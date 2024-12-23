@@ -41,8 +41,12 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(project(":data"))
     implementation(project(":core"))
-    
+
     testImplementation(libs.junit)
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.retrofit.mock)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

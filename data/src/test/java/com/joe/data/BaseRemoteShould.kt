@@ -1,51 +1,60 @@
 package com.joe.data
 
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-import org.junit.Test
-import org.junit.Before
+import com.joe.data.resources.MockJson
 import com.joe.data.response.Result
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
+import retrofit2.Call
+import retrofit2.Response
 
-class BaseRemoteShould {
-    class TestRemote : BaseRemote()
+@OptIn(ExperimentalCoroutinesApi::class)
+class BaseRemoteTest {
 
-    private lateinit var testRemote: TestRemote
-    private val exceptionMessage = "Test Exception"
+    private val testDispatcher = StandardTestDispatcher()
 
-    @Before
-    fun setup() {
-        testRemote = TestRemote()
+    private val baseRemote = object : BaseRemote() {}
+
+    @Test
+    fun `tryRemote returns Success when call is successful`() = runTest(testDispatcher) {
+        val mockCall: Call<String> = mock()
+        val expectedResponse = "Success Response"
+        whenever(mockCall.execute()).thenReturn(Response.success(expectedResponse))
+
+        val result = baseRemote.tryRemote { mockCall }
+
+        assert(result.isSuccess)
+        assertEquals(expectedResponse, (result as Result.Success).value)
     }
 
     @Test
-    fun `tryRemote should return Success when remoteCall is successful`() = runBlocking {
-        val expectedResult = "Success Result"
+    fun `tryRemote returns Failure with ErrorResponse when call fails`() = runTest(testDispatcher) {
+        val mockCall: Call<String> = mock()
+        val errorBody = MockJson.ERROR_JSON.toResponseBody()
+        whenever(mockCall.execute()).thenReturn(Response.error(400, errorBody))
 
-        val result = testRemote.tryRemote { expectedResult }
+        val result = baseRemote.tryRemote { mockCall }
 
-        assertTrue(result.isSuccess)
-        assertEquals(expectedResult, (result as Result.Success).value)
+        assert(result is Result.Failure)
+        val error = (result as Result.Failure).error
+        assertEquals(MockJson.ERROR_MESSAGE, error?.statusMessage)
     }
 
     @Test
-    fun `tryRemote should return Failure when remoteCall throws an exception`() = runBlocking {
-        val result = testRemote.tryRemote<String> {
-            throw Exception(exceptionMessage)
-        }
+    fun `tryRemote returns Failure with exception message when exception occurs`() = runTest(testDispatcher) {
+        val mockCall: Call<String> = mock()
+        val exceptionMessage = "Network Error"
+        whenever(mockCall.execute()).thenThrow(RuntimeException(exceptionMessage))
 
-        assertTrue(result.isFailure)
-        val errorResponse = (result as Result.Failure).error
-        assertEquals(exceptionMessage, errorResponse?.statusMessage)
-    }
+        val result = baseRemote.tryRemote { mockCall }
 
-    @Test
-    fun `tryRemote should return Failure with empty message when exception message is null`() = runBlocking {
-        val result = testRemote.tryRemote<String> {
-            throw Exception()
-        }
-
-        assertTrue(result.isFailure)
-        val errorResponse = (result as Result.Failure).error
-        assertEquals("", errorResponse?.statusMessage)
+        assert(result.isFailure)
+        val error = (result as Result.Failure).error
+        assertEquals(exceptionMessage, error?.statusMessage)
     }
 }

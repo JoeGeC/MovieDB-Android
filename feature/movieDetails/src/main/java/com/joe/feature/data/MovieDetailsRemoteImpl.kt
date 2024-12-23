@@ -1,19 +1,23 @@
 package com.joe.feature.data
 
 import com.joe.data.BaseRemote
+import com.joe.data.NetworkProvider
+import com.joe.data.NetworkProvider.API_KEY
 import com.joe.data.response.ErrorResponse
 import com.joe.feature.repository.boundary.MovieDetailsRemote
 import com.joe.feature.repository.response.MovieDetailsResponse
 import com.joe.data.response.Result
+import retrofit2.Retrofit
 
 class MovieDetailsRemoteImpl(
-    private val remote: MovieDetailsService = retrofit.create(
+    retrofit: Retrofit = NetworkProvider.createRetrofit()
+) : BaseRemote(), MovieDetailsRemote {
+    private val service: MovieDetailsService = retrofit.create(
         MovieDetailsService::class.java
     )
-) : BaseRemote(), MovieDetailsRemote {
 
     override suspend fun getMovieDetails(movieId: Long): Result<MovieDetailsResponse?, ErrorResponse?> =
         tryRemote {
-            remote.getMovieDetails(movieId, API_KEY)
+            service.getMovieDetails(movieId, API_KEY)
         }
 }
