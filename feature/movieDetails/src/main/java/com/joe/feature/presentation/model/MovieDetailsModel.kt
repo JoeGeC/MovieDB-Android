@@ -1,11 +1,11 @@
-package com.joe.feature.domain.entity
+package com.joe.feature.presentation.model
 
-import java.time.LocalDate
+import com.joe.feature.domain.entity.MediaType
 
-data class MovieDetails(
+data class MovieDetailsModel(
     val id: Long,
     val title: String,
-    val releaseDate: LocalDate,
+    val releaseDate: String,
     val tagline: String,
     val overview: String,
     val posterPath: String,
@@ -13,7 +13,3 @@ data class MovieDetails(
     val backdropPath: String,
     val type: MediaType
 )
-
-enum class MediaType {
-    Movie, Tv
-}

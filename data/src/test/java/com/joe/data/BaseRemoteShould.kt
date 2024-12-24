@@ -15,9 +15,7 @@ import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BaseRemoteTest {
-
     private val testDispatcher = StandardTestDispatcher()
-
     private val baseRemote = object : BaseRemote() {}
 
     @Test

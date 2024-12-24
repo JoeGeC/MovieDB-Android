@@ -33,17 +33,18 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(project(":data"))
     implementation(project(":core"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.retrofit.mock)
     testImplementation(libs.kotlinx.coroutines.test)

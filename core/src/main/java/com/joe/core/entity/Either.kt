@@ -1,4 +1,4 @@
-package com.joe.core
+package com.joe.core.entity
 
 sealed class Either<out S, out F> {
     data class Success<out S>(val value: S) : Either<S, Nothing>()
