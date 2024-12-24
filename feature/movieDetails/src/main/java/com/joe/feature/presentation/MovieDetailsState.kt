@@ -18,4 +18,6 @@ class ErrorState() : MovieDetailsState(){
 
 data class MovieDetailsSuccessState(val movieDetails: MovieDetailsModel) : MovieDetailsState()
 
+data class MovieDetailsRefreshingState(val previousState: MovieDetailsState) : MovieDetailsState()
+
 data class MovieDetailsCompletedState(val previousState: MovieDetailsState) : MovieDetailsState()

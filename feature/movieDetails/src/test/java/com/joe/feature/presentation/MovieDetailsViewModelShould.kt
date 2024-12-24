@@ -105,4 +105,38 @@ class MovieDetailsViewModelTest {
         assertEquals(ErrorState(), emittedStates[1])
         assertEquals(MovieDetailsSuccessState(MockObjects.model), emittedStates[2])
     }
+
+    @Test
+    fun `refresh should not emit new state if current state is LoadingState`() = runTest{
+        assertTrue(viewModel.state.value is LoadingState)
+
+        viewModel.refresh(MockObjects.MOVIE_ID)
+        advanceUntilIdle()
+
+        assertTrue(viewModel.state.value is LoadingState)
+    }
+
+    @Test
+    fun `refresh should emit RefreshingState with previous state`() = runTest{
+        whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenReturn(MockObjects.successFlow)
+        val emittedStates = mutableListOf<MovieDetailsState>()
+
+        val job = launch {
+            viewModel.state.collect { state -> emittedStates.add(state) }
+        }
+        viewModel.getMovie(MockObjects.MOVIE_ID)
+        advanceUntilIdle()
+        viewModel.refresh(MockObjects.MOVIE_ID)
+        advanceUntilIdle()
+        job.cancel()
+
+        assertTrue(emittedStates[0] is LoadingState)
+        val successState = MovieDetailsSuccessState(MockObjects.model)
+        val completedState = MovieDetailsCompletedState(successState)
+        assertEquals(completedState, emittedStates[1])
+        assertEquals(MovieDetailsRefreshingState(completedState), emittedStates[2])
+        assertEquals(completedState, emittedStates[3])
+        assertEquals(4, emittedStates.size)
+    }
 }

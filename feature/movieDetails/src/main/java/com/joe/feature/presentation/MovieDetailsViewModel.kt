@@ -26,13 +26,13 @@ class MovieDetailsViewModel(
             movieDetailsUseCase.getMovieDetails(movieId)
                 .catch { e -> _state.value = ErrorState() }
                 .onCompletion { _state.value = MovieDetailsCompletedState(_state.value) }
-                .collect { result ->
-                    when {
-                        result.isSuccess -> handleSuccessState(result)
-                        else -> _state.value = ErrorState()
-                    }
-                }
+                .collect { result -> handleResult(result) }
         }, dispatcher)
+    }
+
+    private fun handleResult(result: Either<MovieDetailsEntity?, ErrorEntity?>) = when {
+        result.isSuccess -> handleSuccessState(result)
+        else -> _state.value = ErrorState()
     }
 
     private fun handleSuccessState(result: Either<MovieDetailsEntity?, ErrorEntity?>) {
@@ -40,6 +40,12 @@ class MovieDetailsViewModel(
         _state.value = (if (body != null) {
             MovieDetailsSuccessState(body.toModel())
         } else ErrorState())
+    }
+
+    fun refresh(movieId: Long) {
+        if (_state.value is LoadingState) return
+        _state.value = MovieDetailsRefreshingState(_state.value)
+        getMovie(movieId)
     }
 
 }
