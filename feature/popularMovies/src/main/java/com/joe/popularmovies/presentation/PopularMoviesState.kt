@@ -21,8 +21,10 @@ class ErrorState() : PopularMoviesState() {
 }
 
 data class PopularMoviesLoadingMoreState(
-    val popularMoviesModel: PopularMoviesModel,
-) : PopularMoviesState()
+    val previousState: PopularMoviesSuccessState
+) : PopularMoviesState() {
+    override fun getBaseState() = previousState
+}
 
 data class PopularMoviesSuccessState(
     val popularMoviesModel: PopularMoviesModel,

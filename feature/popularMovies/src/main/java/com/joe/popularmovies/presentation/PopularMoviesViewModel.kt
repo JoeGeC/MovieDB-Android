@@ -41,7 +41,7 @@ class PopularMoviesViewModel(
         }, dispatcher)
     }
 
-    private fun handleResult(result: Either<PopularMoviesEntity?, ErrorEntity?>) =
+    private fun handleResult(result: Either<PopularMoviesEntity?, ErrorEntity?>): PopularMoviesState =
         when {
             result.isSuccess -> handleSuccessState(result.body)
             _state.value.getBaseState() is PopularMoviesSuccessState -> _state.value.getBaseState()
@@ -52,20 +52,21 @@ class PopularMoviesViewModel(
         if (entity != null) {
             canLoadMore = !entity.isFinalPage
             currentPage++
+            println(state.value)
             val model = entity.toModel(getCurrentMoviesInState())
             if (model.movies.isEmpty()) ErrorState()
             else PopularMoviesSuccessState(model)
         } else ErrorState()
 
     private fun getCurrentMoviesInState(): List<MediaDetailsModel> {
-        val currentState = _state.value.getBaseState() as? PopularMoviesLoadingMoreState
+        val currentState = _state.value.getBaseState() as? PopularMoviesSuccessState
         return currentState?.popularMoviesModel?.movies.orEmpty()
     }
 
     fun getMoreMovies() {
         if (!canLoadMore) return
         val currentState = _state.value.getBaseState() as? PopularMoviesSuccessState ?: return
-        _state.value = PopularMoviesLoadingMoreState(currentState.popularMoviesModel)
+        _state.value = PopularMoviesLoadingMoreState(currentState)
         getMovies()
     }
 
