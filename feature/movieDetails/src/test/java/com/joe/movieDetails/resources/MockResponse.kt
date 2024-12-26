@@ -1,0 +1,16 @@
+package com.joe.movieDetails.resources
+
+import com.joe.movieDetails.repository.response.MovieDetailsResponse
+
+object MockResponse {
+    val response = MovieDetailsResponse(
+        id = MockEntity.MOVIE_ID,
+        title = MockEntity.TITLE_1,
+        tagline = MockEntity.TAGLINE_1,
+        overview = MockEntity.OVERVIEW_1,
+        releaseDate = "1978-11-15",
+        posterPath = MockEntity.POSTER_PATH_1,
+        backdropPath = MockEntity.BACKDROP_PATH_1,
+        voteAverage = MockEntity.SCORE_1,
+    )
+}

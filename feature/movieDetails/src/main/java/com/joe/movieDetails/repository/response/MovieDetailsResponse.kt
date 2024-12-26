@@ -1,7 +1,7 @@
 package com.joe.movieDetails.repository.response
 
 data class MovieDetailsResponse(
-    val id: Long?,
+    val id: Int?,
     val title: String?,
     val tagline: String?,
     val overview: String?,

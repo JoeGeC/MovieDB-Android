@@ -1,8 +1,8 @@
 package com.joe.movieDetails.data
 
+import com.joe.core.entity.Either
 import com.joe.data.NetworkProvider
-import com.joe.data.response.Result
-import com.joe.movieDetails.data.resources.MockJson
+import com.joe.movieDetails.resources.MockJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -39,7 +39,7 @@ class MovieDetailsRemoteImplTest {
         val result = movieDetailsRemote.getMovieDetails(MockJson.MOVIE_ID)
 
         assert(result.isSuccess)
-        val data = (result as Result.Success).value
+        val data = (result as Either.Success).value
         assertEquals(MockJson.MOVIE_ID, data?.id)
         assertEquals(MockJson.MOVIE_TITLE, data?.title)
         assertEquals(MockJson.MOVIE_TAGLINE, data?.tagline)
@@ -62,7 +62,7 @@ class MovieDetailsRemoteImplTest {
         val result = movieDetailsRemote.getMovieDetails(123)
 
         assert(result.isFailure)
-        val error = (result as Result.Failure).error
+        val error = (result as Either.Failure).error
         assertEquals(MockJson.ERROR_MESSAGE, error?.statusMessage)
     }
 }

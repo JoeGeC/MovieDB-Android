@@ -8,8 +8,8 @@ data class MediaDetailsModel(
     val releaseDate: String,
     val tagline: String,
     val overview: String,
-    val posterPath: String,
-    val score: Float,
-    val backdropPath: String,
+    val posterPath: String?,
+    val score: Float?,
+    val backdropPath: String?,
     val type: MediaType
 )

@@ -4,6 +4,6 @@ import com.joe.core.entity.Either
 import com.joe.data.response.ErrorResponse
 import com.joe.movieDetails.repository.response.MovieDetailsResponse
 
-interface MovieDetailsRemote {
+interface MovieDetailsLocal {
     suspend fun getMovieDetails(movieId: Int): Either<MovieDetailsResponse?, ErrorResponse?>
 }

@@ -1,7 +1,7 @@
-package com.joe.movieDetails.data.resources
+package com.joe.movieDetails.resources
 
 object MockJson {
-    const val MOVIE_ID: Long = 123
+    const val MOVIE_ID = 123
     const val MOVIE_TITLE = "The Lord of the Rings"
     const val MOVIE_TAGLINE = "Fantasy...beyond your imagination"
     const val MOVIE_OVERVIEW =

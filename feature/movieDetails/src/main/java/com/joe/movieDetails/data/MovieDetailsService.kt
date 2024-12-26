@@ -10,7 +10,7 @@ interface MovieDetailsService {
 
     @GET("/movie/{id}")
     fun getMovieDetails(
-        @Path("id") id: Long,
+        @Path("id") id: Int,
         @Query("api_key") apiKey: String
     ): Call<MovieDetailsResponse>
 
