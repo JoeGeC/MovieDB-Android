@@ -70,6 +70,18 @@ class PopularMoviesViewModelShould {
     }
 
     @Test
+    fun `set ErrorState on empty`() = runTest {
+        whenever(useCase.getPopularMovies(1)).thenReturn(MockObjects.emptySuccessFlow)
+
+        viewModel.init()
+        advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state.getBaseState() is ErrorState)
+    }
+
+    @Test
     fun `set SuccessState on success`() = runTest {
         whenever(useCase.getPopularMovies(1)).thenReturn(MockObjects.successFlow1)
 
