@@ -1,19 +1,11 @@
 package com.joe.movieDetails.presentation
 
-import com.joe.core.entity.Either
-import com.joe.core.entity.ErrorEntity
-import com.joe.core.entity.MediaDetailsEntity
-import com.joe.core.viewModels.CompletedState
 import com.joe.core.viewModels.ErrorState
 import com.joe.core.viewModels.LoadingState
-import com.joe.core.viewModels.RefreshingState
-import com.joe.core.viewModels.ViewModelState
 import com.joe.movieDetails.domain.usecase.MovieDetailsUseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -24,18 +16,20 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieDetailsViewModelShould {
     private lateinit var viewModel: MovieDetailsViewModel
-    private val movieDetailsUseCase: MovieDetailsUseCase = Mockito.mock()
+    private val useCase: MovieDetailsUseCase = Mockito.mock()
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = MovieDetailsViewModel(movieDetailsUseCase, testDispatcher)
+        viewModel = MovieDetailsViewModel(useCase, testDispatcher)
     }
 
     @After
@@ -49,99 +43,81 @@ class MovieDetailsViewModelShould {
     }
 
     @Test
-    fun `getMovie emits success state and then completed state`() = runTest {
-        whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
-            .thenReturn(MockObjects.successFlow)
-        val emittedStates = mutableListOf<ViewModelState>()
+    fun `set ErrorState when exception is thrown`() = runTest {
+        whenever(useCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenThrow(NullPointerException())
 
-        val job = launch {
-            viewModel.state.collect { state -> emittedStates.add(state) }
-        }
-        viewModel.getMovie(MockObjects.MOVIE_ID)
+        viewModel.init(MockObjects.MOVIE_ID)
         advanceUntilIdle()
-        job.cancel()
 
-        assertTrue(emittedStates[0] is LoadingState)
-        val successState = MovieDetailsSuccessState(MockObjects.model)
-        assertEquals(CompletedState(successState), emittedStates[1])
-        assertEquals(2, emittedStates.size)
+        val state = viewModel.state.value
+        assertTrue(state is ErrorState)
     }
 
     @Test
-    fun `getMovie emits error state and then completed state`() = runTest {
-        whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
-            .thenReturn(MockObjects.failureFlow)
-        val emittedStates = mutableListOf<ViewModelState>()
+    fun `set ErrorState when failure`() = runTest {
+        whenever(useCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenReturn(MockObjects.failure)
 
-        val job = launch {
-            viewModel.state.collect { state -> emittedStates.add(state) }
-        }
-        viewModel.getMovie(MockObjects.MOVIE_ID)
+        viewModel.init(MockObjects.MOVIE_ID)
         advanceUntilIdle()
-        job.cancel()
 
-        assertTrue(emittedStates[0] is LoadingState)
-        val errorState = ErrorState()
-        assertEquals(CompletedState(errorState), emittedStates[1])
-        assertEquals(2, emittedStates.size)
+        val state = viewModel.state.value
+        assertTrue(state is ErrorState)
     }
 
     @Test
-    fun `getMovie emits error state and then success state and then completed state`() = runTest {
-        val flow = MutableSharedFlow<Either<MediaDetailsEntity?, ErrorEntity?>>()
-        whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID)).thenReturn(flow)
-        val emittedStates = mutableListOf<ViewModelState>()
+    fun `set ErrorState when null result`() = runTest {
+        whenever(useCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenReturn(MockObjects.nullSuccess)
 
-        val job = launch {
-            viewModel.state.collect { state -> emittedStates.add(state) }
-        }
+        viewModel.init(MockObjects.MOVIE_ID)
+        advanceUntilIdle()
 
-        viewModel.getMovie(MockObjects.MOVIE_ID)
-        advanceUntilIdle()
-        flow.emit(MockObjects.failure)
-        advanceUntilIdle()
-        flow.emit(MockObjects.success)
-        advanceUntilIdle()
-        job.cancel()
-
-        println(emittedStates)
-        assertEquals(3, emittedStates.size)
-        assertTrue(emittedStates[0] is LoadingState)
-        assertEquals(ErrorState(), emittedStates[1])
-        assertEquals(MovieDetailsSuccessState(MockObjects.model), emittedStates[2])
+        val state = viewModel.state.value
+        assertTrue(state is ErrorState)
     }
 
     @Test
-    fun `refresh should not emit new state if current state is LoadingState`() = runTest{
-        assertTrue(viewModel.state.value is LoadingState)
+    fun `set SuccessState when success`() = runTest {
+        whenever(useCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenReturn(MockObjects.success)
 
-        viewModel.refresh(MockObjects.MOVIE_ID)
+        viewModel.init(MockObjects.MOVIE_ID)
         advanceUntilIdle()
 
-        assertTrue(viewModel.state.value is LoadingState)
+        val state = viewModel.state.value
+        assertEquals(MovieDetailsSuccessState(MockObjects.model), state)
     }
 
     @Test
-    fun `refresh should emit RefreshingState with previous state`() = runTest{
-        whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
-            .thenReturn(MockObjects.successFlow)
-        val emittedStates = mutableListOf<ViewModelState>()
+    fun `do nothing on refresh when LoadingState`() = runTest {
+        whenever(useCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenReturn(MockObjects.success)
 
-        val job = launch {
-            viewModel.state.collect { state -> emittedStates.add(state) }
-        }
-        viewModel.getMovie(MockObjects.MOVIE_ID)
+        viewModel.init(MockObjects.MOVIE_ID)
+        viewModel.refresh()
         advanceUntilIdle()
-        viewModel.refresh(MockObjects.MOVIE_ID)
-        advanceUntilIdle()
-        job.cancel()
 
-        assertTrue(emittedStates[0] is LoadingState)
-        val successState = MovieDetailsSuccessState(MockObjects.model)
-        val completedState = CompletedState(successState)
-        assertEquals(completedState, emittedStates[1])
-        assertEquals(RefreshingState(completedState), emittedStates[2])
-        assertEquals(completedState, emittedStates[3])
-        assertEquals(4, emittedStates.size)
+        val state = viewModel.state.value
+        assertEquals(MovieDetailsSuccessState(MockObjects.model), state)
+        verify(useCase, times(1)).getMovieDetails(MockObjects.MOVIE_ID)
     }
+
+    @Test
+    fun `do nothing on refresh when RefreshingState && refresh correctly`() = runTest {
+        whenever(useCase.getMovieDetails(MockObjects.MOVIE_ID))
+            .thenReturn(MockObjects.success)
+
+        viewModel.init(MockObjects.MOVIE_ID)
+        advanceUntilIdle()
+        viewModel.refresh()
+        viewModel.refresh()
+        advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals(MovieDetailsSuccessState(MockObjects.model), state)
+        verify(useCase, times(2)).getMovieDetails(MockObjects.MOVIE_ID)
+    }
+
 }

@@ -9,6 +9,6 @@ import kotlinx.coroutines.flow.Flow
 class MovieDetailsUseCase(
     private val repository: MovieDetailsRepository
 ) {
-    suspend fun getMovieDetails(movieId: Long): Flow<Either<MediaDetailsEntity?, ErrorEntity?>> =
+    suspend fun getMovieDetails(movieId: Int): Either<MediaDetailsEntity?, ErrorEntity?> =
         repository.getMovieDetails(movieId)
 }

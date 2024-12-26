@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
 
 object MockObjects {
-    const val MOVIE_ID = 1L
+    const val MOVIE_ID = 1
 
     val model = MediaDetailsModel(
         id = MOVIE_ID,
@@ -36,8 +36,7 @@ object MockObjects {
     )
 
     val success = Either.Success(entity)
-    val successFlow = flowOf(success)
+    val nullSuccess = Either.Success(null)
     const val ERROR_MESSAGE = "Error"
     val failure = Either.Failure(ErrorEntity(ERROR_MESSAGE))
-    val failureFlow = flowOf(failure)
 }

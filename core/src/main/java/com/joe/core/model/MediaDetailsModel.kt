@@ -3,7 +3,7 @@ package com.joe.core.model
 import com.joe.core.entity.MediaType
 
 data class MediaDetailsModel(
-    val id: Long,
+    val id: Int,
     val title: String,
     val releaseDate: String,
     val tagline: String,

@@ -6,5 +6,5 @@ import com.joe.core.entity.MediaDetailsEntity
 import kotlinx.coroutines.flow.Flow
 
 interface MovieDetailsRepository {
-    suspend fun getMovieDetails(movieId: Long) : Flow<Either<MediaDetailsEntity?, ErrorEntity?>>
+    suspend fun getMovieDetails(movieId: Int) : Either<MediaDetailsEntity?, ErrorEntity?>
 }

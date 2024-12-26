@@ -6,7 +6,6 @@ import com.joe.core.entity.ErrorEntity
 import com.joe.core.entity.MediaDetailsEntity
 import com.joe.movieDetails.domain.usecase.MovieDetailsUseCase
 import com.joe.core.converter.toModel
-import com.joe.core.viewModels.CompletedState
 import com.joe.core.viewModels.ErrorState
 import com.joe.core.viewModels.LoadingState
 import com.joe.core.viewModels.RefreshingState
@@ -17,8 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
 
 class MovieDetailsViewModel(
     private val movieDetailsUseCase: MovieDetailsUseCase,
@@ -26,13 +23,25 @@ class MovieDetailsViewModel(
 ) : ViewModel() {
     private val _state = MutableStateFlow<ViewModelState>(LoadingState())
     val state: StateFlow<ViewModelState> = _state.asStateFlow()
+    private var movieId: Int? = null
 
-    fun getMovie(movieId: Long) {
+    fun init(movieId: Int) {
+        this.movieId = movieId
+        getMovie()
+    }
+
+    private fun getMovie(){
+        if(movieId == null){
+            _state.value = ErrorState()
+            return
+        }
         job({
-            movieDetailsUseCase.getMovieDetails(movieId)
-                .catch { e -> _state.value = ErrorState() }
-                .onCompletion { _state.value = CompletedState(_state.value) }
-                .collect { result -> handleResult(result) }
+            try {
+                val result = movieDetailsUseCase.getMovieDetails(movieId!!)
+                handleResult(result)
+            } catch (_: Exception){
+                _state.value = ErrorState()
+            }
         }, dispatcher)
     }
 
@@ -48,10 +57,10 @@ class MovieDetailsViewModel(
         } else ErrorState())
     }
 
-    fun refresh(movieId: Long) {
-        if (_state.value is LoadingState) return
+    fun refresh() {
+        if (_state.value is LoadingState || _state.value is RefreshingState) return
         _state.value = RefreshingState(_state.value)
-        getMovie(movieId)
+        getMovie()
     }
 
 }
