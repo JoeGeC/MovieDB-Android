@@ -12,6 +12,14 @@ fun PopularMoviesEntity.toModel(
 ): PopularMoviesModel =
     PopularMoviesModel(
         page = this.page,
-        movies = previousMovies + this.movies.map { movie -> movie.toModel(locale) },
+        movies = combineMovies(previousMovies, convertMovies(locale)),
         isFinalPage = this.isFinalPage,
     )
+
+private fun PopularMoviesEntity.combineMovies(
+    previousMovies: List<MediaDetailsModel>,
+    thisMovies: List<MediaDetailsModel>,
+): List<MediaDetailsModel> = (previousMovies + thisMovies).distinctBy { it.id }
+
+private fun PopularMoviesEntity.convertMovies(locale: Locale): List<MediaDetailsModel> =
+    this.movies.map { movie -> movie.toModel(locale) }

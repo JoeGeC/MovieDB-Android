@@ -1,14 +1,24 @@
 package com.joe.popularmovies
 
+import com.joe.core.entity.Either
+import com.joe.core.entity.ErrorEntity
 import com.joe.core.viewModels.ErrorState
 import com.joe.core.viewModels.LoadingState
 import com.joe.core.viewModels.CompletedState
+import com.joe.core.viewModels.RefreshingState
+import com.joe.core.viewModels.ViewModelState
+import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
+import com.joe.popularmovies.presentation.PopularMoviesLoadingMoreState
 import com.joe.popularmovies.presentation.PopularMoviesSuccessState
 import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -98,6 +108,85 @@ class PopularMoviesViewModelShould {
     }
 
     @Test
+    fun `emit SuccessState and then SuccessState on flow`() = runTest {
+        val channel = Channel<Either<PopularMoviesEntity?, ErrorEntity?>>()
+        whenever(useCase.getPopularMovies(1)).thenReturn(channel.receiveAsFlow())
+        val emittedStates = mutableListOf<ViewModelState>()
+
+        val job = launch {
+            viewModel.state.collect { state -> emittedStates.add(state) }
+        }
+        viewModel.init()
+        advanceUntilIdle()
+        channel.send(MockObjects.success1)
+        advanceUntilIdle()
+        channel.send(MockObjects.success2)
+        advanceUntilIdle()
+        channel.close()
+        advanceUntilIdle()
+        job.cancel()
+
+        assertTrue(emittedStates[0] is LoadingState)
+        assertEquals(PopularMoviesSuccessState(MockObjects.popularMoviesModel1), emittedStates[1])
+        val successState2 = PopularMoviesSuccessState(MockObjects.popularMoviesModel2)
+        assertEquals(successState2, emittedStates[2])
+        assertEquals(CompletedState(successState2), emittedStates[3])
+        assertEquals(4, emittedStates.size)
+    }
+
+    @Test
+    fun `emit SuccessState once when identical success flow`() = runTest {
+        val channel = Channel<Either<PopularMoviesEntity?, ErrorEntity?>>()
+        whenever(useCase.getPopularMovies(1)).thenReturn(channel.receiveAsFlow())
+        val emittedStates = mutableListOf<ViewModelState>()
+
+        val job = launch {
+            viewModel.state.collect { state -> emittedStates.add(state) }
+        }
+        viewModel.init()
+        advanceUntilIdle()
+        channel.send(MockObjects.success1)
+        advanceUntilIdle()
+        channel.send(MockObjects.success1)
+        advanceUntilIdle()
+        channel.close()
+        advanceUntilIdle()
+        job.cancel()
+
+        assertTrue(emittedStates[0] is LoadingState)
+        val successState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
+        assertEquals(successState, emittedStates[1])
+        assertEquals(CompletedState(successState), emittedStates[2])
+        assertEquals(3, emittedStates.size)
+    }
+
+    @Test
+    fun `emit SuccessState once when success then failure flow`() = runTest {
+        val channel = Channel<Either<PopularMoviesEntity?, ErrorEntity?>>()
+        whenever(useCase.getPopularMovies(1)).thenReturn(channel.receiveAsFlow())
+        val emittedStates = mutableListOf<ViewModelState>()
+
+        val job = launch {
+            viewModel.state.collect { state -> emittedStates.add(state) }
+        }
+        viewModel.init()
+        advanceUntilIdle()
+        channel.send(MockObjects.success1)
+        advanceUntilIdle()
+        channel.send(MockObjects.failure)
+        advanceUntilIdle()
+        channel.close()
+        advanceUntilIdle()
+        job.cancel()
+
+        assertTrue(emittedStates[0] is LoadingState)
+        val successState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
+        assertEquals(successState, emittedStates[1])
+        assertEquals(CompletedState(successState), emittedStates[2])
+        assertEquals(3, emittedStates.size)
+    }
+
+    @Test
     fun `append movies on pagination call`() = runTest {
         whenever(useCase.getPopularMovies(1)).thenReturn(MockObjects.successFlow1)
         whenever(useCase.getPopularMovies(2)).thenReturn(MockObjects.successFlow2)
@@ -161,6 +250,16 @@ class PopularMoviesViewModelShould {
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(1)).getPopularMovies(any())
+    }
+
+    @Test
+    fun `do nothing on getMoreMovies when not CompletedState`() = runTest {
+        whenever(useCase.getPopularMovies(1)).thenReturn(MockObjects.successFlow1)
+
+        viewModel.init()
+        assertFalse(viewModel.state.value is CompletedState)
+        viewModel.getMoreMovies()
+        assertFalse(viewModel.state.value is PopularMoviesLoadingMoreState)
     }
 
     @Test

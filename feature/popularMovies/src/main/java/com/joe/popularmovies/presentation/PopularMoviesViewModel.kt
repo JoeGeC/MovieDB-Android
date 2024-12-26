@@ -3,13 +3,13 @@ package com.joe.popularmovies.presentation
 import androidx.lifecycle.ViewModel
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.core.viewModels.job
 import com.joe.core.model.MediaDetailsModel
+import com.joe.core.viewModels.CompletedState
 import com.joe.core.viewModels.ErrorState
 import com.joe.core.viewModels.LoadingState
-import com.joe.core.viewModels.CompletedState
 import com.joe.core.viewModels.RefreshingState
 import com.joe.core.viewModels.ViewModelState
+import com.joe.core.viewModels.job
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.converter.toModel
@@ -57,7 +57,6 @@ class PopularMoviesViewModel(
         if (entity != null) {
             canLoadMore = !entity.isFinalPage
             currentPage++
-            println(state.value)
             val model = entity.toModel(getCurrentMoviesInState())
             if (model.movies.isEmpty()) ErrorState()
             else PopularMoviesSuccessState(model)
@@ -69,7 +68,7 @@ class PopularMoviesViewModel(
     }
 
     fun getMoreMovies() {
-        if (!canLoadMore) return
+        if (!canLoadMore || _state.value !is CompletedState) return
         val currentState = _state.value.getBaseState() as? PopularMoviesSuccessState ?: return
         _state.value = PopularMoviesLoadingMoreState(currentState)
         getMovies()

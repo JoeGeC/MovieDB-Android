@@ -13,7 +13,7 @@ import java.time.LocalDate
 
 
 object MockObjects {
-    const val MOVIE_ID_1 = 1L
+    const val MOVIE_ID_1 = 1
     const val TITLE_1 = "The Lord of the Rings"
     const val TAGLINE_1 = "Fantasy...beyond your imagination"
     const val OVERVIEW_1 =
@@ -34,7 +34,7 @@ object MockObjects {
         type = MediaType.Movie
     )
 
-    const val MOVIE_ID_2 = 2L
+    const val MOVIE_ID_2 = 2
     const val TITLE_2 = "Movie 2"
     const val TAGLINE_2 = "Tagline 2"
     const val OVERVIEW_2 = "Overview 2"
