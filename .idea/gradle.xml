@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/movieDetails" />
+            <option value="$PROJECT_DIR$/feature/popularMovies" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />
