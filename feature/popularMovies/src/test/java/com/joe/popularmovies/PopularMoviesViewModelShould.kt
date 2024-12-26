@@ -1,9 +1,9 @@
 package com.joe.popularmovies
 
+import com.joe.core.viewModels.ErrorState
+import com.joe.core.viewModels.LoadingState
+import com.joe.core.viewModels.CompletedState
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
-import com.joe.popularmovies.presentation.ErrorState
-import com.joe.popularmovies.presentation.LoadingState
-import com.joe.popularmovies.presentation.PopularMoviesCompletedState
 import com.joe.popularmovies.presentation.PopularMoviesSuccessState
 import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +56,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         assertTrue(state.getBaseState() is ErrorState)
     }
 
@@ -68,7 +68,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         assertTrue(state.getBaseState() is ErrorState)
     }
 
@@ -80,7 +80,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         assertTrue(state.getBaseState() is ErrorState)
     }
 
@@ -92,7 +92,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
     }
@@ -108,7 +108,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel2)
         assertEquals(expectedState, state.getBaseState())
     }
@@ -124,7 +124,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
     }
@@ -142,7 +142,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel2)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(2)).getPopularMovies(any())
@@ -157,7 +157,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(1)).getPopularMovies(any())
@@ -172,7 +172,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(1)).getPopularMovies(any())
@@ -190,7 +190,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is PopularMoviesCompletedState)
+        assertTrue(state is CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(2)).getPopularMovies(any())

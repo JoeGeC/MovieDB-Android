@@ -3,6 +3,11 @@ package com.joe.movieDetails.presentation
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
 import com.joe.core.entity.MediaDetailsEntity
+import com.joe.core.viewModels.CompletedState
+import com.joe.core.viewModels.ErrorState
+import com.joe.core.viewModels.LoadingState
+import com.joe.core.viewModels.RefreshingState
+import com.joe.core.viewModels.ViewModelState
 import com.joe.movieDetails.domain.usecase.MovieDetailsUseCase
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +52,7 @@ class MovieDetailsViewModelShould {
     fun `getMovie emits success state and then completed state`() = runTest {
         whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
             .thenReturn(MockObjects.successFlow)
-        val emittedStates = mutableListOf<MovieDetailsState>()
+        val emittedStates = mutableListOf<ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -58,7 +63,7 @@ class MovieDetailsViewModelShould {
 
         assertTrue(emittedStates[0] is LoadingState)
         val successState = MovieDetailsSuccessState(MockObjects.model)
-        assertEquals(MovieDetailsCompletedState(successState), emittedStates[1])
+        assertEquals(CompletedState(successState), emittedStates[1])
         assertEquals(2, emittedStates.size)
     }
 
@@ -66,7 +71,7 @@ class MovieDetailsViewModelShould {
     fun `getMovie emits error state and then completed state`() = runTest {
         whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
             .thenReturn(MockObjects.failureFlow)
-        val emittedStates = mutableListOf<MovieDetailsState>()
+        val emittedStates = mutableListOf<ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -77,7 +82,7 @@ class MovieDetailsViewModelShould {
 
         assertTrue(emittedStates[0] is LoadingState)
         val errorState = ErrorState()
-        assertEquals(MovieDetailsCompletedState(errorState), emittedStates[1])
+        assertEquals(CompletedState(errorState), emittedStates[1])
         assertEquals(2, emittedStates.size)
     }
 
@@ -85,7 +90,7 @@ class MovieDetailsViewModelShould {
     fun `getMovie emits error state and then success state and then completed state`() = runTest {
         val flow = MutableSharedFlow<Either<MediaDetailsEntity?, ErrorEntity?>>()
         whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID)).thenReturn(flow)
-        val emittedStates = mutableListOf<MovieDetailsState>()
+        val emittedStates = mutableListOf<ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -120,7 +125,7 @@ class MovieDetailsViewModelShould {
     fun `refresh should emit RefreshingState with previous state`() = runTest{
         whenever(movieDetailsUseCase.getMovieDetails(MockObjects.MOVIE_ID))
             .thenReturn(MockObjects.successFlow)
-        val emittedStates = mutableListOf<MovieDetailsState>()
+        val emittedStates = mutableListOf<ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -133,9 +138,9 @@ class MovieDetailsViewModelShould {
 
         assertTrue(emittedStates[0] is LoadingState)
         val successState = MovieDetailsSuccessState(MockObjects.model)
-        val completedState = MovieDetailsCompletedState(successState)
+        val completedState = CompletedState(successState)
         assertEquals(completedState, emittedStates[1])
-        assertEquals(MovieDetailsRefreshingState(completedState), emittedStates[2])
+        assertEquals(RefreshingState(completedState), emittedStates[2])
         assertEquals(completedState, emittedStates[3])
         assertEquals(4, emittedStates.size)
     }

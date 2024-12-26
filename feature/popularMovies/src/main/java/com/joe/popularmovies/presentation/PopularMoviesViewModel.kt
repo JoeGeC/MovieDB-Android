@@ -3,8 +3,13 @@ package com.joe.popularmovies.presentation
 import androidx.lifecycle.ViewModel
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.core.job
+import com.joe.core.viewModels.job
 import com.joe.core.model.MediaDetailsModel
+import com.joe.core.viewModels.ErrorState
+import com.joe.core.viewModels.LoadingState
+import com.joe.core.viewModels.CompletedState
+import com.joe.core.viewModels.RefreshingState
+import com.joe.core.viewModels.ViewModelState
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.converter.toModel
@@ -21,8 +26,8 @@ class PopularMoviesViewModel(
     private val popularMoviesUseCase: PopularMoviesUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-    private val _state = MutableStateFlow<PopularMoviesState>(LoadingState())
-    val state: StateFlow<PopularMoviesState> = _state.asStateFlow()
+    private val _state = MutableStateFlow<ViewModelState>(LoadingState())
+    val state: StateFlow<ViewModelState> = _state.asStateFlow()
     private var currentJob: Job? = null
     private var currentPage = 1
     private var canLoadMore = true
@@ -36,12 +41,12 @@ class PopularMoviesViewModel(
         currentJob = job({
             popularMoviesUseCase.getPopularMovies(currentPage)
                 .catch { e -> _state.value = ErrorState() }
-                .onCompletion { _state.value = PopularMoviesCompletedState(_state.value) }
+                .onCompletion { _state.value = CompletedState(_state.value) }
                 .collect { result -> _state.value = handleResult(result) }
         }, dispatcher)
     }
 
-    private fun handleResult(result: Either<PopularMoviesEntity?, ErrorEntity?>): PopularMoviesState =
+    private fun handleResult(result: Either<PopularMoviesEntity?, ErrorEntity?>): ViewModelState =
         when {
             result.isSuccess -> handleSuccessState(result.body)
             _state.value.getBaseState() is PopularMoviesSuccessState -> _state.value.getBaseState()
@@ -71,9 +76,9 @@ class PopularMoviesViewModel(
     }
 
     fun refresh() {
-        if (_state.value is LoadingState || _state.value is PopularMoviesRefreshingState) return
+        if (_state.value is LoadingState || _state.value is RefreshingState) return
         reset()
-        _state.value = PopularMoviesRefreshingState(_state.value)
+        _state.value = RefreshingState(_state.value)
         getMovies()
     }
 

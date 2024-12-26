@@ -6,7 +6,12 @@ import com.joe.core.entity.ErrorEntity
 import com.joe.core.entity.MediaDetailsEntity
 import com.joe.movieDetails.domain.usecase.MovieDetailsUseCase
 import com.joe.core.converter.toModel
-import com.joe.core.job
+import com.joe.core.viewModels.CompletedState
+import com.joe.core.viewModels.ErrorState
+import com.joe.core.viewModels.LoadingState
+import com.joe.core.viewModels.RefreshingState
+import com.joe.core.viewModels.ViewModelState
+import com.joe.core.viewModels.job
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,14 +24,14 @@ class MovieDetailsViewModel(
     private val movieDetailsUseCase: MovieDetailsUseCase,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
-    private val _state = MutableStateFlow<MovieDetailsState>(LoadingState())
-    val state: StateFlow<MovieDetailsState> = _state.asStateFlow()
+    private val _state = MutableStateFlow<ViewModelState>(LoadingState())
+    val state: StateFlow<ViewModelState> = _state.asStateFlow()
 
     fun getMovie(movieId: Long) {
         job({
             movieDetailsUseCase.getMovieDetails(movieId)
                 .catch { e -> _state.value = ErrorState() }
-                .onCompletion { _state.value = MovieDetailsCompletedState(_state.value) }
+                .onCompletion { _state.value = CompletedState(_state.value) }
                 .collect { result -> handleResult(result) }
         }, dispatcher)
     }
@@ -45,7 +50,7 @@ class MovieDetailsViewModel(
 
     fun refresh(movieId: Long) {
         if (_state.value is LoadingState) return
-        _state.value = MovieDetailsRefreshingState(_state.value)
+        _state.value = RefreshingState(_state.value)
         getMovie(movieId)
     }
 
