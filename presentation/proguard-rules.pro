@@ -1,0 +1,1 @@
+-keep class com.joe.presentation.ui.ErrorScreenKt { *; }

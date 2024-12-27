@@ -2,11 +2,8 @@ package com.joe.popularmovies
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.core.viewModels.ErrorState
-import com.joe.core.viewModels.LoadingState
-import com.joe.core.viewModels.CompletedState
-import com.joe.core.viewModels.RefreshingState
-import com.joe.core.viewModels.ViewModelState
+import com.joe.presentation.viewModels.CompletedState
+import com.joe.presentation.viewModels.RefreshingState
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.PopularMoviesLoadingMoreState
@@ -54,7 +51,7 @@ class PopularMoviesViewModelShould {
 
     @Test
     fun `initialize with loading state`() = runTest {
-        assertTrue(viewModel.state.value is LoadingState)
+        assertTrue(viewModel.state.value is com.joe.presentation.viewModels.LoadingState)
     }
 
     @Test
@@ -66,8 +63,8 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
-        assertTrue(state.getBaseState() is ErrorState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
+        assertTrue(state.getBaseState() is com.joe.presentation.viewModels.ErrorState)
     }
 
     @Test
@@ -78,8 +75,8 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
-        assertTrue(state.getBaseState() is ErrorState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
+        assertTrue(state.getBaseState() is com.joe.presentation.viewModels.ErrorState)
     }
 
     @Test
@@ -90,8 +87,8 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
-        assertTrue(state.getBaseState() is ErrorState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
+        assertTrue(state.getBaseState() is com.joe.presentation.viewModels.ErrorState)
     }
 
     @Test
@@ -102,7 +99,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
     }
@@ -111,7 +108,7 @@ class PopularMoviesViewModelShould {
     fun `emit SuccessState and then SuccessState on flow`() = runTest {
         val channel = Channel<Either<PopularMoviesEntity?, ErrorEntity?>>()
         whenever(useCase.getPopularMovies(1)).thenReturn(channel.receiveAsFlow())
-        val emittedStates = mutableListOf<ViewModelState>()
+        val emittedStates = mutableListOf<com.joe.presentation.viewModels.ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -126,11 +123,11 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
         job.cancel()
 
-        assertTrue(emittedStates[0] is LoadingState)
+        assertTrue(emittedStates[0] is com.joe.presentation.viewModels.LoadingState)
         assertEquals(PopularMoviesSuccessState(MockObjects.popularMoviesModel1), emittedStates[1])
         val successState2 = PopularMoviesSuccessState(MockObjects.popularMoviesModel2)
         assertEquals(successState2, emittedStates[2])
-        assertEquals(CompletedState(successState2), emittedStates[3])
+        assertEquals(com.joe.presentation.viewModels.CompletedState(successState2), emittedStates[3])
         assertEquals(4, emittedStates.size)
     }
 
@@ -138,7 +135,7 @@ class PopularMoviesViewModelShould {
     fun `emit SuccessState once when identical success flow`() = runTest {
         val channel = Channel<Either<PopularMoviesEntity?, ErrorEntity?>>()
         whenever(useCase.getPopularMovies(1)).thenReturn(channel.receiveAsFlow())
-        val emittedStates = mutableListOf<ViewModelState>()
+        val emittedStates = mutableListOf<com.joe.presentation.viewModels.ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -153,10 +150,10 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
         job.cancel()
 
-        assertTrue(emittedStates[0] is LoadingState)
+        assertTrue(emittedStates[0] is com.joe.presentation.viewModels.LoadingState)
         val successState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(successState, emittedStates[1])
-        assertEquals(CompletedState(successState), emittedStates[2])
+        assertEquals(com.joe.presentation.viewModels.CompletedState(successState), emittedStates[2])
         assertEquals(3, emittedStates.size)
     }
 
@@ -164,7 +161,7 @@ class PopularMoviesViewModelShould {
     fun `emit SuccessState once when success then failure flow`() = runTest {
         val channel = Channel<Either<PopularMoviesEntity?, ErrorEntity?>>()
         whenever(useCase.getPopularMovies(1)).thenReturn(channel.receiveAsFlow())
-        val emittedStates = mutableListOf<ViewModelState>()
+        val emittedStates = mutableListOf<com.joe.presentation.viewModels.ViewModelState>()
 
         val job = launch {
             viewModel.state.collect { state -> emittedStates.add(state) }
@@ -179,10 +176,10 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
         job.cancel()
 
-        assertTrue(emittedStates[0] is LoadingState)
+        assertTrue(emittedStates[0] is com.joe.presentation.viewModels.LoadingState)
         val successState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(successState, emittedStates[1])
-        assertEquals(CompletedState(successState), emittedStates[2])
+        assertEquals(com.joe.presentation.viewModels.CompletedState(successState), emittedStates[2])
         assertEquals(3, emittedStates.size)
     }
 
@@ -197,7 +194,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel2)
         assertEquals(expectedState, state.getBaseState())
     }
@@ -213,7 +210,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
     }
@@ -231,7 +228,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel2)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(2)).getPopularMovies(any())
@@ -246,7 +243,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(1)).getPopularMovies(any())
@@ -257,7 +254,7 @@ class PopularMoviesViewModelShould {
         whenever(useCase.getPopularMovies(1)).thenReturn(MockObjects.successFlow1)
 
         viewModel.init()
-        assertFalse(viewModel.state.value is CompletedState)
+        assertFalse(viewModel.state.value is com.joe.presentation.viewModels.CompletedState)
         viewModel.getMoreMovies()
         assertFalse(viewModel.state.value is PopularMoviesLoadingMoreState)
     }
@@ -271,7 +268,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(1)).getPopularMovies(any())
@@ -289,7 +286,7 @@ class PopularMoviesViewModelShould {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertTrue(state is CompletedState)
+        assertTrue(state is com.joe.presentation.viewModels.CompletedState)
         val expectedState = PopularMoviesSuccessState(MockObjects.popularMoviesModel1)
         assertEquals(expectedState, state.getBaseState())
         verify(useCase, times(2)).getPopularMovies(any())

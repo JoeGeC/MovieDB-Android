@@ -2,16 +2,13 @@ package com.joe.movieDetails.data
 
 import com.joe.core.entity.Either
 import com.joe.data.BaseRemote
-import com.joe.data.NetworkProvider
 import com.joe.data.NetworkProvider.API_KEY
 import com.joe.data.response.ErrorResponse
 import com.joe.movieDetails.repository.boundary.MovieDetailsRemote
 import com.joe.movieDetails.repository.response.MovieDetailsResponse
 import retrofit2.Retrofit
 
-class MovieDetailsRemoteImpl(
-    retrofit: Retrofit = NetworkProvider.createRetrofit()
-) : BaseRemote(), MovieDetailsRemote {
+class MovieDetailsRemoteImpl(retrofit: Retrofit) : BaseRemote(), MovieDetailsRemote {
     private val service: MovieDetailsService = retrofit.create(
         MovieDetailsService::class.java
     )

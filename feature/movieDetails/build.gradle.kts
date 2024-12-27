@@ -44,7 +44,6 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
@@ -52,6 +51,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(project(":data"))
     implementation(project(":core"))
+    implementation(project(":presentation"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito)

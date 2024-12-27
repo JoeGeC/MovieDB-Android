@@ -1,7 +1,7 @@
 package com.joe.movieDetails.presentation
 
-import com.joe.core.viewModels.ErrorState
-import com.joe.core.viewModels.LoadingState
+import com.joe.presentation.viewModels.ErrorState
+import com.joe.presentation.viewModels.LoadingState
 import com.joe.movieDetails.domain.usecase.MovieDetailsUseCase
 import com.joe.movieDetails.resources.MockEntity
 import com.joe.movieDetails.resources.MockModel

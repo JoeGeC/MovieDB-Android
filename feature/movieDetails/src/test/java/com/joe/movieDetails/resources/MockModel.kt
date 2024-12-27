@@ -2,7 +2,7 @@ package com.joe.movieDetails.resources
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.MediaType
-import com.joe.core.model.MediaDetailsModel
+import com.joe.presentation.model.MediaDetailsModel
 import com.joe.movieDetails.resources.MockEntity.MOVIE_ID
 
 object MockModel {

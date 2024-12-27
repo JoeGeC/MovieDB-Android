@@ -1,4 +1,4 @@
-package com.joe.core.viewModels
+package com.joe.presentation.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

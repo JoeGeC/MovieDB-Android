@@ -1,4 +1,4 @@
-package com.joe.core.formatter
+package com.joe.presentation.formatter
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

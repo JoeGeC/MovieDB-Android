@@ -33,7 +33,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.lifecycle.viewmodel.android)
-
     testImplementation(libs.junit)
 }

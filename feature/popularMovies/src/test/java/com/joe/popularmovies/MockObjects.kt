@@ -4,13 +4,11 @@ import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
 import com.joe.core.entity.MediaType
 import com.joe.core.entity.MediaDetailsEntity
-import com.joe.core.model.MediaDetailsModel
+import com.joe.presentation.model.MediaDetailsModel
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.presentation.model.PopularMoviesModel
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
-
-
 
 object MockObjects {
     const val MOVIE_ID_1 = 1

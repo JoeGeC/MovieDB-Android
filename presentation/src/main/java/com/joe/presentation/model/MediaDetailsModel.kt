@@ -1,4 +1,4 @@
-package com.joe.core.model
+package com.joe.presentation.model
 
 import com.joe.core.entity.MediaType
 

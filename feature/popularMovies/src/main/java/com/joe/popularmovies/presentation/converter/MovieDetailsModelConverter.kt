@@ -1,9 +1,9 @@
 package com.joe.popularmovies.presentation.converter
 
-import com.joe.core.converter.toModel
-import com.joe.core.model.MediaDetailsModel
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.presentation.model.PopularMoviesModel
+import com.joe.presentation.model.MediaDetailsModel
+import com.joe.presentation.converter.toModel
 import java.util.Locale
 
 fun PopularMoviesEntity.toModel(

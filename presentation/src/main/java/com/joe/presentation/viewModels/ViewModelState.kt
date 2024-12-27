@@ -1,4 +1,4 @@
-package com.joe.core.viewModels
+package com.joe.presentation.viewModels
 
 abstract class ViewModelState() {
     open fun getBaseState(): ViewModelState = this

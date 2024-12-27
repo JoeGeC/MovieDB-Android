@@ -1,10 +1,10 @@
-package com.joe.core.converter
+package com.joe.presentation.converter
 
-import com.joe.core.formatter.formatLocalDate
-import com.joe.core.formatter.toImageUrl
+import com.joe.presentation.formatter.formatLocalDate
+import com.joe.presentation.formatter.toImageUrl
 import com.joe.core.entity.MediaDetailsEntity
 import com.joe.core.entity.MediaType
-import com.joe.core.model.MediaDetailsModel
+import com.joe.presentation.model.MediaDetailsModel
 import java.util.Locale
 
 fun MediaDetailsEntity.toModel(locale: Locale = Locale.getDefault()): MediaDetailsModel =
