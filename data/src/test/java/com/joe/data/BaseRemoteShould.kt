@@ -1,7 +1,7 @@
 package com.joe.data
 
+import com.joe.core.entity.Either
 import com.joe.data.resources.MockJson
-import com.joe.data.response.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -27,7 +27,7 @@ class BaseRemoteTest {
         val result = baseRemote.tryRemote { mockCall }
 
         assert(result.isSuccess)
-        assertEquals(expectedResponse, (result as Result.Success).value)
+        assertEquals(expectedResponse, (result as Either.Success).value)
     }
 
     @Test
@@ -38,8 +38,8 @@ class BaseRemoteTest {
 
         val result = baseRemote.tryRemote { mockCall }
 
-        assert(result is Result.Failure)
-        val error = (result as Result.Failure).error
+        assert(result is Either.Failure)
+        val error = (result as Either.Failure).error
         assertEquals(MockJson.ERROR_MESSAGE, error?.statusMessage)
     }
 
@@ -52,7 +52,7 @@ class BaseRemoteTest {
         val result = baseRemote.tryRemote { mockCall }
 
         assert(result.isFailure)
-        val error = (result as Result.Failure).error
+        val error = (result as Either.Failure).error
         assertEquals(exceptionMessage, error?.statusMessage)
     }
 }
