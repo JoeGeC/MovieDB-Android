@@ -1,8 +1,6 @@
 package com.joe.movieDetails.repository
 
 import com.joe.core.entity.Either
-import com.joe.core.entity.ErrorEntity
-import com.joe.core.entity.MediaDetailsEntity
 import com.joe.data.response.ErrorResponse
 import com.joe.movieDetails.repository.boundary.MovieDetailsLocal
 import com.joe.movieDetails.repository.boundary.MovieDetailsRemote
@@ -15,7 +13,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.kotlin.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -79,6 +76,19 @@ class MovieDetailsRepositoryImplTest {
         verify(local, times(1)).getMovieDetails(any())
         verify(remote, times(1)).getMovieDetails(any())
         assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `getMovieDetails inserts into local when remote succeeds`() = runTest {
+        whenever(local.getMovieDetails(MockEntity.MOVIE_ID)).thenReturn(Either.Failure(null))
+        whenever(remote.getMovieDetails(MockEntity.MOVIE_ID))
+            .thenReturn(Either.Success(MockResponse.response))
+
+        repository.getMovieDetails(MockEntity.MOVIE_ID)
+
+        verify(local, times(1)).getMovieDetails(any())
+        verify(remote, times(1)).getMovieDetails(any())
+        verify(local, times(1)).insert(MockResponse.response)
     }
 
 }

@@ -7,29 +7,35 @@ import com.joe.movieDetails.domain.boundary.MovieDetailsRepository
 import com.joe.movieDetails.repository.boundary.MovieDetailsLocal
 import com.joe.movieDetails.repository.boundary.MovieDetailsRemote
 import com.joe.movieDetails.repository.converter.toEntity
+import com.joe.movieDetails.repository.response.MovieDetailsResponse
 
 class MovieDetailsRepositoryImpl(
     private val remote: MovieDetailsRemote,
     private val local: MovieDetailsLocal,
 ) : MovieDetailsRepository {
-    
-    override suspend fun getMovieDetails(movieId: Int): Either<MediaDetailsEntity?, ErrorEntity?> {
-        val localResponse = local.getMovieDetails(movieId)
-        return if (localResponse.isFailure) getFromRemote(movieId)
-        else {
-            localResponse.body?.toEntity()?.let { entity -> Either.Success(entity) }
-                ?: getFromRemote(movieId)
-        }
-    }
 
-    private suspend fun getFromRemote(movieId: Int): Either<MediaDetailsEntity?, ErrorEntity?> {
-        val remoteResponse = remote.getMovieDetails(movieId)
-        return if (remoteResponse.isFailure)
-            Either.Failure(ErrorEntity(remoteResponse.errorBody?.statusMessage ?: "Remote fail"))
-        else {
-            remoteResponse.body?.toEntity()?.let{ entity -> Either.Success(entity) }
-                ?: Either.Failure(ErrorEntity("Remote response is null"))
-        }
-    }
+    override suspend fun getMovieDetails(movieId: Int): Either<MediaDetailsEntity?, ErrorEntity?> =
+        local.getMovieDetails(movieId).fold(
+            onSuccess = { response ->
+                response?.toEntity()?.let {
+                    Either.Success(it)
+                } ?: fetchFromRemote(movieId)
+            },
+            onFailure = { fetchFromRemote(movieId) }
+        )
+
+    private suspend fun fetchFromRemote(movieId: Int): Either<MediaDetailsEntity?, ErrorEntity?> =
+        remote.getMovieDetails(movieId).fold(
+            onSuccess = { response -> handleRemoteSuccess(response) },
+            onFailure = { error ->
+                Either.Failure(ErrorEntity(error?.statusMessage ?: "Remote fetch failed"))
+            }
+        )
+
+    private suspend fun handleRemoteSuccess(response: MovieDetailsResponse?): Either<MediaDetailsEntity?, ErrorEntity?> =
+        response?.toEntity()?.let { entity ->
+            local.insert(response)
+            Either.Success(entity)
+        } ?: Either.Failure(ErrorEntity("Remote conversion failed"))
 
 }
