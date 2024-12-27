@@ -6,4 +6,6 @@ import com.joe.movieDetails.repository.response.MovieDetailsResponse
 
 interface MovieDetailsLocal {
     suspend fun getMovieDetails(movieId: Int): Either<MovieDetailsResponse?, ErrorResponse?>
+
+    suspend fun insert(response: MovieDetailsResponse)
 }
