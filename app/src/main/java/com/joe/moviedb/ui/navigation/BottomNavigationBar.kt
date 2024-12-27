@@ -55,7 +55,7 @@ fun BottomNavigationBar() {
             startDestination = Screens.Movies.route,
             modifier = Modifier.padding(paddingValues = paddingValues)) {
             composable(Screens.Movies.route) {
-                MovieDetailsScreen(123)
+                MovieDetailsScreen(772)
             }
             composable(Screens.TvShows.route) {
             }

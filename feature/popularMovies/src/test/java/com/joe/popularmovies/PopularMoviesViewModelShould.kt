@@ -2,8 +2,6 @@ package com.joe.popularmovies
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.presentation.viewModels.CompletedState
-import com.joe.presentation.viewModels.RefreshingState
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.PopularMoviesLoadingMoreState
@@ -12,7 +10,6 @@ import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -22,10 +19,9 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Test
-
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.times
