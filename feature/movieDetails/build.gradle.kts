@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.devtools)
+    alias(libs.plugins.android.ksp)
+    alias(libs.plugins.android.hilt)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -34,14 +36,20 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling)
+    implementation(libs.compose.material3)
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.navigation)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
     implementation(project(":data"))
     implementation(project(":core"))
 
@@ -51,7 +59,4 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.retrofit.mock)
     testImplementation(libs.kotlinx.coroutines.test)
-
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }

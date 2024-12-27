@@ -33,9 +33,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
@@ -47,8 +44,4 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.mockito)
     testImplementation(libs.retrofit.mock)
-
-
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }

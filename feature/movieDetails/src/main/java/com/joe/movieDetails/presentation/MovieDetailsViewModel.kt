@@ -11,15 +11,17 @@ import com.joe.core.viewModels.LoadingState
 import com.joe.core.viewModels.RefreshingState
 import com.joe.core.viewModels.ViewModelState
 import com.joe.core.viewModels.job
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class MovieDetailsViewModel(
+@HiltViewModel
+class MovieDetailsViewModel @Inject constructor(
     private val movieDetailsUseCase: MovieDetailsUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _state = MutableStateFlow<ViewModelState>(LoadingState())
     val state: StateFlow<ViewModelState> = _state.asStateFlow()

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.joe.popularmovies"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 29
@@ -33,9 +33,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(project(":data"))
     implementation(project(":core"))
 
@@ -45,7 +42,4 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.retrofit.mock)
     testImplementation(libs.kotlinx.coroutines.test)
-
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }
