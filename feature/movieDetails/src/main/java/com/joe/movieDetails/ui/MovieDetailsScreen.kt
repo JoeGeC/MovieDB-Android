@@ -193,7 +193,7 @@ fun UserScore(score: Float?, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AnimatedCircularProgressBar(score, modifier)
+        AnimatedCircularProgressBar(progress = score, modifier = modifier)
         Text(
             text = "User\nScore",
             style = MaterialTheme.typography.titleSmall,

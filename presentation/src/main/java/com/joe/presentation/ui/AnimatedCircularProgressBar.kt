@@ -5,11 +5,13 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,18 +20,24 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.geometry.center
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AnimatedCircularProgressBar(progress: Float, modifier: Modifier = Modifier) {
+fun AnimatedCircularProgressBar(
+    progress: Float,
+    modifier: Modifier = Modifier,
+    size: Float = 75f,
+    strokeWidth: Float = 6f,
+    numberTextStyle: TextStyle = MaterialTheme.typography.headlineMedium,
+    percentageTextStyle: TextStyle = MaterialTheme.typography.labelSmall,
+    numberTextColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    percentageTextColor: Color = MaterialTheme.colorScheme.onPrimaryContainer,
+    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
+) {
     val animatedProgress = remember { Animatable(0f) }
-    val strokeColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val progressColor = MaterialTheme.colorScheme.primary
-    val backgroundColor = MaterialTheme.colorScheme.primaryContainer
+    val progressBarSize = remember { size * 0.9 }
 
     LaunchedEffect(progress) {
         animatedProgress.animateTo(
@@ -40,56 +48,46 @@ fun AnimatedCircularProgressBar(progress: Float, modifier: Modifier = Modifier) 
 
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier.size(80.dp)
+        modifier = modifier
+            .size(size.dp)
+            .background(color = backgroundColor, shape = CircleShape)
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val strokeWidth = 6.dp.toPx()
-            val radius = size.minDimension / 2 - strokeWidth / 2
-            val innerRadius = radius - 6.dp.toPx()
-            val center = size.center
 
-            drawCircle(
-                color = backgroundColor,
-                radius = radius,
-            )
+        CircularProgressIndicator(
+            progress = { animatedProgress.value },
+            modifier = Modifier.size(progressBarSize.dp),
+            color = MaterialTheme.colorScheme.primary,
+            strokeWidth = strokeWidth.dp
+        )
 
-            drawCircle(
-                color = strokeColor,
-                radius = innerRadius,
-                center = center,
-                style = Stroke(width = strokeWidth)
-            )
-
-            drawArc(
-                color = progressColor,
-                startAngle = -90f,
-                sweepAngle = 360 * animatedProgress.value,
-                useCenter = false,
-                style = Stroke(width = strokeWidth, pathEffect = null),
-                size = Size(innerRadius * 2, innerRadius * 2),
-                topLeft = Offset(
-                    (size.width - innerRadius * 2) / 2,
-                    (size.height - innerRadius * 2) / 2
-                )
-            )
-        }
-
-        ScoreLabel(animatedProgress)
+        ScoreLabel(
+            animatedProgress,
+            numberTextStyle,
+            numberTextColor,
+            percentageTextStyle,
+            percentageTextColor
+        )
     }
 }
 
 @Composable
-private fun ScoreLabel(progress: Animatable<Float, AnimationVector1D>) {
-    Row{
+private fun ScoreLabel(
+    progress: Animatable<Float, AnimationVector1D>,
+    numberTextStyle: TextStyle,
+    numberTextColor: Color,
+    percentageTextStyle: TextStyle,
+    percentageTextColor: Color
+) {
+    Row {
         Text(
             text = "${(progress.value * 100).toInt()}",
-            style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
+            style = numberTextStyle,
+            color = numberTextColor
         )
         Text(
             text = "%",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            style = percentageTextStyle,
+            color = percentageTextColor,
             modifier = Modifier.padding(top = 4.dp)
         )
     }
