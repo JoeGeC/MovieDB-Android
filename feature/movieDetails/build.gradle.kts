@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.coil)
     implementation(libs.coil.okhttp)
+    implementation(libs.shimmer)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation)

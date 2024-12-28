@@ -1,5 +1,6 @@
 package com.joe.movieDetails.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,7 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.joe.feature.R
 import com.joe.movieDetails.presentation.MovieDetailsSuccessState
 import com.joe.movieDetails.presentation.MovieDetailsViewModel
@@ -36,6 +38,7 @@ import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
+import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun MovieDetailsScreen(
@@ -58,7 +61,7 @@ private fun ScreenState(state: ViewModelState) {
     when (state) {
         is MovieDetailsSuccessState -> MovieDetailsSuccessScreen(state.movieDetails)
         is ErrorState -> ErrorScreen()
-        is LoadingState -> Text("Loading...")
+        is LoadingState -> MovieDetailsLoadingScreen()
         is RefreshingState -> ScreenState(state.previousState)
     }
 }
@@ -79,7 +82,7 @@ fun MovieDetailsSuccessScreen(movieDetails: MediaDetailsModel) {
                     .fillMaxWidth()
                     .padding(horizontal = 42.dp),
                 verticalAlignment = Alignment.Bottom
-            ){
+            ) {
                 PosterImage(movieDetails.posterPath)
                 Spacer(Modifier.weight(1f))
                 UserScore(movieDetails.score)
@@ -90,16 +93,20 @@ fun MovieDetailsSuccessScreen(movieDetails: MediaDetailsModel) {
 
 @Composable
 private fun BackgroundImage(backgroundImageUrl: String?) {
-    AsyncImage(
-        model = backgroundImageUrl,
-        contentDescription = "Background Image",
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp),
-        contentScale = ContentScale.Crop,
-        placeholder = painterResource(R.drawable.backdrop_fallback),
-        error = painterResource(R.drawable.backdrop_fallback)
-    )
+            .height(250.dp)
+    ) {
+        SubcomposeAsyncImage(
+            modifier = Modifier.fillMaxSize(),
+            model = backgroundImageUrl,
+            contentDescription = "Background Image",
+            contentScale = ContentScale.Crop,
+            loading = { ImageShimmer() },
+            error = { painterResource(R.drawable.backdrop_fallback) }
+        )
+    }
 }
 
 @Composable
@@ -129,18 +136,30 @@ private fun MovieDetailsSurface(movieDetails: MediaDetailsModel) {
 @Composable
 private fun PosterImage(posterImageUrl: String?) {
     Box(
-        modifier = Modifier.height(250.dp)) {
-        AsyncImage(
+        modifier = Modifier
+            .height(Dimensions.POSTER_IMAGE_HEIGHT.dp)
+            .width(Dimensions.POSTER_IMAGE_WIDTH.dp)
+            .clip(RoundedCornerShape(8))
+    ) {
+        SubcomposeAsyncImage(
             model = posterImageUrl,
-            contentDescription = "Profile Image",
-            modifier = Modifier
-                .align(Alignment.Center)
-                .clip(RoundedCornerShape(4)),
+            contentDescription = "Movie Poster",
+            modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
-            placeholder = painterResource(R.drawable.poster_fallback),
-            error = painterResource(R.drawable.poster_fallback)
+            loading = { ImageShimmer() },
+            error = { painterResource(R.drawable.poster_fallback) }
         )
     }
+}
+
+@Composable
+private fun ImageShimmer() {
+    Box(
+        Modifier
+            .shimmer()
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.onSurface)
+    )
 }
 
 @Composable
@@ -188,11 +207,15 @@ private fun Overview(overview: String) {
 
 @Composable
 fun UserScore(score: Float?, modifier: Modifier = Modifier) {
-    if(score == null) return
+    if (score == null) return
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AnimatedCircularProgressBar(progress = score, modifier = modifier)
+        AnimatedCircularProgressBar(
+            progress = score,
+            size = Dimensions.USER_SCORE_SIZE,
+            modifier = modifier
+        )
         Text(
             text = "User\nScore",
             style = MaterialTheme.typography.titleSmall,
