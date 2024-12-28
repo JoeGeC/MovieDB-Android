@@ -13,6 +13,7 @@ import com.joe.presentation.viewModels.ViewModelState
 import com.joe.presentation.viewModels.job
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +39,7 @@ class MovieDetailsViewModel @Inject constructor(
             return
         }
         job({
+            _state.value = LoadingState()
             try {
                 val result = movieDetailsUseCase.getMovieDetails(movieId!!)
                 handleResult(result)
@@ -62,7 +64,10 @@ class MovieDetailsViewModel @Inject constructor(
     fun refresh() {
         if (_state.value is LoadingState || _state.value is RefreshingState) return
         _state.value = RefreshingState(_state.value)
-        getMovie()
+        job({
+            delay(20) //Allow compose PullToRefresh to finish animating
+            getMovie()
+        }, dispatcher)
     }
 
 }

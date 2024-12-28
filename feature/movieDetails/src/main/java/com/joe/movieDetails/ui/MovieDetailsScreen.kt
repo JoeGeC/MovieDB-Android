@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,6 +43,7 @@ import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
 import com.valentinilk.shimmer.shimmer
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
@@ -52,7 +56,15 @@ fun MovieDetailsScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        ScreenState(state)
+        println("State: $state")
+        PullToRefreshBox(
+            isRefreshing = state is RefreshingState,
+            onRefresh = viewModel::refresh
+        ) {
+            Box(Modifier.verticalScroll(rememberScrollState())){
+                ScreenState(state)
+            }
+        }
     }
 }
 
@@ -62,19 +74,19 @@ private fun ScreenState(state: ViewModelState) {
         is MovieDetailsSuccessState -> MovieDetailsSuccessScreen(state.movieDetails)
         is ErrorState -> ErrorScreen()
         is LoadingState -> MovieDetailsLoadingScreen()
-        is RefreshingState -> ScreenState(state.previousState)
+        is RefreshingState -> { ScreenState(state.previousState) }
     }
 }
 
 @Composable
 fun MovieDetailsSuccessScreen(movieDetails: MediaDetailsModel) {
-    val scrollState = rememberScrollState()
+//    val scrollState = rememberScrollState()
     Box(Modifier.fillMaxSize()) {
         BackgroundImage(movieDetails.backdropPath)
         Box(
             modifier = Modifier
                 .padding(top = 100.dp)
-                .verticalScroll(scrollState)
+//                .verticalScroll(scrollState)
         ) {
             MovieDetailsSurface(movieDetails)
             Row(
