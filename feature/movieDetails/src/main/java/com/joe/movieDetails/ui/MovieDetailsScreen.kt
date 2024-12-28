@@ -115,7 +115,7 @@ private fun MovieDetailsSurface(movieDetails: MediaDetailsModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 120.dp)
+                .padding(top = 120.dp, bottom = 16.dp)
                 .padding(horizontal = 28.dp),
         ) {
 
