@@ -1,7 +1,7 @@
 package com.joe.popularmovies.data
 
 import com.joe.core.entity.Either
-import com.joe.data.NetworkProvider
+import com.joe.data.json.NetworkProvider
 import com.joe.popularmovies.resources.MockJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

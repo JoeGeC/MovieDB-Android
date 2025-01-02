@@ -19,5 +19,5 @@ object MockModel {
     )
 
     val nullSuccess = Either.Success(null)
-    const val ERROR_MESSAGE = "Error"
+    const val ERROR_MESSAGE = "Error Message"
 }

@@ -10,4 +10,11 @@ data class PopularMoviesLocalModel(
     @ColumnInfo(name = "movies") val movies: String?,
     @ColumnInfo(name = "totalPages") val totalPages: Int,
     @ColumnInfo(name = "cachedAt") val cachedAt: Long
-)
+){
+    override fun equals(other: Any?): Boolean =
+        other is PopularMoviesLocalModel &&
+                page == other.page &&
+                movies == other.movies &&
+                totalPages == other.totalPages
+
+}

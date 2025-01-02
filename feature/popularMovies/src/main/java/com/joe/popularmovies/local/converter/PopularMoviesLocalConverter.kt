@@ -2,6 +2,7 @@ package com.joe.popularmovies.local.converter
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.joe.data.JsonAdapter.localDateGson
 import com.joe.popularmovies.domain.entity.MovieListItemEntity
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.local.model.PopularMoviesLocalModel
@@ -16,6 +17,6 @@ fun PopularMoviesResponse.toLocal(): PopularMoviesLocalModel? = PopularMoviesLoc
 
 fun PopularMoviesLocalModel?.toEntity(): PopularMoviesEntity? = PopularMoviesEntity(
     page = this?.page ?: throw java.lang.NullPointerException(),
-    movies = Gson().fromJson(this.movies, object: TypeToken<List<MovieListItemEntity>>() {}.type),
+    movies = localDateGson.fromJson(this.movies, object: TypeToken<List<MovieListItemEntity>>() {}.type),
     isFinalPage = this.totalPages <= this.page,
 )

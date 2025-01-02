@@ -1,6 +1,7 @@
 package com.joe.data
 
 import com.joe.core.entity.Either
+import com.joe.data.json.NetworkProvider
 import com.joe.data.response.ErrorResponse
 import retrofit2.Call
 import retrofit2.Retrofit

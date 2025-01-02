@@ -1,5 +1,6 @@
 package com.joe.popularmovies.domain.entity
 
+import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
 
 data class MovieListItemEntity(
@@ -7,5 +8,5 @@ data class MovieListItemEntity(
     val title: String?,
     val releaseDate: LocalDate?,
     val posterPath: String?,
-    val score: Float,
+    @SerializedName("voteAverage") val score: Float,
 )

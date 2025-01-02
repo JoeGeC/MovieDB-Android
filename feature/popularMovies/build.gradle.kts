@@ -60,5 +60,4 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.retrofit.mock)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
 }

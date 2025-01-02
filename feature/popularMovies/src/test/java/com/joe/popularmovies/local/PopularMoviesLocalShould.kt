@@ -1,7 +1,6 @@
 package com.joe.popularmovies.local
 
 import com.joe.core.entity.Either
-import com.joe.data.response.ErrorResponse
 import com.joe.popularmovies.resources.MockLocal
 import com.joe.popularmovies.resources.MockObjects
 import kotlinx.coroutines.ExperimentalCoroutinesApi

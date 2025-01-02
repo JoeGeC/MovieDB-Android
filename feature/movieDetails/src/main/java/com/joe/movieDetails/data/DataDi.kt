@@ -1,6 +1,6 @@
 package com.joe.movieDetails.data
 
-import com.joe.data.NetworkProvider
+import com.joe.data.json.NetworkProvider
 import com.joe.movieDetails.repository.boundary.MovieDetailsRemote
 import dagger.Module
 import dagger.Provides

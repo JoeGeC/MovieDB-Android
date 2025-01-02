@@ -15,12 +15,11 @@ class PopularMoviesRepositoryImpl(
     private val local: PopularMoviesLocal,
 ) : PopularMoviesRepository {
 
-    override suspend fun getPopularMovies(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> {
-        return fetchLocal(page).fold(
+    override suspend fun getPopularMovies(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> =
+        fetchLocal(page).fold(
             onSuccess = { Either.Success(it) },
             onFailure = { fetchRemote(page) }
         )
-    }
 
     private fun fetchLocal(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> {
         val localResult = local.get(page)

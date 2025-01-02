@@ -1,4 +1,4 @@
-package com.joe.data
+package com.joe.data.json
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson

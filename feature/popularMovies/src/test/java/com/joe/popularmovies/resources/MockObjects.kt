@@ -6,16 +6,15 @@ import com.joe.popularmovies.domain.entity.MovieListItemEntity
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.presentation.model.MovieListItemModel
 import com.joe.popularmovies.presentation.model.PopularMoviesModel
-import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
 
 object MockObjects {
-    const val MOVIE_ID_1 = 1
     const val PAGE_1 = 1
     const val PAGE_2 = 2
+    const val MOVIE_ID_1 = 1
     const val TITLE_1 = "The Lord of the Rings"
-    const val POSTER_PATH_1 = "https://image.tmdb.org/t/p/original/liW0mjvTyLs7UCumaHhx3PpU4VT.jpg"
     const val SCORE_1 = 6.589f
+    const val POSTER_PATH_1 = "https://image.tmdb.org/t/p/original/liW0mjvTyLs7UCumaHhx3PpU4VT.jpg"
 
     val model1 = MovieListItemModel(
         id = MOVIE_ID_1,
@@ -71,11 +70,6 @@ object MockObjects {
     val success2 = Either.Success(popularMoviesEntity2)
     val emptySuccess = Either.Success(emptyPopularMoviesEntity)
 
-    val successFlow1 = flowOf(success1)
-    val successFlow2 = flowOf(success2)
-    val emptySuccessFlow = flowOf(emptySuccess)
-
-    const val ERROR_MESSAGE = "Error"
+    const val ERROR_MESSAGE = "Error Message"
     val failure = Either.Failure(ErrorEntity(ERROR_MESSAGE))
-    val failureFlow = flowOf(failure)
 }
