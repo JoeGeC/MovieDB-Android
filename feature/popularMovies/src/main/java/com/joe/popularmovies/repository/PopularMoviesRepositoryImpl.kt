@@ -25,7 +25,7 @@ class PopularMoviesRepositoryImpl(
 
     private suspend fun FlowCollector<Either<PopularMoviesEntity?, ErrorEntity?>>.fetchLocal(page: Int) {
         val localResult = local.getPopularMovies(page)
-        if (localResult is Either.Success && !localResult.value.movies.isNullOrEmpty()) {
+        if (localResult is Either.Success && !localResult.value.results.isNullOrEmpty()) {
             emitSafeOrNone { localResult.value.toEntity() }
         }
     }
@@ -35,10 +35,10 @@ class PopularMoviesRepositoryImpl(
         remoteResult.fold(
             onSuccess = { remoteData ->
                 local.insertPopularMovies(remoteData)
-                emitSafeOrFailure { remoteData.toEntity() }
+                emitSafeOrFailure { remoteData?.toEntity() }
             },
             onFailure = { error ->
-                emit(Either.Failure(ErrorEntity(error.statusMessage)))
+                emit(Either.Failure(ErrorEntity(error?.statusMessage ?: "")))
             }
         )
     }

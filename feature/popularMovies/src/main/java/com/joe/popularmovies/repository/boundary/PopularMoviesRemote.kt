@@ -5,5 +5,5 @@ import com.joe.data.response.ErrorResponse
 import com.joe.popularmovies.repository.response.PopularMoviesResponse
 
 interface PopularMoviesRemote {
-    fun getPopularMovies(page: Int): Either<PopularMoviesResponse, ErrorResponse>
+    fun getPopularMovies(page: Int): Either<PopularMoviesResponse?, ErrorResponse?>
 }

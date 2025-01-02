@@ -7,6 +7,7 @@ import com.joe.popularmovies.repository.response.PopularMoviesResponse
 
 object MockResponse {
     const val POSTER_PATH_1 = "/liW0mjvTyLs7UCumaHhx3PpU4VT.jpg"
+    const val TOTAL_PAGES = 2
 
     val movieDetails = MovieListItemResponse(
         MockObjects.MOVIE_ID_1,
@@ -27,25 +28,25 @@ object MockResponse {
     val emptyPopularMovies = PopularMoviesResponse(
         MockObjects.PAGE_1,
         listOf<MovieListItemResponse>(),
-        false
+        TOTAL_PAGES
     )
 
     val popularMovies = PopularMoviesResponse(
         MockObjects.PAGE_1,
         listOf(movieDetails),
-        false
+        TOTAL_PAGES
     )
 
     val popularMoviesWithNullMovieData = PopularMoviesResponse(
         MockObjects.PAGE_1,
         listOf(movieDetails, movieDetailsWithNullData),
-        false
+        TOTAL_PAGES
     )
 
     val popularMoviesWithNullData = PopularMoviesResponse(
         null,
         listOf(movieDetails),
-        false
+        TOTAL_PAGES
     )
 
     const val ERROR_MESSAGE = "Error Message"

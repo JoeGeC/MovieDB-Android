@@ -7,8 +7,8 @@ import com.joe.popularmovies.repository.response.PopularMoviesResponse
 
 fun PopularMoviesResponse.toEntity() = PopularMoviesEntity(
     page = this.page ?: throw NullPointerException(),
-    movies = this.movies?.mapNotNull { tryConvertMovie(it) } ?: throw IllegalStateException(),
-    isFinalPage = this.isFinalPage
+    movies = this.results?.mapNotNull { tryConvertMovie(it) } ?: throw IllegalStateException(),
+    isFinalPage = this.totalPages <= this.page
 )
 
 private fun tryConvertMovie(response: MovieListItemResponse): MovieListItemEntity? = try {
