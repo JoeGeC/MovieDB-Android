@@ -6,6 +6,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.joe.presentation.R
 
 @Composable
 fun ErrorScreen() {
@@ -13,7 +15,7 @@ fun ErrorScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "Something went wrong :(",
+            text = stringResource(R.string.somethingWentWrong),
             modifier = Modifier.align(Alignment.Center)
         )
     }

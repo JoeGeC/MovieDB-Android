@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.SubcomposeAsyncImage
@@ -204,7 +205,7 @@ private fun Tagline(tagline: String) {
 @Composable
 private fun Overview(overview: String) {
     Text(
-        text = "Overview",
+        text = stringResource(R.string.overview),
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(top = 12.dp)
     )
@@ -228,7 +229,7 @@ fun UserScore(score: Float?, modifier: Modifier = Modifier) {
             modifier = modifier
         )
         Text(
-            text = "User\nScore",
+            text = stringResource(R.string.user_score_newline),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(start = 6.dp, top = 4.dp)
         )

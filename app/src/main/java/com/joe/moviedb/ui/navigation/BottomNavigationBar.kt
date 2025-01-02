@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -30,7 +31,7 @@ fun BottomNavigationBar() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
-                bottomNavigationItems.forEachIndexed { index, navigationItem ->
+                bottomNavigationItems(LocalContext.current).forEachIndexed { index, navigationItem ->
                     NavigationBarItem(
                         selected = index == navigationSelectedItem,
                         label = { Text(navigationItem.label) },
@@ -53,7 +54,8 @@ fun BottomNavigationBar() {
         NavHost(
             navController = navController,
             startDestination = Screens.Movies.route,
-            modifier = Modifier.padding(paddingValues = paddingValues)) {
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
             composable(Screens.Movies.route) {
                 MovieDetailsScreen(550)
             }
