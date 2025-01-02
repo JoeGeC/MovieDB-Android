@@ -17,14 +17,6 @@ object MockResponse {
         MockObjects.SCORE_1,
     )
 
-    val movieDetailsWithNullData = MovieListItemResponse(
-        MockObjects.MOVIE_ID_1,
-        null,
-        null,
-        null,
-        null,
-    )
-
     val popularMovies = PopularMoviesResponse(
         MockObjects.PAGE_1,
         listOf(movieDetails),
