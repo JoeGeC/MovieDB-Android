@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+    implementation(libs.kotlinx.coroutines)
     implementation(project(":core"))
 
     testImplementation(libs.junit)

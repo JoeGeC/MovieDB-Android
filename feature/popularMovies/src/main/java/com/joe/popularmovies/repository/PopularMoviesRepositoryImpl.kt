@@ -9,6 +9,8 @@ import com.joe.popularmovies.repository.boundary.PopularMoviesRemote
 import com.joe.popularmovies.repository.converter.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import com.joe.data.utils.emitSafeOrFailure
+import com.joe.data.utils.emitSafeOrNone
 
 class PopularMoviesRepositoryImpl(
     private val remote: PopularMoviesRemote,
@@ -19,22 +21,17 @@ class PopularMoviesRepositoryImpl(
         flow {
             val localResult = local.getPopularMovies(page)
             if(localResult is Either.Success && !localResult.value.movies.isNullOrEmpty()){
-                try {
-                    emit(Either.Success(localResult.value.toEntity()))
-                } catch (_: Exception){ }
+                emitSafeOrNone { localResult.value.toEntity() }
             }
             val remoteResult = remote.getPopularMovies(page)
             remoteResult.fold(
                 onSuccess = {
                     local.insertPopularMovies(it)
-                    try {
-                        emit(Either.Success(it.toEntity()))
-                    } catch (e: Exception){
-                        emit(Either.Failure(ErrorEntity(e.message ?: "")))
-                    }
+                    emitSafeOrFailure { it.toEntity() }
                 },
                 onFailure = { emit(Either.Failure(ErrorEntity(it.statusMessage))) }
             )
         }
+
 
 }
