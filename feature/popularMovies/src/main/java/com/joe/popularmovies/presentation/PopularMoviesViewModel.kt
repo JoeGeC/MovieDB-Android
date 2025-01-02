@@ -48,16 +48,28 @@ class PopularMoviesViewModel(
             else -> ErrorState()
         }
 
-    private fun handleSuccessState(entity: PopularMoviesEntity?) =
-        if (entity != null) {
-            canLoadMore = !entity.isFinalPage
-            currentPage++
-            val model = entity.toModel(getCurrentMoviesInState())
-            if (model.movies.isEmpty()) ErrorState()
-            else PopularMoviesSuccessState(model)
-        } else if(_state.value.getBaseState() is PopularMoviesSuccessState) {
+    private fun handleSuccessState(entity: PopularMoviesEntity?): ViewModelState = when {
+        entity == null -> getPreviousStateIfAvailable()
+        isMoviesEmpty(entity) -> ErrorState()
+        else -> createSuccessState(entity)
+    }
+
+    private fun isMoviesEmpty(entity: PopularMoviesEntity): Boolean {
+        val model = entity.toModel(getCurrentMoviesInState())
+        return model.movies.isEmpty()
+    }
+
+    private fun createSuccessState(entity: PopularMoviesEntity): PopularMoviesSuccessState {
+        canLoadMore = !entity.isFinalPage
+        currentPage++
+        val model = entity.toModel(getCurrentMoviesInState())
+        return PopularMoviesSuccessState(model)
+    }
+
+    private fun getPreviousStateIfAvailable(): ViewModelState =
+        if (_state.value.getBaseState() is PopularMoviesSuccessState)
             _state.value.getBaseState()
-        } else ErrorState()
+        else ErrorState()
 
     private fun getCurrentMoviesInState(): List<MovieListItemModel> {
         val currentState = _state.value.getBaseState() as? PopularMoviesSuccessState
