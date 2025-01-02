@@ -17,4 +17,13 @@ data class PopularMoviesLocalModel(
                 movies == other.movies &&
                 totalPages == other.totalPages
 
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + page
+        result = 31 * result + (movies?.hashCode() ?: 0)
+        result = 31 * result + totalPages
+        result = 31 * result + cachedAt.hashCode()
+        return result
+    }
+
 }

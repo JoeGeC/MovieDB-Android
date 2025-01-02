@@ -19,7 +19,6 @@ activity = "1.9.3"
 navigation = "2.8.5"
 coil = "3.0.4"
 shimmer = "1.3.1"
-turbine = "1.2.0"
 
 [libraries]
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
@@ -54,7 +53,6 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

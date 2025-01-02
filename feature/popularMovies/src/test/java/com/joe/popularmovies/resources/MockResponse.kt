@@ -25,35 +25,14 @@ object MockResponse {
         null,
     )
 
-    val emptyPopularMovies = PopularMoviesResponse(
-        MockObjects.PAGE_1,
-        listOf<MovieListItemResponse>(),
-        TOTAL_PAGES
-    )
-
     val popularMovies = PopularMoviesResponse(
         MockObjects.PAGE_1,
         listOf(movieDetails),
         TOTAL_PAGES
     )
 
-    val popularMoviesWithNullMovieData = PopularMoviesResponse(
-        MockObjects.PAGE_1,
-        listOf(movieDetails, movieDetailsWithNullData),
-        TOTAL_PAGES
-    )
-
-    val popularMoviesWithNullData = PopularMoviesResponse(
-        null,
-        listOf(movieDetails),
-        TOTAL_PAGES
-    )
-
     const val ERROR_MESSAGE = "Error Message"
 
-    val emptySuccess = Either.Success(emptyPopularMovies)
-    val nullMovieDataSuccess = Either.Success(popularMoviesWithNullMovieData)
-    val nullDataSuccess = Either.Success(popularMoviesWithNullData)
     val success = Either.Success(popularMovies)
     val failure = Either.Failure(ErrorResponse(ERROR_MESSAGE))
 }

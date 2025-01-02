@@ -58,7 +58,6 @@ object MockObjects {
 
     val popularMoviesEntity1 = PopularMoviesEntity(1, entityList1, false)
     val popularMoviesEntity2 = PopularMoviesEntity(2, entityList2, true)
-    val emptyPopularMoviesEntity = PopularMoviesEntity(1, listOf(), false)
 
     val modelList1 = listOf(model1)
     val modelList2 = listOf(model1, model2)
@@ -68,7 +67,6 @@ object MockObjects {
 
     val success1 = Either.Success(popularMoviesEntity1)
     val success2 = Either.Success(popularMoviesEntity2)
-    val emptySuccess = Either.Success(emptyPopularMoviesEntity)
     val nullSuccess = Either.Success(null)
 
     const val ERROR_MESSAGE = "Error Message"
