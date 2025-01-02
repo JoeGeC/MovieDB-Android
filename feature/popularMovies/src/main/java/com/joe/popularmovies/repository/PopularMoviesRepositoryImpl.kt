@@ -2,8 +2,6 @@ package com.joe.popularmovies.repository
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.data.utils.emitSafeOrFailure
-import com.joe.data.utils.emitSafeOrNone
 import com.joe.popularmovies.domain.boundary.PopularMoviesRepository
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.local.converter.toEntity
