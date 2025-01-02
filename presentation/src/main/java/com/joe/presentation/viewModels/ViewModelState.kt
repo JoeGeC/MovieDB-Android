@@ -6,6 +6,7 @@ abstract class ViewModelState() {
 
 class LoadingState() : ViewModelState()
 
+
 class ErrorState() : ViewModelState() {
     override fun equals(other: Any?): Boolean {
         return other is ErrorState

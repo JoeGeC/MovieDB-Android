@@ -7,7 +7,6 @@ import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.converter.toModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
-import com.joe.presentation.viewModels.CompletedState
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
@@ -38,7 +37,7 @@ class PopularMoviesViewModel(
         currentJob?.cancel()
         currentJob = job({
             val result = popularMoviesUseCase.getPopularMovies(currentPage)
-            handleResult(result)
+            _state.value = handleResult(result)
         }, dispatcher)
     }
 
@@ -56,6 +55,8 @@ class PopularMoviesViewModel(
             val model = entity.toModel(getCurrentMoviesInState())
             if (model.movies.isEmpty()) ErrorState()
             else PopularMoviesSuccessState(model)
+        } else if(_state.value.getBaseState() is PopularMoviesSuccessState) {
+            _state.value.getBaseState()
         } else ErrorState()
 
     private fun getCurrentMoviesInState(): List<MovieListItemModel> {
@@ -64,14 +65,14 @@ class PopularMoviesViewModel(
     }
 
     fun getMoreMovies() {
-        if (!canLoadMore || _state.value !is CompletedState) return
+        if (!canLoadMore || _state.value is PopularMoviesLoadingMoreState || _state.value is RefreshingState) return
         val currentState = _state.value.getBaseState() as? PopularMoviesSuccessState ?: return
         _state.value = PopularMoviesLoadingMoreState(currentState)
         getMovies()
     }
 
     fun refresh() {
-        if (_state.value is LoadingState || _state.value is RefreshingState) return
+        if (_state.value is RefreshingState) return
         reset()
         _state.value = RefreshingState(_state.value)
         getMovies()

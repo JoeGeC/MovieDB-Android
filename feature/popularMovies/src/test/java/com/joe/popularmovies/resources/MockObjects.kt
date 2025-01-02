@@ -69,6 +69,7 @@ object MockObjects {
     val success1 = Either.Success(popularMoviesEntity1)
     val success2 = Either.Success(popularMoviesEntity2)
     val emptySuccess = Either.Success(emptyPopularMoviesEntity)
+    val nullSuccess = Either.Success(null)
 
     const val ERROR_MESSAGE = "Error Message"
     val failure = Either.Failure(ErrorEntity(ERROR_MESSAGE))
