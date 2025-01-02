@@ -26,7 +26,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should emit local data when it exists`() = runTest {
+    fun `emit local data when it exists`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.success)
 
         repository.getPopularMovies(MockObjects.PAGE_1).test {
@@ -37,7 +37,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should emit remote data when local is empty and remote succeeds`() = runTest {
+    fun `emit remote data when local is empty and remote succeeds`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.emptySuccess)
         whenever(remote.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.success)
 
@@ -51,7 +51,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should emit error when remote and local both fail`() = runTest {
+    fun `emit error when remote and local both fail`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.failure)
         whenever(remote.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.failure)
 
@@ -63,7 +63,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should not include item when null data in movie in local response`() = runTest {
+    fun `not include item when null data in movie in local response`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.nullMovieDataSuccess)
         whenever(remote.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.success)
 
@@ -75,7 +75,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should not emit when null data in local response`() = runTest {
+    fun `not emit when null data in local response`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.nullDataSuccess)
         whenever(remote.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.success)
 
@@ -87,7 +87,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should emit failure when null data in remote response`() = runTest {
+    fun `emit failure when null data in remote response`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.failure)
         whenever(remote.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.nullDataSuccess)
 
@@ -99,7 +99,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `should not include item when null data in movie in data response`() = runTest {
+    fun `not include item when null data in movie in data response`() = runTest {
         whenever(local.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.failure)
         whenever(remote.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockResponse.nullMovieDataSuccess)
 
