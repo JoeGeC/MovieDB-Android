@@ -23,7 +23,7 @@ class PopularMoviesRepositoryImpl(
     }
 
     private fun fetchLocal(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> {
-        val localResult = local.getPopularMovies(page)
+        val localResult = local.get(page)
         return if (localResult is Either.Success && !localResult.value?.movies.isNullOrEmpty()) {
             Either.Success(localResult.value.toEntity())
         } else Either.Failure(ErrorEntity("No data in local"))
@@ -33,7 +33,7 @@ class PopularMoviesRepositoryImpl(
         val remoteResult = remote.getPopularMovies(page)
         remoteResult.fold(
             onSuccess = { remoteData ->
-                local.insertPopularMovies(remoteData?.toLocal())
+                local.insert(remoteData?.toLocal())
                 return Either.Success(remoteData?.toEntity())
             },
             onFailure = { error ->

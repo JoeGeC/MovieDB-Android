@@ -11,6 +11,7 @@ fun PopularMoviesResponse.toLocal(): PopularMoviesLocalModel? = PopularMoviesLoc
     page = this.page ?: throw NullPointerException(),
     movies = Gson().toJson(this.results),
     totalPages = this.totalPages,
+    cachedAt = System.currentTimeMillis()
 )
 
 fun PopularMoviesLocalModel?.toEntity(): PopularMoviesEntity? = PopularMoviesEntity(

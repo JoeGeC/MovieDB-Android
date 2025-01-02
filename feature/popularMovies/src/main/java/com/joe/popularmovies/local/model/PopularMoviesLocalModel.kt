@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 data class PopularMoviesLocalModel(
     @PrimaryKey val page: Int,
     @ColumnInfo(name = "movies") val movies: String?,
-    @ColumnInfo(name = "totalPages") val totalPages: Int
+    @ColumnInfo(name = "totalPages") val totalPages: Int,
+    @ColumnInfo(name = "cachedAt") val cachedAt: Long
 )
