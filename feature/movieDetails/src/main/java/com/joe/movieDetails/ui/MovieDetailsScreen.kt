@@ -1,6 +1,5 @@
 package com.joe.movieDetails.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,11 +36,11 @@ import com.joe.movieDetails.presentation.MovieDetailsViewModel
 import com.joe.presentation.model.MediaDetailsModel
 import com.joe.presentation.ui.AnimatedCircularProgressBar
 import com.joe.presentation.ui.ErrorScreen
+import com.joe.presentation.ui.ImageShimmer
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
-import com.valentinilk.shimmer.shimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -116,7 +115,7 @@ private fun BackgroundImage(backgroundImageUrl: String?) {
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
             loading = { ImageShimmer() },
-            error = { painterResource(R.drawable.backdrop_fallback) }
+            error = { painterResource(com.joe.presentation.R.drawable.backdrop_fallback) }
         )
     }
 }
@@ -159,19 +158,9 @@ private fun PosterImage(posterImageUrl: String?) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
             loading = { ImageShimmer() },
-            error = { painterResource(R.drawable.poster_fallback) }
+            error = { painterResource(com.joe.presentation.R.drawable.poster_fallback) }
         )
     }
-}
-
-@Composable
-private fun ImageShimmer() {
-    Box(
-        Modifier
-            .shimmer()
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.onSurface)
-    )
 }
 
 @Composable

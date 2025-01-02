@@ -53,6 +53,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(project(":core"))
     implementation(project(":feature:movieDetails"))
+    implementation(project(":feature:popularMovies"))
 
     testImplementation(libs.junit)
 }

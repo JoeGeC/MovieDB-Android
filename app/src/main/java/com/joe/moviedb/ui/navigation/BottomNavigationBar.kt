@@ -9,9 +9,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -19,7 +19,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.joe.movieDetails.ui.MovieDetailsScreen
+import com.joe.popularmovies.ui.PopularMoviesScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +57,7 @@ fun BottomNavigationBar() {
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             composable(Screens.Movies.route) {
-                MovieDetailsScreen(550)
+                PopularMoviesScreen()
             }
             composable(Screens.TvShows.route) {
             }

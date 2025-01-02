@@ -7,21 +7,24 @@ import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.converter.toModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
+import com.joe.presentation.IoDispatcher
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
 import com.joe.presentation.viewModels.job
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
-class PopularMoviesViewModel(
+@HiltViewModel
+class PopularMoviesViewModel @Inject constructor(
     private val popularMoviesUseCase: PopularMoviesUseCase,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val _state = MutableStateFlow<ViewModelState>(LoadingState())
     val state: StateFlow<ViewModelState> = _state.asStateFlow()
