@@ -7,7 +7,6 @@ import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.converter.toModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
-import com.joe.presentation.model.MediaDetailsModel
 import com.joe.presentation.viewModels.CompletedState
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
@@ -20,8 +19,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
 
 class PopularMoviesViewModel(
     private val popularMoviesUseCase: PopularMoviesUseCase,
@@ -40,13 +37,8 @@ class PopularMoviesViewModel(
     private fun getMovies() {
         currentJob?.cancel()
         currentJob = job({
-            popularMoviesUseCase.getPopularMovies(currentPage)
-                .catch { e -> _state.value = ErrorState() }
-                .onCompletion {
-                    _state.value =
-                        CompletedState(_state.value)
-                }
-                .collect { result -> _state.value = handleResult(result) }
+            val result = popularMoviesUseCase.getPopularMovies(currentPage)
+            handleResult(result)
         }, dispatcher)
     }
 

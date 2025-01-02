@@ -2,6 +2,8 @@ package com.joe.movieDetails.local
 
 import com.joe.core.entity.Either
 import com.joe.data.response.ErrorResponse
+import com.joe.movieDetails.local.converter.toLocal
+import com.joe.movieDetails.local.converter.toResponse
 import com.joe.movieDetails.repository.boundary.MovieDetailsLocal
 import com.joe.movieDetails.repository.response.MovieDetailsResponse
 

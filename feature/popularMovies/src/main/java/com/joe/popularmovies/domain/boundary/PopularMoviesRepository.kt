@@ -6,5 +6,5 @@ import com.joe.popularmovies.domain.entity.PopularMoviesEntity
 import kotlinx.coroutines.flow.Flow
 
 interface PopularMoviesRepository {
-    suspend fun getPopularMovies(page: Int) : Flow<Either<PopularMoviesEntity?, ErrorEntity?>>
+    suspend fun getPopularMovies(page: Int) : Either<PopularMoviesEntity?, ErrorEntity?>
 }

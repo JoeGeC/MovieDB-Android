@@ -1,6 +1,6 @@
 package com.joe.movieDetails.resources
 
-import com.joe.movieDetails.local.MovieDetailsLocalModel
+import com.joe.movieDetails.local.model.MovieDetailsLocalModel
 
 object MockLocal {
 

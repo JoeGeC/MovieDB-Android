@@ -1,4 +1,4 @@
-package com.joe.movieDetails.local
+package com.joe.movieDetails.local.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

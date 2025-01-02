@@ -2,43 +2,44 @@ package com.joe.popularmovies.repository
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
+import com.joe.data.utils.emitSafeOrFailure
+import com.joe.data.utils.emitSafeOrNone
 import com.joe.popularmovies.domain.boundary.PopularMoviesRepository
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
+import com.joe.popularmovies.local.converter.toEntity
+import com.joe.popularmovies.local.converter.toLocal
 import com.joe.popularmovies.repository.boundary.PopularMoviesLocal
 import com.joe.popularmovies.repository.boundary.PopularMoviesRemote
 import com.joe.popularmovies.repository.converter.toEntity
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import com.joe.data.utils.emitSafeOrFailure
-import com.joe.data.utils.emitSafeOrNone
-import kotlinx.coroutines.flow.FlowCollector
 
 class PopularMoviesRepositoryImpl(
     private val remote: PopularMoviesRemote,
     private val local: PopularMoviesLocal,
 ) : PopularMoviesRepository {
 
-    override suspend fun getPopularMovies(page: Int): Flow<Either<PopularMoviesEntity?, ErrorEntity?>> = flow {
-        fetchLocal(page)
-        fetchRemote(page)
+    override suspend fun getPopularMovies(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> {
+        return fetchLocal(page).fold(
+            onSuccess = { Either.Success(it) },
+            onFailure = { fetchRemote(page) }
+        )
     }
 
-    private suspend fun FlowCollector<Either<PopularMoviesEntity?, ErrorEntity?>>.fetchLocal(page: Int) {
+    private fun fetchLocal(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> {
         val localResult = local.getPopularMovies(page)
-        if (localResult is Either.Success && !localResult.value.results.isNullOrEmpty()) {
-            emitSafeOrNone { localResult.value.toEntity() }
-        }
+        return if (localResult is Either.Success && !localResult.value?.movies.isNullOrEmpty()) {
+            Either.Success(localResult.value.toEntity())
+        } else Either.Failure(ErrorEntity("No data in local"))
     }
 
-    private suspend fun FlowCollector<Either<PopularMoviesEntity?, ErrorEntity?>>.fetchRemote(page: Int) {
+    private fun fetchRemote(page: Int): Either<PopularMoviesEntity?, ErrorEntity?> {
         val remoteResult = remote.getPopularMovies(page)
         remoteResult.fold(
             onSuccess = { remoteData ->
-                local.insertPopularMovies(remoteData)
-                emitSafeOrFailure { remoteData?.toEntity() }
+                local.insertPopularMovies(remoteData?.toLocal())
+                return Either.Success(remoteData?.toEntity())
             },
             onFailure = { error ->
-                emit(Either.Failure(ErrorEntity(error?.statusMessage ?: "")))
+                return Either.Failure(ErrorEntity(error?.statusMessage ?: ""))
             }
         )
     }

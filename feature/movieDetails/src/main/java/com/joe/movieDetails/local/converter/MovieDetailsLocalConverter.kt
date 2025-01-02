@@ -1,5 +1,6 @@
-package com.joe.movieDetails.local
+package com.joe.movieDetails.local.converter
 
+import com.joe.movieDetails.local.model.MovieDetailsLocalModel
 import com.joe.movieDetails.repository.response.MovieDetailsResponse
 
 

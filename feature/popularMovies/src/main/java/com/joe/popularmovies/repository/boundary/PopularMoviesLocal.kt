@@ -6,6 +6,6 @@ import com.joe.popularmovies.local.model.PopularMoviesLocalModel
 import com.joe.popularmovies.repository.response.PopularMoviesResponse
 
 interface PopularMoviesLocal {
-    fun getPopularMovies(page: Int): Either<PopularMoviesResponse, ErrorResponse>
-    fun insertPopularMovies(response: PopularMoviesResponse?)
+    fun getPopularMovies(page: Int): Either<PopularMoviesLocalModel?, ErrorResponse>
+    fun insertPopularMovies(response: PopularMoviesLocalModel?)
 }
