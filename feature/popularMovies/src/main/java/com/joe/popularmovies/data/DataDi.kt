@@ -1,6 +1,6 @@
-package com.joe.movieDetails.data
+package com.joe.popularmovies.data
 
-import com.joe.movieDetails.repository.boundary.MovieDetailsRemote
+import com.joe.popularmovies.repository.boundary.PopularMoviesRemote
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import retrofit2.Retrofit
 object DataDi {
 
     @Provides
-    fun provideMovieDetailsRemote(retrofit: Retrofit): MovieDetailsRemote =
-        MovieDetailsRemoteImpl(retrofit)
+    fun provideMovieDetailsRemote(retrofit: Retrofit): PopularMoviesRemote =
+        PopularMoviesRemoteImpl(retrofit)
 
 }

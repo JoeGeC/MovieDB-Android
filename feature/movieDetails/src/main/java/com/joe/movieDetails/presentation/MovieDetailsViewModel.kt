@@ -5,6 +5,7 @@ import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
 import com.joe.core.entity.MediaDetailsEntity
 import com.joe.movieDetails.domain.usecase.MovieDetailsUseCase
+import com.joe.presentation.IoDispatcher
 import com.joe.presentation.converter.toModel
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
