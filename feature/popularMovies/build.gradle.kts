@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.android.ksp)
+    alias(libs.plugins.android.hilt)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -40,6 +43,11 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation)
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
     implementation(project(":data"))
     implementation(project(":core"))
     implementation(project(":presentation"))
@@ -50,4 +58,5 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.retrofit.mock)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.turbine)
 }

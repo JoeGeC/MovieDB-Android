@@ -1,13 +1,12 @@
 package com.joe.popularmovies.presentation.converter
 
 import com.joe.popularmovies.domain.entity.PopularMoviesEntity
+import com.joe.popularmovies.presentation.model.MovieListItemModel
 import com.joe.popularmovies.presentation.model.PopularMoviesModel
-import com.joe.presentation.model.MediaDetailsModel
-import com.joe.presentation.converter.toModel
 import java.util.Locale
 
 fun PopularMoviesEntity.toModel(
-    previousMovies: List<MediaDetailsModel>,
+    previousMovies: List<MovieListItemModel>,
     locale: Locale = Locale.getDefault()
 ): PopularMoviesModel =
     PopularMoviesModel(
@@ -17,9 +16,9 @@ fun PopularMoviesEntity.toModel(
     )
 
 private fun PopularMoviesEntity.combineMovies(
-    previousMovies: List<MediaDetailsModel>,
-    thisMovies: List<MediaDetailsModel>,
-): List<MediaDetailsModel> = (previousMovies + thisMovies).distinctBy { it.id }
+    previousMovies: List<MovieListItemModel>,
+    thisMovies: List<MovieListItemModel>,
+): List<MovieListItemModel> = (previousMovies + thisMovies).distinctBy { it.id }
 
-private fun PopularMoviesEntity.convertMovies(locale: Locale): List<MediaDetailsModel> =
+private fun PopularMoviesEntity.convertMovies(locale: Locale): List<MovieListItemModel> =
     this.movies.map { movie -> movie.toModel(locale) }
