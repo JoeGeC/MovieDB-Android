@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -133,26 +134,26 @@ private fun PosterImage(posterImageUrl: String?) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .aspectRatio(0.667f)
             .clip(RoundedCornerShape(8))
     ) {
         SubcomposeAsyncImage(
             model = posterImageUrl,
-            contentDescription = "Movie Poster",
+            contentDescription = stringResource(R.string.movie_poster),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
-            loading = { ShimmerBox(height = 200) },
+            loading = { ShimmerBox() },
             error = { painterResource(R.drawable.poster_fallback) }
         )
     }
 }
 
 @Composable
-fun ShimmerBox(height: Int) {
+fun ShimmerBox() {
     Box(
         Modifier
             .shimmer()
-            .fillMaxWidth()
-            .height(height.dp)
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.onSurface)
     )
 }

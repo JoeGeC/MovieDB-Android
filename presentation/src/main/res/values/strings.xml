@@ -2,4 +2,5 @@
 <resources>
     <string name="somethingWentWrong">Something went wrong :(</string>
     <string name="popularMovies">Popular Movies</string>
+    <string name="movie_poster">Movie Poster</string>
 </resources>
