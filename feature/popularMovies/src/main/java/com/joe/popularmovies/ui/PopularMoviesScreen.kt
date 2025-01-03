@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,12 +31,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil3.compose.SubcomposeAsyncImage
 import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
 import com.joe.presentation.R
 import com.joe.presentation.ui.AnimatedCircularProgressBar
+import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
 import com.valentinilk.shimmer.shimmer
 
@@ -49,25 +50,31 @@ fun PopularMoviesScreen(
     val movies = viewModel.moviesPager.collectAsLazyPagingItems()
 
     ScrollPageWithHeader(title = stringResource(R.string.popularMovies)) {
-        LazyVerticalStaggeredGrid(
-            state = rememberLazyStaggeredGridState(),
-            columns = StaggeredGridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalItemSpacing = 16.dp,
-        ) {
-            items(
-                count = movies.itemCount,
-            ) { index ->
-                movies[index]?.let { movie -> MovieListItem(movie) }
-            }
-            when (movies.loadState.append) {
-                is LoadState.Loading -> items(2) { MovieListLoadingItem() }
-                is LoadState.Error -> {}
-                else -> {}
-            }
+        when (movies.loadState.refresh) {
+            is LoadState.Error -> { ErrorScreen() }
+            is LoadState.Loading -> { PopularMoviesLoadingScreen() }
+            is LoadState.NotLoading -> { PopularMoviesList(movies) }
         }
+    }
+}
+
+@Composable
+fun PopularMoviesList(movies: LazyPagingItems<MovieListItemModel>) {
+    LazyVerticalStaggeredGrid(
+        state = rememberLazyStaggeredGridState(),
+        columns = StaggeredGridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = 16.dp,
+    ) {
+        items(
+            count = movies.itemCount,
+        ) { index ->
+            movies[index]?.let { movie -> MovieListItem(movie) }
+        }
+        if(movies.loadState.append is LoadState.Loading)
+            items(2) { MovieListLoadingItem() }
     }
 }
 
