@@ -35,7 +35,12 @@ fun RefreshableScrollPageWithHeader(
                         style = MaterialTheme.typography.headlineMedium,
                     )
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    scrolledContainerColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     ) { paddingValues ->
