@@ -1,6 +1,7 @@
 package com.joe.presentation.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +18,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 @OptIn(ExperimentalMaterial3Api::class)
 fun ScrollPageWithHeader(
     title: String,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -38,7 +39,7 @@ fun ScrollPageWithHeader(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
                     scrolledContainerColor = MaterialTheme.colorScheme.primary
-                )
+                ),
             )
         }
     ) { paddingValues ->

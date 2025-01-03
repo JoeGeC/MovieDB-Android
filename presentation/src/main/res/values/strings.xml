@@ -4,4 +4,5 @@
     <string name="popularMovies">Popular Movies</string>
     <string name="movie_poster">Movie Poster</string>
     <string name="movie_poster_fallback">Movie Poster fallback</string>
+    <string name="refresh">Refresh</string>
 </resources>

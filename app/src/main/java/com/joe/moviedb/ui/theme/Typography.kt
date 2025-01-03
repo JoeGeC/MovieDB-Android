@@ -32,6 +32,12 @@ internal val CustomTypography = Typography(
         fontSize = 16.sp
     ),
 
+    bodyLarge = TextStyle(
+        fontFamily = RobotoFont,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp
+    ),
+
     bodyMedium = TextStyle(
         fontFamily = RobotoFont,
         fontWeight = FontWeight.Normal,
