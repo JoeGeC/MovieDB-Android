@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -47,14 +48,13 @@ import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
 import com.joe.presentation.R as presentationR
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularMoviesScreen(
+    navController: NavController? = null,
     viewModel: PopularMoviesViewModel = hiltViewModel()
 ) {
     val movies = viewModel.moviesPager.collectAsLazyPagingItems()
-    val gridState = rememberLazyStaggeredGridState()
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     ScrollPageWithHeader(
@@ -64,7 +64,11 @@ fun PopularMoviesScreen(
         when (movies.loadState.refresh) {
             is LoadState.Error -> ErrorScreen(movies::refresh)
             is LoadState.Loading -> PopularMoviesLoadingScreen()
-            is LoadState.NotLoading -> PopularMoviesList(movies, gridState, topAppBarScrollBehavior)
+            is LoadState.NotLoading -> PopularMoviesList(
+                movies,
+                topAppBarScrollBehavior,
+                navController
+            )
         }
     }
 }
@@ -73,12 +77,12 @@ fun PopularMoviesScreen(
 @Composable
 fun PopularMoviesList(
     movies: LazyPagingItems<MovieListItemModel>,
-    gridState: LazyStaggeredGridState,
-    topAppBarScrollBehavior: TopAppBarScrollBehavior
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    navController: NavController?
 ) {
+    val gridState = rememberLazyStaggeredGridState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         LazyVerticalStaggeredGrid(
             state = gridState,
             columns = StaggeredGridCells.Fixed(2),
@@ -90,7 +94,11 @@ fun PopularMoviesList(
             items(
                 count = movies.itemCount,
             ) { index ->
-                movies[index]?.let { movie -> MovieListItem(movie) }
+                movies[index]?.let { movie ->
+                    MovieListItem(
+                        movie,
+                        onClick = { navController?.navigate("movieDetails/${movie.id}") })
+                }
             }
             if (movies.loadState.append is LoadState.Loading)
                 items(2) { MovieListLoadingItem() }

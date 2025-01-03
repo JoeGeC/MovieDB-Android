@@ -29,7 +29,7 @@ class MovieDetailsViewModel @Inject constructor(
     val state: StateFlow<ViewModelState> = _state.asStateFlow()
     private var movieId: Int? = null
 
-    fun init(movieId: Int) {
+    fun init(movieId: Int?) {
         this.movieId = movieId
         getMovie()
     }

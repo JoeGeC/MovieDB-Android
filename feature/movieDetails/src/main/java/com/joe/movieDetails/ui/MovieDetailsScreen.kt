@@ -46,7 +46,7 @@ import com.joe.presentation.viewModels.ViewModelState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailsScreen(
-    movieId: Int,
+    movieId: Int?,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     LaunchedEffect(movieId) { viewModel.init(movieId) }

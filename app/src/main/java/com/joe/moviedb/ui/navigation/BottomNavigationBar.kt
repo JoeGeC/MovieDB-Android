@@ -19,6 +19,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.joe.movieDetails.ui.MovieDetailsScreen
 import com.joe.popularmovies.ui.PopularMoviesScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,9 +58,13 @@ fun BottomNavigationBar() {
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
             composable(Screens.Movies.route) {
-                PopularMoviesScreen()
+                PopularMoviesScreen(navController)
             }
             composable(Screens.TvShows.route) {
+            }
+            composable("movieDetails/{movieId}") { backStackEntry ->
+                val movieId = backStackEntry.arguments?.getString("movieId")?.toInt()
+                MovieDetailsScreen(movieId)
             }
         }
     }

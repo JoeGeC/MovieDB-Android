@@ -1,6 +1,7 @@
 package com.joe.popularmovies.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,12 +30,13 @@ import com.joe.presentation.ui.AnimatedCircularProgressBar
 import com.joe.presentation.ui.ShimmerBox
 
 @Composable
-fun MovieListItem(movie: MovieListItemModel) {
+fun MovieListItem(movie: MovieListItemModel, onClick: (() -> Unit)? = null) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
+            .clickable(onClick = { onClick?.invoke() })
     ) {
         Column {
             Box(contentAlignment = Alignment.BottomStart) {
