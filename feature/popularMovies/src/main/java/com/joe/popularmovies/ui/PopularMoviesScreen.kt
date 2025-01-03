@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,9 +41,11 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
-import com.joe.presentation.R
+import com.joe.popularmovies.ui.sound.scrollToTopSounds
+import com.joe.popularmovies.ui.sound.sfxSoundPool
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
+import com.joe.presentation.R as presentationR
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,7 +58,7 @@ fun PopularMoviesScreen(
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     ScrollPageWithHeader(
-        title = stringResource(R.string.popularMovies),
+        title = stringResource(presentationR.string.popularMovies),
         scrollBehavior = topAppBarScrollBehavior
     ) {
         when (movies.loadState.refresh) {
@@ -107,18 +110,20 @@ private fun ScrollToTopButton(
     gridState: LazyStaggeredGridState,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier
-){
+) {
+    val soundPool = sfxSoundPool()
+    val (scrollSound, popSound) = scrollToTopSounds(LocalContext.current, soundPool)
     var scrollToTop by remember { mutableStateOf(false) }
     val hasScrolledDown by remember {
-        derivedStateOf {
-            gridState.firstVisibleItemIndex > 0
-        }
+        derivedStateOf { gridState.firstVisibleItemIndex > 0 }
     }
 
     LaunchedEffect(scrollToTop) {
         if (scrollToTop) {
+            soundPool.play(scrollSound, 1f, 1f, 0, 0, 1f)
             gridState.animateScrollToItem(0)
             topAppBarScrollBehavior.state.heightOffset = 0f
+            soundPool.play(popSound, 1f, 1f, 0, 0, 1f)
             scrollToTop = false
         }
     }
@@ -149,7 +154,7 @@ private fun ListButton(
         ) {
             Icon(
                 imageVector = Icons.Rounded.KeyboardArrowUp,
-                contentDescription = stringResource(R.string.scroll_to_top),
+                contentDescription = stringResource(presentationR.string.scroll_to_top),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
