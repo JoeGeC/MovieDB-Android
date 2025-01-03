@@ -7,7 +7,6 @@ import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.presentation.converter.toModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class PopularMoviesPagingSource(
