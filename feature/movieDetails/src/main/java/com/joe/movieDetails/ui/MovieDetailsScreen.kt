@@ -9,14 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -56,25 +53,17 @@ fun MovieDetailsScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        println("State: $state")
-        PullToRefreshBox(
-            isRefreshing = state is RefreshingState,
-            onRefresh = viewModel::refresh
-        ) {
-            Box(Modifier.verticalScroll(rememberScrollState())){
-                ScreenState(state)
-            }
-        }
+        ScreenState(state, viewModel::refresh)
     }
 }
 
 @Composable
-private fun ScreenState(state: ViewModelState) {
+private fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
     when (state) {
         is MovieDetailsSuccessState -> MovieDetailsSuccessScreen(state.movieDetails)
-        is ErrorState -> ErrorScreen()
+        is ErrorState -> ErrorScreen(refresh)
         is LoadingState -> MovieDetailsLoadingScreen()
-        is RefreshingState -> { ScreenState(state.previousState) }
+        is RefreshingState -> ScreenState(state.previousState)
     }
 }
 
