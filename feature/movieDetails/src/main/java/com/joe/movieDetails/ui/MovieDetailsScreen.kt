@@ -37,7 +37,7 @@ import com.joe.movieDetails.presentation.MovieDetailsViewModel
 import com.joe.presentation.model.MediaDetailsModel
 import com.joe.presentation.ui.AnimatedCircularProgressBar
 import com.joe.presentation.ui.ErrorScreen
-import com.joe.presentation.ui.ImageShimmer
+import com.joe.presentation.ui.ShimmerBox
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
@@ -115,7 +115,7 @@ private fun BackgroundImage(backgroundImageUrl: String?) {
             model = backgroundImageUrl,
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
-            loading = { ImageShimmer() },
+            loading = { ShimmerBox() },
             error = { painterResource(presentationR.drawable.backdrop_fallback) }
         )
     }
@@ -158,7 +158,7 @@ private fun PosterImage(posterImageUrl: String?) {
             contentDescription = "Movie Poster",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
-            loading = { ImageShimmer() },
+            loading = { ShimmerBox() },
             error = { painterResource(presentationR.drawable.poster_fallback) }
         )
     }

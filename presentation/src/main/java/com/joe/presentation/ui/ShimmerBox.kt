@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun ImageShimmer() {
+fun ShimmerBox() {
     Box(
         Modifier
             .shimmer()
