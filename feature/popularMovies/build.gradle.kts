@@ -42,6 +42,8 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.okhttp)
     implementation(libs.shimmer)
+    implementation(libs.paging.compose)
+    implementation(libs.paging.runtime)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation)
