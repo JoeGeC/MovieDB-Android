@@ -73,20 +73,6 @@ fun PopularMoviesList(
     gridState: LazyStaggeredGridState,
     topAppBarScrollBehavior: TopAppBarScrollBehavior
 ) {
-    var scrollToTop by remember { mutableStateOf(false) }
-    val hasScrolledDown by remember {
-        derivedStateOf {
-            gridState.firstVisibleItemIndex > 0
-        }
-    }
-
-    LaunchedEffect(scrollToTop) {
-        if (scrollToTop) {
-            gridState.animateScrollToItem(0)
-            topAppBarScrollBehavior.state.heightOffset = 0f
-            scrollToTop = false
-        }
-    }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -108,15 +94,44 @@ fun PopularMoviesList(
         }
 
         ScrollToTopButton(
-            visible = hasScrolledDown,
-            onClick = { scrollToTop = true },
+            gridState,
+            topAppBarScrollBehavior,
             modifier = Modifier.align(Alignment.BottomEnd)
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScrollToTopButton(
+    gridState: LazyStaggeredGridState,
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier
+){
+    var scrollToTop by remember { mutableStateOf(false) }
+    val hasScrolledDown by remember {
+        derivedStateOf {
+            gridState.firstVisibleItemIndex > 0
+        }
+    }
+
+    LaunchedEffect(scrollToTop) {
+        if (scrollToTop) {
+            gridState.animateScrollToItem(0)
+            topAppBarScrollBehavior.state.heightOffset = 0f
+            scrollToTop = false
+        }
+    }
+
+    ListButton(
+        visible = hasScrolledDown,
+        onClick = { scrollToTop = true },
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun ListButton(
     visible: Boolean,
     onClick: () -> Unit,
     modifier: Modifier
