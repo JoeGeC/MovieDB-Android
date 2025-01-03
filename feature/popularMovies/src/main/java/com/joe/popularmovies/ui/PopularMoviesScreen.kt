@@ -1,5 +1,6 @@
 package com.joe.popularmovies.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +38,7 @@ import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import com.joe.popularmovies.presentation.model.MovieListItemModel
 import com.joe.presentation.R
 import com.joe.presentation.ui.AnimatedCircularProgressBar
+import com.joe.presentation.ui.ScrollPageWithHeader
 import com.valentinilk.shimmer.shimmer
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,23 +48,25 @@ fun PopularMoviesScreen(
 ) {
     val movies = viewModel.moviesPager.collectAsLazyPagingItems()
 
-    LazyVerticalStaggeredGrid(
-        state = rememberLazyStaggeredGridState(),
-        columns = StaggeredGridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalItemSpacing = 16.dp,
-    ) {
-        items(
-            count = movies.itemCount,
-        ) { index ->
-            movies[index]?.let { movie -> MovieListItem(movie) }
-        }
-        when (movies.loadState.append) {
-            is LoadState.Loading -> items(2) { MovieListLoadingItem() }
-            is LoadState.Error -> items(2) { MovieListErrorItem() }
-            else -> {}
+    ScrollPageWithHeader(title = stringResource(R.string.popularMovies)) {
+        LazyVerticalStaggeredGrid(
+            state = rememberLazyStaggeredGridState(),
+            columns = StaggeredGridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalItemSpacing = 16.dp,
+        ) {
+            items(
+                count = movies.itemCount,
+            ) { index ->
+                movies[index]?.let { movie -> MovieListItem(movie) }
+            }
+            when (movies.loadState.append) {
+                is LoadState.Loading -> items(2) { MovieListLoadingItem() }
+                is LoadState.Error -> {}
+                else -> {}
+            }
         }
     }
 }
@@ -77,19 +82,6 @@ fun MovieListLoadingItem() {
             .shimmer()
     ) {
         Box(Modifier.fillMaxSize())
-    }
-}
-
-@Composable
-fun MovieListErrorItem() {
-    Surface(
-        color = MaterialTheme.colorScheme.surface,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(300.dp)
-            .clip(RoundedCornerShape(12.dp))
-    ) {
-        Text(stringResource(R.string.somethingWentWrong))
     }
 }
 
@@ -143,7 +135,12 @@ private fun PosterImage(posterImageUrl: String?) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
             loading = { ShimmerBox() },
-            error = { painterResource(R.drawable.poster_fallback) }
+            error = {
+                Image(
+                    painter = painterResource(R.drawable.poster_fallback),
+                    contentDescription = stringResource(R.string.movie_poster_fallback)
+                )
+            }
         )
     }
 }

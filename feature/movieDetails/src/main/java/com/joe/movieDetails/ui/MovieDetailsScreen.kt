@@ -30,7 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.SubcomposeAsyncImage
-import com.joe.feature.R
+import com.joe.feature.R as featureR
+import com.joe.presentation.R as presentationR
 import com.joe.movieDetails.presentation.MovieDetailsSuccessState
 import com.joe.movieDetails.presentation.MovieDetailsViewModel
 import com.joe.presentation.model.MediaDetailsModel
@@ -115,7 +116,7 @@ private fun BackgroundImage(backgroundImageUrl: String?) {
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
             loading = { ImageShimmer() },
-            error = { painterResource(com.joe.presentation.R.drawable.backdrop_fallback) }
+            error = { painterResource(presentationR.drawable.backdrop_fallback) }
         )
     }
 }
@@ -158,7 +159,7 @@ private fun PosterImage(posterImageUrl: String?) {
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Fit,
             loading = { ImageShimmer() },
-            error = { painterResource(com.joe.presentation.R.drawable.poster_fallback) }
+            error = { painterResource(presentationR.drawable.poster_fallback) }
         )
     }
 }
@@ -194,7 +195,7 @@ private fun Tagline(tagline: String) {
 @Composable
 private fun Overview(overview: String) {
     Text(
-        text = stringResource(R.string.overview),
+        text = stringResource(featureR.string.overview),
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(top = 12.dp)
     )
@@ -218,7 +219,7 @@ fun UserScore(score: Float?, modifier: Modifier = Modifier) {
             modifier = modifier
         )
         Text(
-            text = stringResource(R.string.user_score_newline),
+            text = stringResource(featureR.string.user_score_newline),
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(start = 6.dp, top = 4.dp)
         )
