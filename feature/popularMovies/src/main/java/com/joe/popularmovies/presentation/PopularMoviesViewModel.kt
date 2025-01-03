@@ -16,6 +16,7 @@ import com.joe.presentation.viewModels.job
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -66,6 +67,7 @@ class PopularMoviesViewModel @Inject constructor(
         canLoadMore = !entity.isFinalPage
         currentPage++
         val model = entity.toModel(getCurrentMoviesInState())
+        println(model)
         return PopularMoviesSuccessState(model)
     }
 
@@ -90,7 +92,10 @@ class PopularMoviesViewModel @Inject constructor(
         if (_state.value is RefreshingState) return
         reset()
         _state.value = RefreshingState(_state.value)
-        getMovies()
+        job({
+            delay(20) //Allow compose PullToRefresh to finish animating
+            getMovies()
+        }, dispatcher)
     }
 
     private fun reset() {
