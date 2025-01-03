@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +48,7 @@ import com.joe.presentation.R
 import com.joe.presentation.ui.AnimatedCircularProgressBar
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ImageShimmer
+import com.joe.presentation.ui.RefreshableScrollPageWithHeader
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
@@ -60,31 +62,15 @@ fun PopularMoviesScreen(
 ) {
     LaunchedEffect(Unit) { viewModel.init() }
     val state by viewModel.state.collectAsState()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold(
-        modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        stringResource(R.string.popularMovies),
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { paddingValues ->
-        PullToRefreshBox(
-            modifier = Modifier.padding(paddingValues),
-            isRefreshing = state is RefreshingState,
-            onRefresh = viewModel::refresh
-        ) {
-            ScreenState(state, viewModel::getMoreMovies)
-        }
+
+    RefreshableScrollPageWithHeader(
+        title = stringResource(R.string.popularMovies),
+        isRefreshing = state is RefreshingState,
+        onRefresh = viewModel::refresh
+    ){
+        ScreenState(state, viewModel::getMoreMovies)
     }
 }
-
 
 @Composable
 private fun ScreenState(state: ViewModelState, getMoreMovies: (() -> Unit)?) {
