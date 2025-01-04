@@ -1,6 +1,6 @@
 package com.joe.populartvshows.repository.response
 
-import com.joe.popular.repository.PaginatedResponse
+import com.joe.popular.repository.response.PaginatedResponse
 
 data class PopularTvShowsResponse(
     override val page: Int?,

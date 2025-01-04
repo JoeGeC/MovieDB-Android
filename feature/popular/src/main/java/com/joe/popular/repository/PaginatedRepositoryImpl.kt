@@ -5,6 +5,8 @@ import com.joe.core.entity.ErrorEntity
 import com.joe.popular.data.PaginatedRemote
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.local.PaginatedLocal
+import com.joe.popular.repository.converter.PaginatedRepositoryConverter
+import com.joe.popular.repository.response.PaginatedResponse
 
 class PaginatedRepositoryImpl<LocalModel, ResponseListItem, Response : PaginatedResponse<ResponseListItem>>(
     private val remote: PaginatedRemote<ResponseListItem, Response>,
@@ -29,10 +31,8 @@ class PaginatedRepositoryImpl<LocalModel, ResponseListItem, Response : Paginated
         val remoteResult = remote.getItems(page)
         remoteResult.fold(
             onSuccess = { remoteData ->
-                val localModel = converter.remoteToLocal(remoteData)
-                local.insert(localModel)
-                val entity = converter.localToEntity(localModel)
-                return Either.Success(entity)
+                local.insert(converter.remoteToLocal(remoteData))
+                return Either.Success(converter.remoteToEntity(remoteData))
             },
             onFailure = { error ->
                 return Either.Failure(ErrorEntity(error?.statusMessage ?: ""))

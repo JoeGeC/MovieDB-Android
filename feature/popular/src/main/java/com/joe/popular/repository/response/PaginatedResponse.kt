@@ -1,4 +1,4 @@
-package com.joe.popular.repository
+package com.joe.popular.repository.response
 
 interface PaginatedResponse<ListItem> {
     val page: Int?

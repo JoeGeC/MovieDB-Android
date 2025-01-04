@@ -15,4 +15,4 @@ fun MediaListEntity.toModel(
     )
 
 private fun MediaListEntity.convertList(locale: Locale): List<MediaListItemModel> =
-    this.shows.map { mediaItem -> mediaItem.toModel(locale) }
+    this.items.map { mediaItem -> mediaItem.toModel(locale) }
