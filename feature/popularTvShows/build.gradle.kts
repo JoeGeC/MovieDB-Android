@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.joe.popularmovies"
+    namespace = "com.joe.populartvshows"
     compileSdk = 35
 
     defaultConfig {

@@ -1,11 +1,11 @@
-package com.joe.popularmovies.ui.sound
+package com.joe.popular.ui.sound
 
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.SoundPool
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.joe.popularmovies.R
+import com.joe.popular.R
 
 @Composable
 fun sfxSoundPool(): SoundPool = remember {

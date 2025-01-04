@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.joe.popularmovies"
+    namespace = "com.joe.popular"
     compileSdk = 35
 
     defaultConfig {
@@ -58,7 +58,6 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core"))
     implementation(project(":presentation"))
-    implementation(project(":feature:popular"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito)

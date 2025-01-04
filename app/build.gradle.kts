@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":feature:movieDetails"))
     implementation(project(":feature:popularMovies"))
+    implementation(project(":feature:popularTvShows"))
 
     testImplementation(libs.junit)
 }

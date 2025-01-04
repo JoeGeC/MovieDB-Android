@@ -1,4 +1,4 @@
-package com.joe.popularmovies.ui
+package com.joe.popular.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -35,15 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.joe.popular.presentation.model.MediaListItemModel
 import com.joe.popular.ui.sound.scrollToTopSounds
 import com.joe.popular.ui.sound.sfxSoundPool
-import com.joe.popularmovies.presentation.PopularMoviesViewModel
-import com.joe.popularmovies.presentation.model.MovieListItemModel
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
 import com.joe.presentation.ui.navigation.Screens
@@ -51,22 +48,21 @@ import com.joe.presentation.R as presentationR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PopularMoviesScreen(
+fun PopularScreen(
     navController: NavController? = null,
-    viewModel: PopularMoviesViewModel = hiltViewModel()
+    items: LazyPagingItems<MediaListItemModel>
 ) {
-    val movies = viewModel.moviesPager.collectAsLazyPagingItems()
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     ScrollPageWithHeader(
         title = stringResource(presentationR.string.popularMovies),
         scrollBehavior = topAppBarScrollBehavior
     ) {
-        when (movies.loadState.refresh) {
-            is LoadState.Error -> ErrorScreen(movies::refresh)
-            is LoadState.Loading -> PopularMoviesLoadingScreen()
+        when (items.loadState.refresh) {
+            is LoadState.Error -> ErrorScreen(items::refresh)
+            is LoadState.Loading -> PopularGridLoadingScreen()
             is LoadState.NotLoading -> PopularMoviesList(
-                movies,
+                items,
                 topAppBarScrollBehavior,
                 navController
             )
@@ -77,7 +73,7 @@ fun PopularMoviesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularMoviesList(
-    movies: LazyPagingItems<MovieListItemModel>,
+    movies: LazyPagingItems<MediaListItemModel>,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     navController: NavController?
 ) {
@@ -96,14 +92,14 @@ fun PopularMoviesList(
                 count = movies.itemCount,
             ) { index ->
                 movies[index]?.let { movie ->
-                    MovieListItem(
+                    MediaListItem(
                         movie,
                         onClick = { navigateToMovieDetails(navController, movie.id) }
                     )
                 }
             }
             if (movies.loadState.append is LoadState.Loading)
-                items(2) { MovieListLoadingItem() }
+                items(2) { MediaListLoadingItem() }
         }
 
         ScrollToTopButton(

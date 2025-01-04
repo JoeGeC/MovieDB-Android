@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.joe.movieDetails.ui.MovieDetailsScreen
 import com.joe.popularmovies.ui.PopularMoviesScreen
+import com.joe.populartvshows.ui.PopularTvShowsScreen
 import com.joe.presentation.ui.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,6 +103,7 @@ private fun NavHost(
             PopularMoviesScreen(navController)
         }
         composable(Screens.TvShows.route) {
+            PopularTvShowsScreen(navController)
         }
         composable("${Screens.MovieDetails.route}/{${Screens.MovieDetails.param}}") { params ->
             val movieId = params.arguments?.getString(Screens.MovieDetails.param)?.toInt()
