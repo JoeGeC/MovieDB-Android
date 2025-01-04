@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.joe.movieDetails.ui.MovieDetailsScreen
 import com.joe.popularmovies.ui.PopularMoviesScreen
+import com.joe.presentation.ui.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,8 +63,8 @@ fun BottomNavigationBar() {
             }
             composable(Screens.TvShows.route) {
             }
-            composable("movieDetails/{movieId}") { backStackEntry ->
-                val movieId = backStackEntry.arguments?.getString("movieId")?.toInt()
+            composable("${Screens.MovieDetails.route}/{${Screens.MovieDetails.param}}") { params ->
+                val movieId = params.arguments?.getString(Screens.MovieDetails.param)?.toInt()
                 MovieDetailsScreen(movieId)
             }
         }

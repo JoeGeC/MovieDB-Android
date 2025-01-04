@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.joe.moviedb.R
+import com.joe.presentation.ui.navigation.Screens
 
 internal fun bottomNavigationItems(context: Context): List<BottomNavigationItem> = listOf(
     BottomNavigationItem(

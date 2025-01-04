@@ -46,6 +46,7 @@ import com.joe.popularmovies.ui.sound.scrollToTopSounds
 import com.joe.popularmovies.ui.sound.sfxSoundPool
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
+import com.joe.presentation.ui.navigation.Screens
 import com.joe.presentation.R as presentationR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +98,8 @@ fun PopularMoviesList(
                 movies[index]?.let { movie ->
                     MovieListItem(
                         movie,
-                        onClick = { navController?.navigate("movieDetails/${movie.id}") })
+                        onClick = { navigateToMovieDetails(navController, movie.id) }
+                    )
                 }
             }
             if (movies.loadState.append is LoadState.Loading)
@@ -110,6 +112,13 @@ fun PopularMoviesList(
             modifier = Modifier.align(Alignment.BottomEnd)
         )
     }
+}
+
+private fun navigateToMovieDetails(
+    navController: NavController?,
+    movieId: Int
+) {
+    navController?.navigate("${Screens.MovieDetails.route}/${movieId}")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
