@@ -1,5 +1,6 @@
 package com.joe.populartvshows.repository.converter
 
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.joe.data.JsonAdapter.localDateGson
 import com.joe.popular.domain.entity.MediaListEntity
@@ -11,18 +12,23 @@ import com.joe.populartvshows.repository.response.TvShowListItemResponse
 import java.time.LocalDate
 
 class PopularTvShowsRepositoryConverter: PaginatedRepositoryConverter<PopularTvShowsLocalModel, PopularTvShowsResponse> {
+    val gsonEntityDeserializer = GsonBuilder()
+        .registerTypeAdapter(MediaListItemEntity::class.java, MediaListItemEntityDeserializer())
+        .create()
+
+
     override fun remoteToEntity(response: PopularTvShowsResponse?): MediaListEntity? {
         if(response == null) return null
         return MediaListEntity(
             response.page ?: throw NullPointerException(),
-            response.results?.mapNotNull { tryConvertMovie(it) } ?: throw IllegalStateException(),
+            response.results?.mapNotNull { tryConvertItem(it) } ?: throw IllegalStateException(),
             isLastPage(response.totalPages, response.page)
         )
     }
 
     private fun isLastPage(totalPages: Int, page: Int): Boolean = totalPages <= page
 
-    private fun tryConvertMovie(response: TvShowListItemResponse): MediaListItemEntity? = try {
+    private fun tryConvertItem(response: TvShowListItemResponse): MediaListItemEntity? = try {
         response.toEntity()
     } catch (_: Exception) {
         null
@@ -40,9 +46,13 @@ class PopularTvShowsRepositoryConverter: PaginatedRepositoryConverter<PopularTvS
 
     override fun localToEntity(localModel: PopularTvShowsLocalModel?): MediaListEntity? {
         if(localModel == null) return null
+        val items = gsonEntityDeserializer.fromJson<List<MediaListItemEntity>>(
+            localModel.shows,
+            object : TypeToken<List<MediaListItemEntity>>() {}.type
+        ).filterNotNull()
         return MediaListEntity(
             localModel.page,
-            localDateGson.fromJson(localModel.shows, object: TypeToken<List<MediaListItemEntity>>() {}.type),
+            items,
             isLastPage(localModel.totalPages, localModel.page)
         )
     }
