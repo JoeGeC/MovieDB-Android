@@ -6,4 +6,5 @@
     <string name="movie_poster_fallback">Movie Poster fallback</string>
     <string name="refresh">Refresh</string>
     <string name="scroll_to_top">Scroll to top</string>
+    <string name="popularTvShows">Popular TV Shows</string>
 </resources>

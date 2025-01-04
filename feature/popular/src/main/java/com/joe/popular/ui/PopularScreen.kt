@@ -50,12 +50,13 @@ import com.joe.presentation.R as presentationR
 @Composable
 fun PopularScreen(
     navController: NavController? = null,
-    items: LazyPagingItems<MediaListItemModel>
+    items: LazyPagingItems<MediaListItemModel>,
+    title: String
 ) {
     val topAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     ScrollPageWithHeader(
-        title = stringResource(presentationR.string.popularMovies),
+        title = title,
         scrollBehavior = topAppBarScrollBehavior
     ) {
         when (items.loadState.refresh) {
