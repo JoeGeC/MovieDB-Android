@@ -60,7 +60,7 @@ object MockObjects {
     val popularMoviesEntity2 = PopularMoviesEntity(2, entityList2, true)
 
     val modelList1 = listOf(model1)
-    val modelList2 = listOf(model1, model2)
+    val modelList2 = listOf(model2)
 
     val popularMoviesModel1 = PopularMoviesModel(PAGE_1, modelList1, false)
     val popularMoviesModel2 = PopularMoviesModel(PAGE_2, modelList2, true)

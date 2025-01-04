@@ -1,10 +1,12 @@
 package com.joe.popularmovies.presentation
 
+import android.net.http.NetworkException
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import androidx.paging.PagingSource.LoadResult
+import app.cash.turbine.test
 import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
 import com.joe.popularmovies.resources.MockObjects
-import com.joe.presentation.viewModels.ErrorState
-import com.joe.presentation.viewModels.LoadingState
-import com.joe.presentation.viewModels.RefreshingState
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
@@ -15,197 +17,68 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import kotlin.Int
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PopularMoviesViewModelTest {
     private lateinit var viewModel: PopularMoviesViewModel
     private var useCase: PopularMoviesUseCase = mock()
-    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
-        Dispatchers.setMain(testDispatcher)
-        viewModel = PopularMoviesViewModel(useCase, testDispatcher)
+        viewModel = PopularMoviesViewModel(useCase)
     }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
+    @ExperimentalCoroutinesApi
     @Test
-    fun `start on LoadingState`() = runTest {
-        assertTrue(viewModel.state.value is LoadingState)
-    }
-
-    @Test
-    fun `emit success state when movies are successfully fetched`() = runTest {
+    fun `load returns LoadResult_Page on successful data load`() = runTest {
         whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
 
-        viewModel.init()
-        advanceUntilIdle()
+        val pagingSource = PopularMoviesPagingSource(useCase)
 
-        val state = viewModel.state.value
-        val successState = state as PopularMoviesSuccessState
-        assertEquals(successState.popularMoviesModel, MockObjects.popularMoviesModel1)
+        val params = PagingSource.LoadParams.Refresh<Int>(null, 20, false)
+        val result = pagingSource.load(params)
+
+        assertTrue(result is LoadResult.Page)
+        val page = result as LoadResult.Page
+        assertEquals(MockObjects.modelList1, page.data)
+        assertEquals(null, page.prevKey)
+        assertEquals(2, page.nextKey)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun `emit error state when movies fetch fails`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.failure)
-
-        viewModel.init()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value
-        assert(state is ErrorState)
-    }
-
-    @Test
-    fun `emit error state when movies fetch returns null entity`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.nullSuccess)
-
-        viewModel.init()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value
-        assert(state is ErrorState)
-    }
-
-    @Test
-    fun `emit SuccessState state when movies fetch returns null entity but previously was success`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_2)).thenReturn(MockObjects.nullSuccess)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(state.popularMoviesModel, MockObjects.popularMoviesModel1)
-    }
-
-    @Test
-    fun `emit LoadingMoreState when more movies are being loaded`() = runTest {
+    fun `load returns second page with null next key on final page`() = runTest {
         whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
         whenever(useCase.getPopularMovies(MockObjects.PAGE_2)).thenReturn(MockObjects.success2)
 
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
+        val pagingSource = PopularMoviesPagingSource(useCase)
 
-        val state = viewModel.state.value
-        assert(state is PopularMoviesLoadingMoreState)
+        val params1 = PagingSource.LoadParams.Refresh<Int>(null, 20, false)
+        pagingSource.load(params1)
+        val params2 = PagingSource.LoadParams.Refresh<Int>(2, 20, false)
+        val result = pagingSource.load(params2)
+
+        assertTrue(result is LoadResult.Page)
+        val page = result as LoadResult.Page
+        assertEquals(MockObjects.modelList2, page.data)
+        assertEquals(1, page.prevKey)
+        assertEquals(null, page.nextKey)
     }
 
     @Test
-    fun `emit SuccessState when more movies are loaded`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_2)).thenReturn(MockObjects.success2)
+    fun `load returns LoadResult_Error on use case failure`() = runTest {
+        whenever(useCase.getPopularMovies(any())).thenThrow(NullPointerException("Network error"))
 
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
-        advanceUntilIdle()
+        val pagingSource = PopularMoviesPagingSource(useCase)
 
-        val state = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(state.popularMoviesModel, MockObjects.popularMoviesModel2)
+        val params = PagingSource.LoadParams.Refresh<Int>(null, 20, false)
+        val result = pagingSource.load(params)
+
+        assertTrue(result is LoadResult.Error)
+        val error = result as LoadResult.Error
+        assertEquals("Network error", error.throwable.message)
     }
 
-    @Test
-    fun `not get more movies if already getting more`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_2)).thenReturn(MockObjects.success2)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
-        viewModel.getMoreMovies()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(state.popularMoviesModel, MockObjects.popularMoviesModel2)
-        verify(useCase, times(2)).getPopularMovies(any())
-    }
-
-    @Test
-    fun `not get more movies if refreshing`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.refresh()
-        viewModel.getMoreMovies()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(state.popularMoviesModel, MockObjects.popularMoviesModel1)
-        verify(useCase, times(2)).getPopularMovies(MockObjects.PAGE_1)
-    }
-
-    @Test
-    fun `reset and emit refreshing state when refresh is triggered`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.refresh()
-
-        val state = viewModel.state.value
-        assert(state is RefreshingState)
-        val baseState = state.getBaseState() as PopularMoviesSuccessState
-        assertEquals(baseState.popularMoviesModel, MockObjects.popularMoviesModel1)
-        advanceUntilIdle()
-        val newState = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(newState.popularMoviesModel, MockObjects.popularMoviesModel1)
-    }
-
-    @Test
-    fun `not refresh when refresh is already triggered`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.refresh()
-        viewModel.refresh()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(state.popularMoviesModel, MockObjects.popularMoviesModel1)
-        verify(useCase, times(2)).getPopularMovies(MockObjects.PAGE_1)
-    }
-
-    @Test
-    fun `refresh even if loading more`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
-        viewModel.refresh()
-
-        val state = viewModel.state.value
-        assert(state is RefreshingState)
-    }
-
-    @Test
-    fun `not fetch more movies if can't load more`() = runTest {
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_1)).thenReturn(MockObjects.success1)
-        whenever(useCase.getPopularMovies(MockObjects.PAGE_2)).thenReturn(MockObjects.success2)
-
-        viewModel.init()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
-        advanceUntilIdle()
-        viewModel.getMoreMovies()
-        advanceUntilIdle()
-
-        val state = viewModel.state.value as PopularMoviesSuccessState
-        assertEquals(state.popularMoviesModel, MockObjects.popularMoviesModel2)
-        verify(useCase, times(2)).getPopularMovies(any())
-    }
 }
