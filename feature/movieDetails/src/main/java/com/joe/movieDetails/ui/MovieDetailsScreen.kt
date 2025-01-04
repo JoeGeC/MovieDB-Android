@@ -69,14 +69,9 @@ private fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 
 @Composable
 fun MovieDetailsSuccessScreen(movieDetails: MediaDetailsModel) {
-//    val scrollState = rememberScrollState()
     Box(Modifier.fillMaxSize()) {
         BackgroundImage(movieDetails.backdropPath)
-        Box(
-            modifier = Modifier
-                .padding(top = 100.dp)
-//                .verticalScroll(scrollState)
-        ) {
+        Box(modifier = Modifier.padding(top = 100.dp)) {
             MovieDetailsSurface(movieDetails)
             Row(
                 modifier = Modifier
