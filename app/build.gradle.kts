@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
     implementation(project(":core"))
+    implementation(project(":presentation"))
     implementation(project(":feature:movieDetails"))
     implementation(project(":feature:popularMovies"))
 

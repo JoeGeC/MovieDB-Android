@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.joe.presentation.ui.theme.customColorScheme
 
 @Composable
 fun AnimatedCircularProgressBar(
@@ -54,7 +55,7 @@ fun AnimatedCircularProgressBar(
         CircularProgressIndicator(
             progress = { animatedProgress.value },
             modifier = Modifier.size(progressBarSize.dp),
-            color = MaterialTheme.colorScheme.primary,
+            color = getProgressColor(animatedProgress.value),
             strokeWidth = strokeWidth.dp
         )
 
@@ -66,6 +67,13 @@ fun AnimatedCircularProgressBar(
             percentageTextColor
         )
     }
+}
+
+@Composable
+private fun getProgressColor(value: Float): Color = when {
+    value <= 0.5f -> MaterialTheme.customColorScheme.lowScore
+    value <= 0.7 -> MaterialTheme.customColorScheme.mediumScore
+    else -> MaterialTheme.customColorScheme.highScore
 }
 
 @Composable

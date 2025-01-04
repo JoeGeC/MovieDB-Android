@@ -36,5 +36,5 @@ internal val DarkColorPalette = darkColorScheme(
     surface = Color(0xFF1E1E1E),
     onBackground = Color(0xFFFFFFFF),
     onSurface = Color(0xFFFFFFFF),
-    onSurfaceVariant = Color(0xFF80D6FF)
+    onSurfaceVariant = Color(0xFF80D6FF),
 )
