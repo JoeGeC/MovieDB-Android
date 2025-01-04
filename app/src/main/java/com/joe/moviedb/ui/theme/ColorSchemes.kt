@@ -23,12 +23,12 @@ internal val LightColorPalette = lightColorScheme(
     surface = Color(0xFFFFFFFF),
     onBackground = Color(0xFF212121),
     onSurface = Color(0xFF212121),
-    onSurfaceVariant = Color(0xFF2196F3)
+    onSurfaceVariant = Color(0xFF2196F3),
 )
 
 internal val DarkColorPalette = darkColorScheme(
     primary = Color(0xFF04213B),
-    onPrimary = Color(0xFF1E1E1E),
+    onPrimary = Color(0xFFFFFFFF),
     secondary = Color(0xFF0288D1),
     primaryContainer = Color(0xFF101010),
     onPrimaryContainer = Color(0xFFFFFFFF),
@@ -36,5 +36,5 @@ internal val DarkColorPalette = darkColorScheme(
     surface = Color(0xFF1E1E1E),
     onBackground = Color(0xFFFFFFFF),
     onSurface = Color(0xFFFFFFFF),
-    onSurfaceVariant = Color(0xFF1976D2),
+    onSurfaceVariant = Color(0xFF03A9F4),
 )
