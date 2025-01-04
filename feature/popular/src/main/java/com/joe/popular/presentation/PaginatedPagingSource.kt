@@ -6,23 +6,27 @@ import com.joe.popular.domain.PaginatedUseCase
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.presentation.converter.toModel
 import com.joe.popular.presentation.model.MediaListItemModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PaginatedPagingSource(
     private val useCase: PaginatedUseCase
 ) : PagingSource<Int, MediaListItemModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MediaListItemModel> =
-        try {
-            val page = params.key ?: 1
-            val result = useCase.getItems(page)
+        withContext(Dispatchers.IO) {
+            try {
+                val page = params.key ?: 1
+                val result = useCase.getItems(page)
 
-            if (result.isSuccess) {
-                loadNextPage(result.body, page)
-            } else {
-                LoadResult.Error(Throwable("Error loading data"))
+                if (result.isSuccess) {
+                    loadNextPage(result.body, page)
+                } else {
+                    LoadResult.Error(Throwable("Error loading data"))
+                }
+            } catch (e: Exception) {
+                LoadResult.Error(e)
             }
-        } catch (e: Exception) {
-            LoadResult.Error(e)
         }
 
     private fun loadNextPage(result: MediaListEntity?, page: Int): LoadResult.Page<Int, MediaListItemModel> {

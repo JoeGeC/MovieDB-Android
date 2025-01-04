@@ -10,8 +10,12 @@ class PopularTvShowsLocalImpl(private val database: PopularTvShowsDatabase) : Pa
 
     override fun get(page: Int): Either<PopularTvShowsLocalModel?, ErrorResponse> {
         val validTime = System.currentTimeMillis() - cacheValidDuration24Hours
-        val response = database.popularTvShowsDao().getByPage(page, validTime)
-            ?: return Either.Failure(ErrorResponse("Cache expired or no data available"))
+        val response = try {
+            database.popularTvShowsDao().getByPage(page, validTime)
+                ?: return Either.Failure(ErrorResponse("Cache expired or no data available"))
+        } catch (e: Exception) {
+            return Either.Failure(ErrorResponse(e.message ?: "DAO query failed: ${e.localizedMessage}"))
+        }
         return Either.Success(response)
     }
 

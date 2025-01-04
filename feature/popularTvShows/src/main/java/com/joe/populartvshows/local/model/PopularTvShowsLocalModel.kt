@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "popular_movies")
+@Entity(tableName = "popular_tv_shows")
 data class PopularTvShowsLocalModel(
     @PrimaryKey val page: Int,
-    @ColumnInfo(name = "movies") val shows: String?,
+    @ColumnInfo(name = "shows") val shows: String?,
     @ColumnInfo(name = "totalPages") val totalPages: Int,
     @ColumnInfo(name = "cachedAt") val cachedAt: Long
 ){
