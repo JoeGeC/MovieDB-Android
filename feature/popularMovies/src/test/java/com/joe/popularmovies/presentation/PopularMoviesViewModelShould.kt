@@ -69,6 +69,20 @@ class PopularMoviesViewModelTest {
 
     @Test
     fun `load returns LoadResult_Error on use case failure`() = runTest {
+        whenever(useCase.getPopularMovies(any())).thenReturn(MockObjects.failure)
+
+        val pagingSource = PopularMoviesPagingSource(useCase)
+
+        val params = PagingSource.LoadParams.Refresh<Int>(null, 20, false)
+        val result = pagingSource.load(params)
+
+        assertTrue(result is LoadResult.Error)
+        val error = result as LoadResult.Error
+        assertEquals(MockObjects.ERROR_MESSAGE, error.throwable.message)
+    }
+
+    @Test
+    fun `load returns LoadResult_Error on use case exception`() = runTest {
         whenever(useCase.getPopularMovies(any())).thenThrow(NullPointerException("Network error"))
 
         val pagingSource = PopularMoviesPagingSource(useCase)
