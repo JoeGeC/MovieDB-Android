@@ -5,6 +5,7 @@ import com.joe.data.response.ErrorResponse
 import com.joe.popular.local.dao.PopularDaoHelper
 import com.joe.popular.local.model.TimeLimitCacheModel
 
+@Suppress("UNCHECKED_CAST")
 class PopularLocalImpl<T: TimeLimitCacheModel>(
     private val daoHelper: PopularDaoHelper<T>,
 ) : PopularLocal<T> {

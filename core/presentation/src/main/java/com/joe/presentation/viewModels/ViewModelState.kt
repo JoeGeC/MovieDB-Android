@@ -22,9 +22,3 @@ data class RefreshingState(
 ) : ViewModelState() {
     override fun getBaseState() = previousState
 }
-
-data class CompletedState(
-    val previousState: ViewModelState
-) : ViewModelState() {
-    override fun getBaseState() = previousState
-}
