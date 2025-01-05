@@ -61,7 +61,7 @@ class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvSho
 fun TvShowListItemResponse.toEntity() = MediaListItemEntity(
     id = this.id ?: throw NullPointerException(),
     title = this.name ?: throw NullPointerException(),
-    releaseDate = LocalDate.parse(this.firstAirDate),
+    releaseDate = try { LocalDate.parse(this.firstAirDate) } catch(_: Exception) { null },
     posterPath = this.posterPath ?: throw NullPointerException(),
     score = this.voteAverage ?: throw java.lang.NullPointerException()
 )
