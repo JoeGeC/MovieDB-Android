@@ -2,7 +2,10 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="MovieDB.data" target="21" />
+      <module name="MovieDB.domain" target="21" />
       <module name="MovieDB.movieDetails" target="21" />
+      <module name="MovieDB.presentation" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
