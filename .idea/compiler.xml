@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="MovieDB.data" target="21" />
       <module name="MovieDB.domain" target="21" />
+      <module name="MovieDB.feature.popularMovies" target="21" />
+      <module name="MovieDB.feature.popularTvShows" target="21" />
       <module name="MovieDB.movieDetails" target="21" />
       <module name="MovieDB.presentation" target="21" />
     </bytecodeTargetLevel>

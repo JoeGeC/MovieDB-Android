@@ -18,8 +18,9 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/movieDetails" />
             <option value="$PROJECT_DIR$/feature/popular" />
-            <option value="$PROJECT_DIR$/feature/popularMovies" />
-            <option value="$PROJECT_DIR$/feature/popularTvShows" />
+            <option value="$PROJECT_DIR$/feature/popular/base" />
+            <option value="$PROJECT_DIR$/feature/popular/movies" />
+            <option value="$PROJECT_DIR$/feature/popular/tv" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

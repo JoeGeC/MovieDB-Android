@@ -55,8 +55,8 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:presentation"))
     implementation(project(":feature:movieDetails"))
-    implementation(project(":feature:popularMovies"))
-    implementation(project(":feature:popularTvShows"))
+    implementation(project(":feature:popular:movies"))
+    implementation(project(":feature:popular:tv"))
 
     testImplementation(libs.junit)
 }
