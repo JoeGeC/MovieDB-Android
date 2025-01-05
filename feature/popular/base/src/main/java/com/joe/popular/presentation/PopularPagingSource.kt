@@ -7,7 +7,6 @@ import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.presentation.converter.toModel
 import com.joe.popular.presentation.model.MediaListItemModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 
 class PopularPagingSource(
