@@ -3,14 +3,18 @@ package com.joe.populartvshows.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.joe.popular.local.model.TimeLimitCacheModel
 
 @Entity(tableName = "popular_tv_shows")
 data class PopularTvShowsLocalModel(
     @PrimaryKey val page: Int,
     @ColumnInfo(name = "shows") val shows: String?,
     @ColumnInfo(name = "totalPages") val totalPages: Int,
-    @ColumnInfo(name = "cachedAt") val cachedAt: Long
-){
+    @ColumnInfo(name = "cachedAt") override val cachedAt: Long
+): TimeLimitCacheModel {
+
+    override fun copy(cachedAt: Long): TimeLimitCacheModel = copy(cachedAt = cachedAt)
+
     override fun equals(other: Any?): Boolean =
         other is PopularTvShowsLocalModel &&
                 page == other.page &&

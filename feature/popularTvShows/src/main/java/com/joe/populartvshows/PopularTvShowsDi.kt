@@ -5,12 +5,13 @@ import androidx.room.Room
 import com.joe.popular.data.PaginatedRemote
 import com.joe.popular.domain.PaginatedUseCase
 import com.joe.popular.local.PaginatedLocal
+import com.joe.popular.local.PaginatedLocalImpl
 import com.joe.popular.repository.PaginatedRepository
 import com.joe.popular.repository.PaginatedRepositoryImpl
 import com.joe.populartvshows.data.PopularTvShowsRemoteImpl
-import com.joe.populartvshows.local.PopularTvShowsDao
-import com.joe.populartvshows.local.PopularTvShowsDatabase
-import com.joe.populartvshows.local.PopularTvShowsLocalImpl
+import com.joe.populartvshows.local.dao.PopularTvShowsDao
+import com.joe.populartvshows.local.dao.PopularTvShowsDaoHelper
+import com.joe.populartvshows.local.database.PopularTvShowsDatabase
 import com.joe.populartvshows.local.model.PopularTvShowsLocalModel
 import com.joe.populartvshows.repository.converter.PopularTvShowsRepositoryConverter
 import com.joe.populartvshows.repository.response.PopularTvShowsResponse
@@ -54,9 +55,9 @@ object PopularTvShowsDi {
     @PopularTvShows
     @Provides
     fun providePopularTvShowsLocal(
-        database: PopularTvShowsDatabase
+        daoHelper: PopularTvShowsDaoHelper
     ): PaginatedLocal<PopularTvShowsLocalModel> =
-        PopularTvShowsLocalImpl(database)
+        PaginatedLocalImpl<PopularTvShowsLocalModel>(daoHelper)
 
     @PopularTvShows
     @Provides
