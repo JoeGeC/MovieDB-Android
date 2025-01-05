@@ -13,6 +13,8 @@ data class PopularTvShowsLocalModel(
     @ColumnInfo(name = "cachedAt") override val cachedAt: Long
 ): TimeLimitCacheModel {
 
+    override fun copyWith(cachedAt: Long): TimeLimitCacheModel = copy(cachedAt = cachedAt)
+
     override fun equals(other: Any?): Boolean =
         other is PopularTvShowsLocalModel &&
                 page == other.page &&

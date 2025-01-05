@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="somethingWentWrong">Something went wrong :(</string>
+    <string name="popularMovies">Popular Movies</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="movie_poster_fallback">Movie Poster fallback</string>
+    <string name="refresh">Refresh</string>
+    <string name="scroll_to_top">Scroll to top</string>
+    <string name="popularTvShows">Popular TV Shows</string>
+</resources>

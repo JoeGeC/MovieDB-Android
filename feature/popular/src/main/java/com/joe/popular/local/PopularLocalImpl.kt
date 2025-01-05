@@ -24,7 +24,7 @@ class PopularLocalImpl<T: TimeLimitCacheModel>(
     override fun insert(item: T?) {
         try {
             if (item == null) return
-            val updatedItem = item.copy(cachedAt = System.currentTimeMillis()) as T
+            val updatedItem = item.copyWith(cachedAt = System.currentTimeMillis()) as T
             daoHelper.insertAll(updatedItem)
         } catch (_: Exception) {}
     }
