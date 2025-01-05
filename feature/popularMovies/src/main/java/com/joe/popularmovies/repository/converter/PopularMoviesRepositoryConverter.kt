@@ -1,23 +1,18 @@
-package com.joe.populartvshows.repository.converter
+package com.joe.popularmovies.repository.converter
 
-import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.joe.data.JsonAdapter.localDateGson
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.domain.entity.MediaListItemEntity
 import com.joe.popular.repository.converter.PopularRepositoryConverter
-import com.joe.populartvshows.local.model.PopularTvShowsLocalModel
-import com.joe.populartvshows.repository.response.PopularTvShowsResponse
-import com.joe.populartvshows.repository.response.TvShowListItemResponse
+import com.joe.popularmovies.local.model.PopularMoviesLocalModel
+import com.joe.popularmovies.repository.response.MovieListItemResponse
+import com.joe.popularmovies.repository.response.PopularMoviesResponse
 import java.time.LocalDate
 
-class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvShowsLocalModel, PopularTvShowsResponse> {
-    val gsonEntityDeserializer = GsonBuilder()
-        .registerTypeAdapter(MediaListItemEntity::class.java, TvShowListItemEntityDeserializer())
-        .create()
+class PopularMoviesRepositoryConverter: PopularRepositoryConverter<PopularMoviesLocalModel, PopularMoviesResponse> {
 
-
-    override fun remoteToEntity(response: PopularTvShowsResponse?): MediaListEntity? {
+    override fun remoteToEntity(response: PopularMoviesResponse?): MediaListEntity? {
         if(response == null) return null
         return MediaListEntity(
             response.page ?: throw NullPointerException(),
@@ -28,15 +23,15 @@ class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvSho
 
     private fun isLastPage(totalPages: Int, page: Int): Boolean = totalPages <= page
 
-    private fun tryConvertItem(response: TvShowListItemResponse): MediaListItemEntity? = try {
+    private fun tryConvertItem(response: MovieListItemResponse): MediaListItemEntity? = try {
         response.toEntity()
     } catch (_: Exception) {
         null
     }
 
-    override fun remoteToLocal(response: PopularTvShowsResponse?): PopularTvShowsLocalModel? {
+    override fun remoteToLocal(response: PopularMoviesResponse?): PopularMoviesLocalModel? {
         if(response == null) return null
-        return PopularTvShowsLocalModel(
+        return PopularMoviesLocalModel(
             response.page ?: throw NullPointerException(),
             localDateGson.toJson(response.results),
             response.totalPages,
@@ -44,10 +39,10 @@ class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvSho
         )
     }
 
-    override fun localToEntity(localModel: PopularTvShowsLocalModel?): MediaListEntity? {
+    override fun localToEntity(localModel: PopularMoviesLocalModel?): MediaListEntity? {
         if(localModel == null) return null
-        val items = gsonEntityDeserializer.fromJson<List<MediaListItemEntity>>(
-            localModel.shows,
+        val items = localDateGson.fromJson<List<MediaListItemEntity>>(
+            localModel.movies,
             object : TypeToken<List<MediaListItemEntity>>() {}.type
         ).filterNotNull()
         return MediaListEntity(
@@ -58,10 +53,10 @@ class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvSho
     }
 }
 
-fun TvShowListItemResponse.toEntity() = MediaListItemEntity(
+fun MovieListItemResponse.toEntity() = MediaListItemEntity(
     id = this.id ?: throw NullPointerException(),
-    title = this.name ?: throw NullPointerException(),
-    releaseDate = LocalDate.parse(this.firstAirDate),
+    title = this.title ?: throw NullPointerException(),
+    releaseDate = LocalDate.parse(this.releaseDate),
     posterPath = this.posterPath ?: throw NullPointerException(),
     score = this.voteAverage ?: throw java.lang.NullPointerException()
 )

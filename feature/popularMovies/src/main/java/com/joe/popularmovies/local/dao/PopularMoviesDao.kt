@@ -1,4 +1,4 @@
-package com.joe.popularmovies.local
+package com.joe.popularmovies.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -7,7 +7,7 @@ import com.joe.popular.domain.entity.MediaListItemEntity
 import java.lang.reflect.Type
 import java.time.LocalDate
 
-class MediaListItemEntityDeserializer : JsonDeserializer<MediaListItemEntity> {
+class TvShowListItemEntityDeserializer : JsonDeserializer<MediaListItemEntity> {
     override fun deserialize(
         json: JsonElement,
         typeOfT: Type,

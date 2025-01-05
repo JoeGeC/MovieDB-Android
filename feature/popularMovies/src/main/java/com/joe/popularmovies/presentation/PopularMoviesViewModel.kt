@@ -5,18 +5,19 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.joe.popularmovies.domain.usecase.PopularMoviesUseCase
+import com.joe.popular.domain.PopularUseCase
+import com.joe.popular.presentation.PopularPagingSource
+import com.joe.popularmovies.PopularMovies
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class PopularMoviesViewModel @Inject constructor(
-    private val popularMoviesUseCase: PopularMoviesUseCase,
+    @PopularMovies private val useCase: PopularUseCase
 ) : ViewModel() {
 
-    val moviesPager = Pager(
+    val itemsPager = Pager(
         config = PagingConfig(pageSize = 20, enablePlaceholders = false),
-        pagingSourceFactory = { PopularMoviesPagingSource(popularMoviesUseCase) }
+        pagingSourceFactory = { PopularPagingSource(useCase) }
     ).flow.cachedIn(viewModelScope)
-
 }
