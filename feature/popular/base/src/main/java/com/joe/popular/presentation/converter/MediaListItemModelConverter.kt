@@ -9,7 +9,7 @@ import java.util.Locale
 fun MediaListItemEntity.toModel(locale: Locale = Locale.getDefault()) = MediaListItemModel(
     id = this.id,
     title = this.title ?: "",
-    releaseDate = this.releaseDate?.formatLocalDate(locale) ?: "",
+    releaseDate = this.releaseDate?.formatLocalDate(locale) ?: "TBA",
     posterPath = this.posterPath?.toImageUrl() ?: "",
     score = this.score
 )

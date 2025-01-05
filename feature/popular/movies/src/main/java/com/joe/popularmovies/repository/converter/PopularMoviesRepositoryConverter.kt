@@ -56,7 +56,7 @@ class PopularMoviesRepositoryConverter: PopularRepositoryConverter<PopularMovies
 fun MovieListItemResponse.toEntity() = MediaListItemEntity(
     id = this.id ?: throw NullPointerException(),
     title = this.title ?: throw NullPointerException(),
-    releaseDate = LocalDate.parse(this.releaseDate),
+    releaseDate = try { LocalDate.parse(this.releaseDate) } catch(_: Exception) { null },
     posterPath = this.posterPath ?: throw NullPointerException(),
     score = this.voteAverage ?: throw java.lang.NullPointerException()
 )

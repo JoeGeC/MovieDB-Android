@@ -7,6 +7,7 @@ import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.presentation.converter.toModel
 import com.joe.popular.presentation.model.MediaListItemModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 
 class PopularPagingSource(
@@ -18,6 +19,7 @@ class PopularPagingSource(
             try {
                 val page = params.key ?: 1
                 val result = useCase.getItems(page)
+                println("LoadParams: $result")
 
                 if (result.isSuccess) {
                     loadNextPage(result.body, page)
@@ -25,6 +27,7 @@ class PopularPagingSource(
                     LoadResult.Error(Throwable("Error loading data"))
                 }
             } catch (e: Exception) {
+                println("Error loading data: $e")
                 LoadResult.Error(e)
             }
         }

@@ -15,6 +15,10 @@ class LocalDateAdapter : TypeAdapter<LocalDate>() {
 
     override fun read(`in`: JsonReader): LocalDate? {
         val date = `in`.nextString()
-        return LocalDate.parse(date, formatter)
+        return try {
+            LocalDate.parse(date, formatter)
+        } catch (_: Exception) {
+            null
+        }
     }
 }
