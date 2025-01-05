@@ -2,17 +2,17 @@ package com.joe.popular.repository
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.popular.data.PaginatedRemote
+import com.joe.popular.data.PopularRemote
 import com.joe.popular.domain.entity.MediaListEntity
-import com.joe.popular.local.PaginatedLocal
-import com.joe.popular.repository.converter.PaginatedRepositoryConverter
-import com.joe.popular.repository.response.PaginatedResponse
+import com.joe.popular.local.PopularLocal
+import com.joe.popular.repository.converter.PopularRepositoryConverter
+import com.joe.popular.repository.response.PopularResponse
 
-class PaginatedRepositoryImpl<LocalModel, ResponseListItem, Response : PaginatedResponse<ResponseListItem>>(
-    private val remote: PaginatedRemote<ResponseListItem, Response>,
-    private val local: PaginatedLocal<LocalModel>,
-    private val converter: PaginatedRepositoryConverter<LocalModel, Response>
-) : PaginatedRepository {
+class PopularRepositoryImpl<LocalModel, ResponseListItem, Response : PopularResponse<ResponseListItem>>(
+    private val remote: PopularRemote<ResponseListItem, Response>,
+    private val local: PopularLocal<LocalModel>,
+    private val converter: PopularRepositoryConverter<LocalModel, Response>
+) : PopularRepository {
 
     override suspend fun getItems(page: Int): Either<MediaListEntity?, ErrorEntity?> =
         fetchLocal(page).fold(

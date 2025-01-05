@@ -5,13 +5,13 @@ import com.google.gson.reflect.TypeToken
 import com.joe.data.JsonAdapter.localDateGson
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.domain.entity.MediaListItemEntity
-import com.joe.popular.repository.converter.PaginatedRepositoryConverter
+import com.joe.popular.repository.converter.PopularRepositoryConverter
 import com.joe.populartvshows.local.model.PopularTvShowsLocalModel
 import com.joe.populartvshows.repository.response.PopularTvShowsResponse
 import com.joe.populartvshows.repository.response.TvShowListItemResponse
 import java.time.LocalDate
 
-class PopularTvShowsRepositoryConverter: PaginatedRepositoryConverter<PopularTvShowsLocalModel, PopularTvShowsResponse> {
+class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvShowsLocalModel, PopularTvShowsResponse> {
     val gsonEntityDeserializer = GsonBuilder()
         .registerTypeAdapter(MediaListItemEntity::class.java, MediaListItemEntityDeserializer())
         .create()

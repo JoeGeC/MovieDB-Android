@@ -2,12 +2,12 @@ package com.joe.popular.local
 
 import com.joe.core.entity.Either
 import com.joe.data.response.ErrorResponse
-import com.joe.popular.local.dao.PaginatedDaoHelper
+import com.joe.popular.local.dao.PopularDaoHelper
 import com.joe.popular.local.model.TimeLimitCacheModel
 
-class PaginatedLocalImpl<T: TimeLimitCacheModel>(
-    private val daoHelper: PaginatedDaoHelper<T>,
-) : PaginatedLocal<T> {
+class PopularLocalImpl<T: TimeLimitCacheModel>(
+    private val daoHelper: PopularDaoHelper<T>,
+) : PopularLocal<T> {
     private val cacheValidDuration24Hours = 86400000L
 
     override fun get(page: Int): Either<T?, ErrorResponse> {

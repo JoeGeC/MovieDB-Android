@@ -2,12 +2,12 @@ package com.joe.populartvshows
 
 import android.content.Context
 import androidx.room.Room
-import com.joe.popular.data.PaginatedRemote
-import com.joe.popular.domain.PaginatedUseCase
-import com.joe.popular.local.PaginatedLocal
-import com.joe.popular.local.PaginatedLocalImpl
-import com.joe.popular.repository.PaginatedRepository
-import com.joe.popular.repository.PaginatedRepositoryImpl
+import com.joe.popular.data.PopularRemote
+import com.joe.popular.domain.PopularUseCase
+import com.joe.popular.local.PopularLocal
+import com.joe.popular.local.PopularLocalImpl
+import com.joe.popular.repository.PopularRepository
+import com.joe.popular.repository.PopularRepositoryImpl
 import com.joe.populartvshows.data.PopularTvShowsRemoteImpl
 import com.joe.populartvshows.local.dao.PopularTvShowsDao
 import com.joe.populartvshows.local.dao.PopularTvShowsDaoHelper
@@ -37,7 +37,7 @@ object PopularTvShowsDi {
     @Provides
     fun providePopularTvShowsRemote(
         retrofit: Retrofit
-    ): PaginatedRemote<TvShowListItemResponse, PopularTvShowsResponse> =
+    ): PopularRemote<TvShowListItemResponse, PopularTvShowsResponse> =
         PopularTvShowsRemoteImpl(retrofit)
 
     @Provides
@@ -56,16 +56,16 @@ object PopularTvShowsDi {
     @Provides
     fun providePopularTvShowsLocal(
         daoHelper: PopularTvShowsDaoHelper
-    ): PaginatedLocal<PopularTvShowsLocalModel> =
-        PaginatedLocalImpl<PopularTvShowsLocalModel>(daoHelper)
+    ): PopularLocal<PopularTvShowsLocalModel> =
+        PopularLocalImpl<PopularTvShowsLocalModel>(daoHelper)
 
     @PopularTvShows
     @Provides
     fun providePopularTvShowsRepository(
-        @PopularTvShows remote: PaginatedRemote<TvShowListItemResponse, PopularTvShowsResponse>,
-        @PopularTvShows local: PaginatedLocal<PopularTvShowsLocalModel>,
+        @PopularTvShows remote: PopularRemote<TvShowListItemResponse, PopularTvShowsResponse>,
+        @PopularTvShows local: PopularLocal<PopularTvShowsLocalModel>,
         @PopularTvShows converter: PopularTvShowsRepositoryConverter
-    ): PaginatedRepository = PaginatedRepositoryImpl(remote, local, converter)
+    ): PopularRepository = PopularRepositoryImpl(remote, local, converter)
 
     @PopularTvShows
     @Provides
@@ -75,6 +75,6 @@ object PopularTvShowsDi {
     @PopularTvShows
     @Provides
     fun providePopularTvShowsUseCase(
-        @PopularTvShows repository: PaginatedRepository
-    ): PaginatedUseCase = PaginatedUseCase(repository)
+        @PopularTvShows repository: PopularRepository
+    ): PopularUseCase = PopularUseCase(repository)
 }

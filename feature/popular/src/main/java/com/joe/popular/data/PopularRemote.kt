@@ -2,8 +2,8 @@ package com.joe.popular.data
 
 import com.joe.core.entity.Either
 import com.joe.data.response.ErrorResponse
-import com.joe.popular.repository.response.PaginatedResponse
+import com.joe.popular.repository.response.PopularResponse
 
-interface PaginatedRemote<ListItem, Response : PaginatedResponse<ListItem>> {
+interface PopularRemote<ListItem, Response : PopularResponse<ListItem>> {
     fun getItems(page: Int): Either<Response?, ErrorResponse?>
 }

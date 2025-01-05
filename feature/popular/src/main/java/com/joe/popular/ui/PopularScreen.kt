@@ -40,10 +40,10 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.joe.popular.presentation.model.MediaListItemModel
 import com.joe.popular.ui.sound.scrollToTopSounds
-import com.joe.popular.ui.sound.sfxSoundPool
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
 import com.joe.presentation.ui.navigation.Screens
+import com.joe.presentation.ui.sound.sfxSoundPool
 import com.joe.presentation.R as presentationR
 
 @OptIn(ExperimentalMaterial3Api::class)

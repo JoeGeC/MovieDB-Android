@@ -2,15 +2,15 @@ package com.joe.popular.presentation
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.joe.popular.domain.PaginatedUseCase
+import com.joe.popular.domain.PopularUseCase
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.presentation.converter.toModel
 import com.joe.popular.presentation.model.MediaListItemModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PaginatedPagingSource(
-    private val useCase: PaginatedUseCase
+class PopularPagingSource(
+    private val useCase: PopularUseCase
 ) : PagingSource<Int, MediaListItemModel>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MediaListItemModel> =
