@@ -7,8 +7,8 @@ plugins {
 }
 
 android {
-    namespace = "com.joe.feature"
-    compileSdk = 35
+    namespace = "com.joe.details"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 29
@@ -55,7 +55,6 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:presentation"))
-    implementation(project(":feature:details:base"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito)

@@ -1,6 +1,7 @@
 package com.joe.popularmovies.repository.converter
 
 import com.google.gson.reflect.TypeToken
+import com.joe.core.entity.toLocalDateOrNull
 import com.joe.data.JsonAdapter.localDateGson
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.domain.entity.MediaListItemEntity
@@ -56,7 +57,7 @@ class PopularMoviesRepositoryConverter: PopularRepositoryConverter<PopularMovies
 fun MovieListItemResponse.toEntity() = MediaListItemEntity(
     id = this.id ?: throw NullPointerException(),
     title = this.title ?: throw NullPointerException(),
-    releaseDate = try { LocalDate.parse(this.releaseDate) } catch(_: Exception) { null },
-    posterPath = this.posterPath ?: throw NullPointerException(),
-    score = this.voteAverage ?: throw java.lang.NullPointerException()
+    releaseDate = this.releaseDate?.toLocalDateOrNull(),
+    posterPath = this.posterPath,
+    score = this.voteAverage
 )

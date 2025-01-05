@@ -5,8 +5,8 @@ import java.time.LocalDate
 
 data class MediaListItemEntity(
     val id: Int,
-    val title: String?,
+    val title: String,
     val releaseDate: LocalDate?,
     val posterPath: String?,
-    @SerializedName("voteAverage") val score: Float,
+    @SerializedName("voteAverage") val score: Float?,
 )

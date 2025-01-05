@@ -11,5 +11,5 @@ fun MediaListItemEntity.toModel(locale: Locale = Locale.getDefault()) = MediaLis
     title = this.title ?: "",
     releaseDate = this.releaseDate?.formatLocalDate(locale) ?: "TBA",
     posterPath = this.posterPath?.toImageUrl() ?: "",
-    score = this.score
+    score = this.score ?: 0f
 )
