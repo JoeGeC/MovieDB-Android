@@ -23,7 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil3.ImageLoader
 import coil3.compose.SubcomposeAsyncImage
+import coil3.compose.setSingletonImageLoaderFactory
 import com.joe.popular.presentation.model.MediaListItemModel
 import com.joe.presentation.R
 import com.joe.presentation.ui.AnimatedCircularProgressBar

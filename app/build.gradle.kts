@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.material3)
+    implementation(libs.coil)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation)
