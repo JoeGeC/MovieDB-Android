@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.joe.presentation.ui.theme.customColorScheme
 
 @Composable
-fun AnimatedCircularProgressBar(
+fun AnimatedScoreCircle(
     progress: Float,
     modifier: Modifier = Modifier,
     size: Float = 75f,
@@ -60,6 +60,7 @@ fun AnimatedCircularProgressBar(
         )
 
         ScoreLabel(
+            progress,
             animatedProgress,
             numberTextStyle,
             numberTextColor,
@@ -78,7 +79,8 @@ private fun getProgressColor(value: Float): Color = when {
 
 @Composable
 private fun ScoreLabel(
-    progress: Animatable<Float, AnimationVector1D>,
+    progress: Float,
+    animatedProgress: Animatable<Float, AnimationVector1D>,
     numberTextStyle: TextStyle,
     numberTextColor: Color,
     percentageTextStyle: TextStyle,
@@ -86,15 +88,17 @@ private fun ScoreLabel(
 ) {
     Row {
         Text(
-            text = "${(progress.value * 100).toInt()}",
+            text = if(progress == 0f) "NR" else "${(animatedProgress.value * 100).toInt()}",
             style = numberTextStyle,
             color = numberTextColor
         )
-        Text(
-            text = "%",
-            style = percentageTextStyle,
-            color = percentageTextColor,
-            modifier = Modifier.padding(top = 4.dp)
-        )
+        if(progress > 0f) {
+            Text(
+                text = "%",
+                style = percentageTextStyle,
+                color = percentageTextColor,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
     }
 }

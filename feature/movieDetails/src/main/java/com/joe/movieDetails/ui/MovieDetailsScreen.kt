@@ -32,7 +32,7 @@ import com.joe.presentation.R as presentationR
 import com.joe.movieDetails.presentation.MovieDetailsSuccessState
 import com.joe.movieDetails.presentation.MovieDetailsViewModel
 import com.joe.presentation.model.MediaDetailsModel
-import com.joe.presentation.ui.AnimatedCircularProgressBar
+import com.joe.presentation.ui.AnimatedScoreCircle
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ShimmerBox
 import com.joe.presentation.viewModels.ErrorState
@@ -197,7 +197,7 @@ fun UserScore(score: Float?, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AnimatedCircularProgressBar(
+        AnimatedScoreCircle(
             progress = score,
             size = Dimensions.USER_SCORE_SIZE,
             modifier = modifier
