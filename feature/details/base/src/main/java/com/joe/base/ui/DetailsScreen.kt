@@ -1,6 +1,7 @@
 package com.joe.base.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,19 +47,25 @@ fun DetailsScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         BackgroundImage(mediaDetails.backdropPath)
-        Box(
-            modifier = Modifier.padding(top = 100.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            surface()
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 42.dp),
-                verticalAlignment = Alignment.Bottom
-            ) {
-                PosterImage(mediaDetails.posterPath)
-                Spacer(Modifier.weight(1f))
-                UserScore(mediaDetails.score)
+            Spacer(Modifier.height(100.dp))
+            Box {
+                surface()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 42.dp),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    PosterImage(mediaDetails.posterPath)
+                    Spacer(Modifier.weight(1f))
+                    UserScore(mediaDetails.score)
+                }
+
             }
         }
     }
@@ -138,7 +147,7 @@ fun ReleaseDate(releaseDate: String) {
 
 @Composable
 fun Tagline(tagline: String?) {
-    if(tagline.isNullOrEmpty()) return
+    if (tagline.isNullOrEmpty()) return
     Text(
         text = tagline,
         style = MaterialTheme.typography.labelMedium,
@@ -149,7 +158,7 @@ fun Tagline(tagline: String?) {
 
 @Composable
 fun Overview(overview: String?) {
-    if(overview.isNullOrEmpty()) return
+    if (overview.isNullOrEmpty()) return
     Text(
         text = stringResource(detailsR.string.overview),
         style = MaterialTheme.typography.titleMedium,
