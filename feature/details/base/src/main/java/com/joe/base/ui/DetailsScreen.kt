@@ -137,7 +137,8 @@ fun ReleaseDate(releaseDate: String) {
 }
 
 @Composable
-fun Tagline(tagline: String) {
+fun Tagline(tagline: String?) {
+    if(tagline.isNullOrEmpty()) return
     Text(
         text = tagline,
         style = MaterialTheme.typography.labelMedium,
@@ -147,7 +148,8 @@ fun Tagline(tagline: String) {
 }
 
 @Composable
-fun Overview(overview: String) {
+fun Overview(overview: String?) {
+    if(overview.isNullOrEmpty()) return
     Text(
         text = stringResource(detailsR.string.overview),
         style = MaterialTheme.typography.titleMedium,

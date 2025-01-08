@@ -1,10 +1,9 @@
 package com.joe.tvDetails.ui
 
-import android.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -83,10 +82,9 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
         ) {
             MediaTitle(tvDetails.name)
             ReleaseDate("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
-            Row{
-                Seasons("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
-                Spacer(Modifier.weight(1f))
-                Episodes("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
+            Row(Modifier.fillMaxWidth().padding(top = 12.dp)){
+                NumberOf("Seasons",  tvDetails.numberOfSeasons, Modifier.weight(1f))
+                NumberOf("Episodes", tvDetails.numberOfEpisodes, Modifier.weight(1f))
             }
             Tagline(tvDetails.tagline)
             Overview(tvDetails.overview)
@@ -95,17 +93,17 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
 }
 
 @Composable
-fun Seasons(numberOfSeasons: String) {
-    Text(
-        "Seasons: $numberOfSeasons",
-        style = MaterialTheme.typography.bodyMedium
-    )
-}
-
-@Composable
-fun Episodes(numberOfEpisodes: String) {
-    Text(
-        "Episodes: $numberOfEpisodes",
-        style = MaterialTheme.typography.bodyMedium
-    )
+fun NumberOf(label: String, numberOf: Int?, modifier: Modifier = Modifier) {
+    if(numberOf == null) return
+    Row(modifier) {
+        Text(
+            "$label: ",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            numberOf.toString(),
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
 }
