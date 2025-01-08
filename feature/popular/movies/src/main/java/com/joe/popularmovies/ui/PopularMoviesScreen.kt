@@ -8,6 +8,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.joe.popular.ui.PopularScreen
 import com.joe.popularmovies.presentation.PopularMoviesViewModel
 import com.joe.presentation.R
+import com.joe.presentation.ui.navigation.Screens
 
 @Composable
 fun PopularMoviesScreen(
@@ -17,8 +18,15 @@ fun PopularMoviesScreen(
     val movies = viewModel.itemsPager.collectAsLazyPagingItems()
 
     PopularScreen(
-        navController = navController,
+        onItemClick = { movieId -> navigateToMovieDetails(navController, movieId) },
         items = movies,
         title = stringResource(R.string.popularMovies)
     )
+}
+
+private fun navigateToMovieDetails(
+    navController: NavController?,
+    movieId: Int
+) {
+    navController?.navigate("${Screens.MovieDetails.route}/${movieId}")
 }

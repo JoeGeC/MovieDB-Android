@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/feature/details" />
             <option value="$PROJECT_DIR$/feature/details/base" />
             <option value="$PROJECT_DIR$/feature/details/movies" />
+            <option value="$PROJECT_DIR$/feature/details/tv" />
             <option value="$PROJECT_DIR$/feature/popular" />
             <option value="$PROJECT_DIR$/feature/popular/base" />
             <option value="$PROJECT_DIR$/feature/popular/movies" />

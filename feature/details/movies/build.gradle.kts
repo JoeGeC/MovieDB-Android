@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.joe.feature"
+    namespace = "com.joe.movieDetails"
     compileSdk = 35
 
     defaultConfig {

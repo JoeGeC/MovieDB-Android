@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
@@ -7,17 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.joe.moviedb"
-    compileSdk = 35
+    namespace = "com.joe.tvDetails"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.joe.moviedb"
         minSdk = 29
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -36,9 +33,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -46,19 +40,27 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.material3)
     implementation(libs.coil)
+    implementation(libs.coil.okhttp)
+    implementation(libs.shimmer)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.navigation)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+    implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:presentation"))
-//    implementation(project(":feature:details:base"))
-    implementation(project(":feature:details:movies"))
-    implementation(project(":feature:details:tv"))
-    implementation(project(":feature:popular:movies"))
-    implementation(project(":feature:popular:tv"))
+    implementation(project(":feature:details:base"))
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.retrofit.mock)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

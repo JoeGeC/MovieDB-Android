@@ -35,21 +35,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.joe.popular.presentation.model.MediaListItemModel
 import com.joe.popular.ui.sound.scrollToTopSounds
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
-import com.joe.presentation.ui.navigation.Screens
 import com.joe.presentation.ui.sound.sfxSoundPool
 import com.joe.presentation.R as presentationR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PopularScreen(
-    navController: NavController? = null,
+    onItemClick: (Int) -> Unit,
     items: LazyPagingItems<MediaListItemModel>,
     title: String
 ) {
@@ -65,7 +63,7 @@ fun PopularScreen(
             is LoadState.NotLoading -> PopularMoviesList(
                 items,
                 topAppBarScrollBehavior,
-                navController
+                onItemClick
             )
         }
     }
@@ -76,7 +74,7 @@ fun PopularScreen(
 fun PopularMoviesList(
     movies: LazyPagingItems<MediaListItemModel>,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
-    navController: NavController?
+    onItemClick: (Int) -> Unit
 ) {
     val gridState = rememberLazyStaggeredGridState()
 
@@ -95,7 +93,7 @@ fun PopularMoviesList(
                 movies[index]?.let { movie ->
                     MediaListItem(
                         movie,
-                        onClick = { navigateToMovieDetails(navController, movie.id) }
+                        onClick = { onItemClick(movie.id) }
                     )
                 }
             }
@@ -109,13 +107,6 @@ fun PopularMoviesList(
             modifier = Modifier.align(Alignment.BottomEnd)
         )
     }
-}
-
-private fun navigateToMovieDetails(
-    navController: NavController?,
-    movieId: Int
-) {
-    navController?.navigate("${Screens.MovieDetails.route}/${movieId}")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

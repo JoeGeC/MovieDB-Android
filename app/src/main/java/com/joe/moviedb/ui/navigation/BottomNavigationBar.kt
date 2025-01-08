@@ -27,6 +27,7 @@ import com.joe.movieDetails.ui.MovieDetailsScreen
 import com.joe.popularmovies.ui.PopularMoviesScreen
 import com.joe.populartvshows.ui.PopularTvShowsScreen
 import com.joe.presentation.ui.navigation.Screens
+import com.joe.tvDetails.ui.TvDetailsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,6 +109,10 @@ private fun NavHost(
         composable("${Screens.MovieDetails.route}/{${Screens.MovieDetails.param}}") { params ->
             val movieId = params.arguments?.getString(Screens.MovieDetails.param)?.toInt()
             MovieDetailsScreen(movieId)
+        }
+        composable("${Screens.TvDetails.route}/{${Screens.TvDetails.param}}") { params ->
+            val tvShowId = params.arguments?.getString(Screens.TvDetails.param)?.toInt()
+            TvDetailsScreen(tvShowId)
         }
     }
 }

@@ -36,7 +36,7 @@ class MovieDetailsRemoteImplTest {
     fun `getMovieDetails returns Success with MovieDetailsResponse`() = runTest {
         mockWebServer.enqueue(MockResponse().setBody(MockJson.SUCCESS).setResponseCode(200))
 
-        val result = movieDetailsRemote.getMovieDetails(MockJson.MOVIE_ID)
+        val result = movieDetailsRemote.getDetails(MockJson.MOVIE_ID)
 
         assert(result.isSuccess)
         val data = (result as Either.Success).value
@@ -59,7 +59,7 @@ class MovieDetailsRemoteImplTest {
                 .addHeader("Content-Type", "application/json")
         )
 
-        val result = movieDetailsRemote.getMovieDetails(123)
+        val result = movieDetailsRemote.getDetails(123)
 
         assert(result.isFailure)
         val error = (result as Either.Failure).error
