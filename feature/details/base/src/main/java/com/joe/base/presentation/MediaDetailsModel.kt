@@ -2,7 +2,7 @@ package com.joe.base.presentation
 
 abstract class MediaDetailsModel() {
     abstract val id: Int
-    abstract val title: String
+    abstract val name: String
     abstract val tagline: String
     abstract val overview: String
     abstract val posterPath: String?

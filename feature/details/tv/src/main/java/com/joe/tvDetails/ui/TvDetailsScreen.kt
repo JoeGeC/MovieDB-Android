@@ -1,12 +1,16 @@
 package com.joe.tvDetails.ui
 
+import android.R
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -54,7 +58,7 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
             if (state.mediaDetails !is TvDetailsModel)
                 ErrorScreen()
             else DetailsSuccessScreen(state.mediaDetails) {
-                MovieDetailsSurface(state.mediaDetails)
+                TvDetailsSurface(state.mediaDetails)
             }
         }
         else -> DetailsScreenState(state, refresh)
@@ -62,8 +66,8 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun MovieDetailsSurface(mediaDetails: MediaDetailsModel) {
-    mediaDetails as TvDetailsModel
+private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
+    tvDetails as TvDetailsModel
     Surface(
         modifier = Modifier
             .padding(top = 140.dp)
@@ -77,10 +81,31 @@ private fun MovieDetailsSurface(mediaDetails: MediaDetailsModel) {
                 .padding(top = 120.dp, bottom = 16.dp)
                 .padding(horizontal = 28.dp),
         ) {
-            MediaTitle(mediaDetails.title)
-            ReleaseDate(mediaDetails.releaseDate)
-            Tagline(mediaDetails.tagline)
-            Overview(mediaDetails.overview)
+            MediaTitle(tvDetails.name)
+            ReleaseDate("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
+            Row{
+                Seasons("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
+                Spacer(Modifier.weight(1f))
+                Episodes("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
+            }
+            Tagline(tvDetails.tagline)
+            Overview(tvDetails.overview)
         }
     }
+}
+
+@Composable
+fun Seasons(numberOfSeasons: String) {
+    Text(
+        "Seasons: $numberOfSeasons",
+        style = MaterialTheme.typography.bodyMedium
+    )
+}
+
+@Composable
+fun Episodes(numberOfEpisodes: String) {
+    Text(
+        "Episodes: $numberOfEpisodes",
+        style = MaterialTheme.typography.bodyMedium
+    )
 }

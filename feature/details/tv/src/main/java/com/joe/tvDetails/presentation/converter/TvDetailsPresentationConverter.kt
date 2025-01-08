@@ -14,12 +14,16 @@ class TvDetailsPresentationConverter(
     override fun entityToModel(entity: TvDetailsEntity): TvDetailsModel =
         TvDetailsModel(
             id = entity.id,
-            title = entity.title,
-            releaseDate = entity.releaseDate?.formatLocalDate(locale) ?: "",
+            name = entity.name,
+            firstAirDate = entity.firstAirDate?.formatLocalDate(locale) ?: "",
+            lastAirDate = entity.lastAirDate?.formatLocalDate(locale) ?: "",
             tagline = entity.tagline ?: "",
             overview = entity.overview ?: "",
             posterPath = entity.posterPath?.toImageUrl(),
-            score = entity.score,
             backdropPath = entity.backdropPath?.toImageUrl(),
+            score = entity.score,
+            numberOfSeasons = entity.numberOfSeasons,
+            numberOfEpisodes = entity.numberOfEpisodes,
+            inProduction = entity.inProduction,
         )
 }

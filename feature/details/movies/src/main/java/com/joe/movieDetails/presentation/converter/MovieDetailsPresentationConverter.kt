@@ -14,7 +14,7 @@ class MovieDetailsPresentationConverter(
     override fun entityToModel(entity: MovieDetailsEntity): MovieDetailsModel =
         MovieDetailsModel(
             id = entity.id,
-            title = entity.title,
+            name = entity.title,
             releaseDate = entity.releaseDate?.formatLocalDate(locale) ?: "",
             tagline = entity.tagline ?: "",
             overview = entity.overview ?: "",

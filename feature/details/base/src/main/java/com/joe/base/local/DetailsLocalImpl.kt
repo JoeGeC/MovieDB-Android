@@ -16,8 +16,12 @@ class DetailsLocalImpl<LocalModel>(
     }
 
     override fun getById(movieId: Int): Either<LocalModel?, ErrorResponse?> {
-        val response = daoHelper.getById(movieId)
-            ?: return Either.Failure(ErrorResponse("Null local response"))
-        return Either.Success(response)
+        try {
+            val response = daoHelper.getById(movieId)
+                ?: return Either.Failure(ErrorResponse("Null local response"))
+            return Either.Success(response)
+        } catch (e: Exception) {
+            return Either.Failure(ErrorResponse(e.localizedMessage ?: "Something went wrong in local"))
+        }
     }
 }

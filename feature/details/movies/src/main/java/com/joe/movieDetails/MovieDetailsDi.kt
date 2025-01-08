@@ -18,7 +18,7 @@ import com.joe.movieDetails.local.model.MovieDetailsLocalModel
 import com.joe.movieDetails.presentation.model.MovieDetailsModel
 import com.joe.movieDetails.presentation.converter.MovieDetailsPresentationConverter
 import com.joe.movieDetails.repository.converter.MovieDetailsRepositoryConverter
-import com.joe.movieDetails.repository.response.MovieDetailsResponse
+import com.joe.movieDetails.data.response.MovieDetailsResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

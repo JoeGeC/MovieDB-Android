@@ -1,6 +1,6 @@
 package com.joe.movieDetails.resources
 
-import com.joe.movieDetails.repository.response.MovieDetailsResponse
+import com.joe.movieDetails.data.response.MovieDetailsResponse
 
 object MockResponse {
     const val RELEASE_DATE = "1978-11-15"

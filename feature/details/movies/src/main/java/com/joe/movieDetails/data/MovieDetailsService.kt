@@ -1,6 +1,6 @@
 package com.joe.movieDetails.data
 
-import com.joe.movieDetails.repository.response.MovieDetailsResponse
+import com.joe.movieDetails.data.response.MovieDetailsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package com.joe.movieDetails.repository.response
+package com.joe.movieDetails.data.response
 
 data class MovieDetailsResponse(
     val id: Int?,

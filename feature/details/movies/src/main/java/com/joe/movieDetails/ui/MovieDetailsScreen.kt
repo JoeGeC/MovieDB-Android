@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joe.base.presentation.DetailsSuccessState
-import com.joe.base.presentation.DetailsViewModel
 import com.joe.base.presentation.MediaDetailsModel
 import com.joe.base.ui.DetailsScreenState
 import com.joe.base.ui.DetailsSuccessScreen
@@ -24,7 +23,6 @@ import com.joe.base.ui.MediaTitle
 import com.joe.base.ui.Overview
 import com.joe.base.ui.ReleaseDate
 import com.joe.base.ui.Tagline
-import com.joe.movieDetails.domain.MovieDetailsEntity
 import com.joe.movieDetails.presentation.MovieDetailsViewModel
 import com.joe.movieDetails.presentation.model.MovieDetailsModel
 import com.joe.presentation.ui.ErrorScreen
@@ -79,7 +77,7 @@ private fun MovieDetailsSurface(mediaDetails: MediaDetailsModel) {
                 .padding(top = 120.dp, bottom = 16.dp)
                 .padding(horizontal = 28.dp),
         ) {
-            MediaTitle(mediaDetails.title)
+            MediaTitle(mediaDetails.name)
             ReleaseDate(mediaDetails.releaseDate)
             Tagline(mediaDetails.tagline)
             Overview(mediaDetails.overview)

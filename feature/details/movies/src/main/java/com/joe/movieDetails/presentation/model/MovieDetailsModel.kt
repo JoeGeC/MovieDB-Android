@@ -4,7 +4,7 @@ import com.joe.base.presentation.MediaDetailsModel
 
 data class MovieDetailsModel(
     override val id: Int,
-    override val title: String,
+    override val name: String,
     val releaseDate: String,
     override val tagline: String,
     override val overview: String,

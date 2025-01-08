@@ -4,7 +4,7 @@ import com.joe.base.repository.converter.DetailsRepositoryConverter
 import com.joe.core.entity.toLocalDateOrNull
 import com.joe.movieDetails.domain.MovieDetailsEntity
 import com.joe.movieDetails.local.model.MovieDetailsLocalModel
-import com.joe.movieDetails.repository.response.MovieDetailsResponse
+import com.joe.movieDetails.data.response.MovieDetailsResponse
 
 class MovieDetailsRepositoryConverter :
     DetailsRepositoryConverter<MovieDetailsEntity, MovieDetailsLocalModel, MovieDetailsResponse> {

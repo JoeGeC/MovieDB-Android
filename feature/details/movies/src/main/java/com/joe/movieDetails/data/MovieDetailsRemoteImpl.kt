@@ -5,7 +5,7 @@ import com.joe.core.entity.Either
 import com.joe.data.BaseRemote
 import com.joe.data.json.NetworkProvider.API_KEY
 import com.joe.data.response.ErrorResponse
-import com.joe.movieDetails.repository.response.MovieDetailsResponse
+import com.joe.movieDetails.data.response.MovieDetailsResponse
 import retrofit2.Retrofit
 
 class MovieDetailsRemoteImpl(retrofit: Retrofit) : BaseRemote(), DetailsRemote<MovieDetailsResponse> {

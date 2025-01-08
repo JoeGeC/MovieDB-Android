@@ -4,11 +4,15 @@ import java.time.LocalDate
 
 data class TvDetailsEntity(
     val id: Int,
-    val title: String,
-    val releaseDate: LocalDate?,
+    val name: String,
     val tagline: String?,
     val overview: String?,
+    val firstAirDate: LocalDate?,
+    val lastAirDate: LocalDate?,
     val posterPath: String?,
-    val score: Float?,
     val backdropPath: String?,
+    val score: Float?,
+    val numberOfSeasons: Int?,
+    val numberOfEpisodes: Int?,
+    val inProduction: Boolean?,
 )

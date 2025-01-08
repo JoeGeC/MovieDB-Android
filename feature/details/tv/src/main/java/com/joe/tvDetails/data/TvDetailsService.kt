@@ -1,6 +1,6 @@
 package com.joe.tvDetails.data
 
-import com.joe.tvDetails.repository.response.TvDetailsResponse
+import com.joe.tvDetails.data.response.TvDetailsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

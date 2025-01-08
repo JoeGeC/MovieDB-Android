@@ -18,7 +18,7 @@ import com.joe.tvDetails.local.model.TvDetailsLocalModel
 import com.joe.tvDetails.presentation.converter.TvDetailsPresentationConverter
 import com.joe.tvDetails.presentation.model.TvDetailsModel
 import com.joe.tvDetails.repository.converter.TvDetailsRepositoryConverter
-import com.joe.tvDetails.repository.response.TvDetailsResponse
+import com.joe.tvDetails.data.response.TvDetailsResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
