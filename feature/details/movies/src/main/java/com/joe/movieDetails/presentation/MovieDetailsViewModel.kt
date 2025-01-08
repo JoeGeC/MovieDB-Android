@@ -3,6 +3,7 @@ package com.joe.movieDetails.presentation
 import com.joe.base.presentation.DetailsViewModel
 import com.joe.base.presentation.converter.DetailsPresentationConverter
 import com.joe.base.usecase.DetailsUseCase
+import com.joe.movieDetails.MovieDetails
 import com.joe.movieDetails.domain.MovieDetailsEntity
 import com.joe.movieDetails.presentation.model.MovieDetailsModel
 import com.joe.presentation.IoDispatcher
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
-    useCase: DetailsUseCase<MovieDetailsEntity>,
-    converter: DetailsPresentationConverter<MovieDetailsModel, MovieDetailsEntity>,
+    @MovieDetails useCase: DetailsUseCase<MovieDetailsEntity>,
+    @MovieDetails converter: DetailsPresentationConverter<MovieDetailsModel, MovieDetailsEntity>,
     @IoDispatcher dispatcher: CoroutineDispatcher
 ) : DetailsViewModel<MovieDetailsModel, MovieDetailsEntity>(useCase, converter, dispatcher)

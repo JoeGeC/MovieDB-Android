@@ -11,12 +11,10 @@ import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
 import com.joe.presentation.viewModels.job
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
 abstract class DetailsViewModel<Model: MediaDetailsModel, Entity>(
     private val useCase: DetailsUseCase<Entity>,
