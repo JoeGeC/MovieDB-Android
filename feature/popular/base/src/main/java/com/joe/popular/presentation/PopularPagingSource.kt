@@ -18,15 +18,12 @@ class PopularPagingSource(
             try {
                 val page = params.key ?: 1
                 val result = useCase.getItems(page)
-                println("LoadParams: $result")
-
                 if (result.isSuccess) {
                     loadNextPage(result.body, page)
                 } else {
                     LoadResult.Error(Throwable("Error loading data"))
                 }
             } catch (e: Exception) {
-                println("Error loading data: $e")
                 LoadResult.Error(e)
             }
         }
