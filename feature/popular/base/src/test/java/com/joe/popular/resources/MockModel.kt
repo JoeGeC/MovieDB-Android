@@ -1,7 +1,6 @@
 package com.joe.popular.resources
 
 import com.joe.popular.presentation.model.MediaListItemModel
-import com.joe.popular.presentation.model.MediaListModel
 
 object MockModel {
     const val RELEASE_DATE_1 = "02/04/1999"
@@ -24,12 +23,5 @@ object MockModel {
     )
 
     val mediaListItems1And2 = listOf(mediaListItem1, mediaListItem2)
-
-    val mediaList = MediaListModel(
-        MockEntity.PAGE_1,
-        mediaListItems1And2,
-        false,
-    )
-
 
 }

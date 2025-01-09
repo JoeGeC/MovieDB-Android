@@ -8,7 +8,6 @@ import java.time.LocalDate
 
 object MockEntity {
     const val PAGE_1 = 1
-    const val PAGE_2 = 2
 
     const val ID_1 = 123
     const val TITLE_1 = "Media item 1"
@@ -46,20 +45,6 @@ object MockEntity {
         false,
     )
 
-    val mediaList1 = MediaListEntity(
-        PAGE_1,
-        mediaListItems1And2,
-        false,
-    )
-
-    val mediaList2 = MediaListEntity(
-        PAGE_1,
-        mediaListItems1And2,
-        true,
-    )
-
-    val success1 = Either.Success(mediaList1)
-    val success2 = Either.Success(mediaList2)
     val success1And2 = Either.Success(mediaList1And2)
     const val USE_CASE_ERROR_MESSAGE = "Error loading data"
     const val ERROR_MESSAGE = "Error loading data"
