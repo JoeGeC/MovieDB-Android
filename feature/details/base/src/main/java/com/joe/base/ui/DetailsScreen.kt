@@ -159,15 +159,17 @@ fun Tagline(tagline: String?) {
 @Composable
 fun Overview(overview: String?) {
     if (overview.isNullOrEmpty()) return
-    Text(
-        text = stringResource(detailsR.string.overview),
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 12.dp)
-    )
+    Column {
+        Text(
+            text = stringResource(detailsR.string.overview),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 12.dp)
+        )
 
-    Text(
-        text = overview,
-        style = MaterialTheme.typography.bodyMedium,
-        modifier = Modifier.padding(top = 6.dp)
-    )
+        Text(
+            text = overview,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = 6.dp)
+        )
+    }
 }

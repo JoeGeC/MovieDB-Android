@@ -1,7 +1,11 @@
 package com.joe.tvDetails.ui
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,8 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joe.base.presentation.DetailsSuccessState
@@ -60,6 +66,7 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
                 TvDetailsSurface(state.mediaDetails)
             }
         }
+
         else -> DetailsScreenState(state, refresh)
     }
 }
@@ -81,9 +88,23 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
                 .padding(horizontal = 28.dp),
         ) {
             MediaTitle(tvDetails.name)
-            ReleaseDate("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
-            Row(Modifier.fillMaxWidth().padding(top = 12.dp)){
-                NumberOf("Seasons",  tvDetails.numberOfSeasons, Modifier.weight(1f))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp)
+            ) {
+                ReleaseDate("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
+                Spacer(Modifier.weight(1f))
+                InProduction(tvDetails.inProduction)
+                Spacer(Modifier.weight(1f))
+            }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp)
+            ) {
+                NumberOf("Seasons", tvDetails.numberOfSeasons, Modifier.weight(1f))
                 NumberOf("Episodes", tvDetails.numberOfEpisodes, Modifier.weight(1f))
             }
             Tagline(tvDetails.tagline)
@@ -94,7 +115,7 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
 
 @Composable
 fun NumberOf(label: String, numberOf: Int?, modifier: Modifier = Modifier) {
-    if(numberOf == null) return
+    if (numberOf == null) return
     Row(modifier) {
         Text(
             "$label: ",
@@ -103,7 +124,27 @@ fun NumberOf(label: String, numberOf: Int?, modifier: Modifier = Modifier) {
         )
         Text(
             numberOf.toString(),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
+
+@Composable
+fun InProduction(inProduction: Boolean?, modifier: Modifier = Modifier) {
+    if (inProduction == null || inProduction == false) return
+    val boxShape = RoundedCornerShape(8.dp)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .border(BorderStroke(2.dp, Color.Red), shape = boxShape)
+            .padding(8.dp)
+            .clip(boxShape)
+    ) {
+        Text(
+            "In Production",
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.Red
         )
     }
 }
