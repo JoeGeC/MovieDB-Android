@@ -1,5 +1,6 @@
 package com.joe.base.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,7 +46,7 @@ fun DetailsScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 
 @Composable
 fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable () -> Unit) {
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
         BackgroundImage(mediaDetails.backdropPath)
         Column(
             modifier = Modifier
