@@ -8,7 +8,6 @@ import com.joe.movieDetails.local.dao.MovieDetailsDaoHelper
 import com.joe.movieDetails.local.model.MovieDetailsLocalModel
 import com.joe.movieDetails.resources.MockEntity
 import com.joe.movieDetails.resources.MockLocal
-import com.joe.movieDetails.resources.MockResponse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
