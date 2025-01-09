@@ -15,15 +15,12 @@ import com.joe.presentation.R
 
 @Composable
 fun PosterImage(posterImageUrl: String?, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(8))
-    ) {
+    Box(modifier = modifier.clip(RoundedCornerShape(8))) {
         SubcomposeAsyncImage(
             model = posterImageUrl,
             contentDescription = stringResource(R.string.movie_poster),
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
             loading = { ShimmerBox() },
             error = {
                 Image(
