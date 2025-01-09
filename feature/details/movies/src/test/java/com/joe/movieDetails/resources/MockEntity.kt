@@ -2,8 +2,7 @@ package com.joe.movieDetails.resources
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.core.entity.MediaDetailsEntity
-import com.joe.core.entity.MediaType
+import com.joe.movieDetails.domain.MovieDetailsEntity
 import com.joe.movieDetails.resources.MockModel.ERROR_MESSAGE
 import java.time.LocalDate
 
@@ -16,7 +15,7 @@ object MockEntity {
     const val BACKDROP_PATH_1 = "/TXSxV23MWYkezZ3219gtgcSX6n.jpg"
     const val SCORE_1 = 6.589f
 
-    val entity = MediaDetailsEntity(
+    val entity = MovieDetailsEntity(
         id = MOVIE_ID,
         title = TITLE_1,
         releaseDate = LocalDate.of(1978, 11, 15),
@@ -25,7 +24,6 @@ object MockEntity {
         posterPath = POSTER_PATH_1,
         score = SCORE_1,
         backdropPath = BACKDROP_PATH_1,
-        type = MediaType.Movie
     )
 
     val failure = Either.Failure(ErrorEntity(ERROR_MESSAGE))

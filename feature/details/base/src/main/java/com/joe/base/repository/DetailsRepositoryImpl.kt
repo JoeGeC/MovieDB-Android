@@ -29,8 +29,12 @@ class DetailsRepositoryImpl<Entity, LocalModel, Response>(
         val remoteResult = remote.getDetails(mediaId)
         remoteResult.fold(
             onSuccess = { remoteData ->
-                local.insert(converter.remoteToLocal(remoteData))
-                return Either.Success(converter.remoteToEntity(remoteData))
+                try{
+                    local.insert(converter.remoteToLocal(remoteData))
+                    return Either.Success(converter.remoteToEntity(remoteData))
+                } catch (e: Exception) {
+                    return Either.Failure(ErrorEntity(e.localizedMessage ?: ""))
+                }
             },
             onFailure = { error ->
                 return Either.Failure(ErrorEntity(error?.statusMessage ?: ""))

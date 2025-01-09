@@ -1,9 +1,14 @@
 package com.joe.movieDetails.presentation
 
-import com.joe.presentation.viewModels.ErrorState
-import com.joe.presentation.viewModels.LoadingState
+import com.joe.base.presentation.DetailsSuccessState
+import com.joe.base.usecase.DetailsUseCase
+import com.joe.movieDetails.domain.MovieDetailsEntity
+import com.joe.movieDetails.presentation.converter.MovieDetailsPresentationConverter
+import com.joe.movieDetails.presentation.model.MovieDetailsModel
 import com.joe.movieDetails.resources.MockEntity
 import com.joe.movieDetails.resources.MockModel
+import com.joe.presentation.viewModels.ErrorState
+import com.joe.presentation.viewModels.LoadingState
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,15 +25,16 @@ import org.mockito.Mockito
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MovieDetailsViewModelShould {
-    private lateinit var viewModel: com.joe.base.presentation.DetailsViewModel
-    private val useCase: com.joe.base.usecase.DetailsUseCase = Mockito.mock()
+class MovieviewModelShould {
+    private lateinit var viewModel: MovieDetailsViewModel
+    private val useCase: DetailsUseCase<MovieDetailsEntity> = Mockito.mock()
+    private val converter = MovieDetailsPresentationConverter()
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = com.joe.base.presentation.DetailsViewModel(useCase, testDispatcher)
+        viewModel = MovieDetailsViewModel(useCase, converter, testDispatcher)
     }
 
     @After
@@ -38,85 +44,85 @@ class MovieDetailsViewModelShould {
 
     @Test
     fun `ViewModel is initialized with loading state`() = runTest {
-        assertTrue(com.joe.base.presentation.DetailsViewModel.state.value is LoadingState)
+        assertTrue(viewModel.state.value is LoadingState)
     }
 
     @Test
     fun `set ErrorState when exception is thrown`() = runTest {
-        whenever(com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID))
+        whenever(useCase.getDetails(MockEntity.MOVIE_ID))
             .thenThrow(NullPointerException())
 
-        com.joe.base.presentation.DetailsViewModel.init(MockEntity.MOVIE_ID)
+        viewModel.init(MockEntity.MOVIE_ID)
         advanceUntilIdle()
 
-        val state = com.joe.base.presentation.DetailsViewModel.state.value
+        val state = viewModel.state.value
         assertTrue(state is ErrorState)
     }
 
     @Test
     fun `set ErrorState when failure`() = runTest {
-        whenever(com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID))
+        whenever(useCase.getDetails(MockEntity.MOVIE_ID))
             .thenReturn(MockEntity.failure)
 
-        com.joe.base.presentation.DetailsViewModel.init(MockEntity.MOVIE_ID)
+        viewModel.init(MockEntity.MOVIE_ID)
         advanceUntilIdle()
 
-        val state = com.joe.base.presentation.DetailsViewModel.state.value
+        val state = viewModel.state.value
         assertTrue(state is ErrorState)
     }
 
     @Test
     fun `set ErrorState when null result`() = runTest {
-        whenever(com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID))
+        whenever(useCase.getDetails(MockEntity.MOVIE_ID))
             .thenReturn(MockModel.nullSuccess)
 
-        com.joe.base.presentation.DetailsViewModel.init(MockEntity.MOVIE_ID)
+        viewModel.init(MockEntity.MOVIE_ID)
         advanceUntilIdle()
 
-        val state = com.joe.base.presentation.DetailsViewModel.state.value
+        val state = viewModel.state.value
         assertTrue(state is ErrorState)
     }
 
     @Test
     fun `set SuccessState when success`() = runTest {
-        whenever(com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID))
+        whenever(useCase.getDetails(MockEntity.MOVIE_ID))
             .thenReturn(MockEntity.success)
 
-        com.joe.base.presentation.DetailsViewModel.init(MockEntity.MOVIE_ID)
+        viewModel.init(MockEntity.MOVIE_ID)
         advanceUntilIdle()
 
-        val state = com.joe.base.presentation.DetailsViewModel.state.value
-        assertEquals(com.joe.base.presentation.DetailsSuccessState(MockModel.model), state)
+        val state = viewModel.state.value
+        assertEquals(DetailsSuccessState<MovieDetailsModel>(MockModel.model), state)
     }
 
     @Test
     fun `do nothing on refresh when LoadingState`() = runTest {
-        whenever(com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID))
+        whenever(useCase.getDetails(MockEntity.MOVIE_ID))
             .thenReturn(MockEntity.success)
 
-        com.joe.base.presentation.DetailsViewModel.init(MockEntity.MOVIE_ID)
-        com.joe.base.presentation.DetailsViewModel.refresh()
+        viewModel.init(MockEntity.MOVIE_ID)
+        viewModel.refresh()
         advanceUntilIdle()
 
-        val state = com.joe.base.presentation.DetailsViewModel.state.value
-        assertEquals(com.joe.base.presentation.DetailsSuccessState(MockModel.model), state)
-        com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID)
+        val state = viewModel.state.value
+        assertEquals(DetailsSuccessState<MovieDetailsModel>(MockModel.model), state)
+        useCase.getDetails(MockEntity.MOVIE_ID)
     }
 
     @Test
     fun `do nothing on refresh when RefreshingState && refresh correctly`() = runTest {
-        whenever(com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID))
+        whenever(useCase.getDetails(MockEntity.MOVIE_ID))
             .thenReturn(MockEntity.success)
 
-        com.joe.base.presentation.DetailsViewModel.init(MockEntity.MOVIE_ID)
+        viewModel.init(MockEntity.MOVIE_ID)
         advanceUntilIdle()
-        com.joe.base.presentation.DetailsViewModel.refresh()
-        com.joe.base.presentation.DetailsViewModel.refresh()
+        viewModel.refresh()
+        viewModel.refresh()
         advanceUntilIdle()
 
-        val state = com.joe.base.presentation.DetailsViewModel.state.value
-        assertEquals(com.joe.base.presentation.DetailsSuccessState(MockModel.model), state)
-        com.joe.base.usecase.DetailsUseCase.getDetails(MockEntity.MOVIE_ID)
+        val state = viewModel.state.value
+        assertEquals(DetailsSuccessState<MovieDetailsModel>(MockModel.model), state)
+        useCase.getDetails(MockEntity.MOVIE_ID)
     }
 
 }
