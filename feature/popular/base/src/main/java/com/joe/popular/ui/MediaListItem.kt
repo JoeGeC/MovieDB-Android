@@ -27,6 +27,7 @@ import coil3.compose.SubcomposeAsyncImage
 import com.joe.popular.presentation.model.MediaListItemModel
 import com.joe.presentation.R
 import com.joe.presentation.ui.AnimatedScoreCircle
+import com.joe.presentation.ui.PosterImage
 import com.joe.presentation.ui.ShimmerBox
 
 @Composable
@@ -40,7 +41,12 @@ fun MediaListItem(movie: MediaListItemModel, onClick: (() -> Unit)? = null) {
     ) {
         Column {
             Box(contentAlignment = Alignment.BottomStart) {
-                PosterImage(movie.posterPath)
+                PosterImage(
+                    movie.posterPath,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(0.667f)
+                )
                 AnimatedScoreCircle(
                     movie.score,
                     size = 50f,
@@ -62,30 +68,5 @@ fun MediaListItem(movie: MediaListItemModel, onClick: (() -> Unit)? = null) {
                 Text(movie.releaseDate, style = MaterialTheme.typography.labelMedium)
             }
         }
-    }
-}
-
-
-@Composable
-private fun PosterImage(posterImageUrl: String?) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(0.667f)
-            .clip(RoundedCornerShape(8))
-    ) {
-        SubcomposeAsyncImage(
-            model = posterImageUrl,
-            contentDescription = stringResource(R.string.movie_poster),
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit,
-            loading = { ShimmerBox() },
-            error = {
-                Image(
-                    painter = painterResource(R.drawable.poster_fallback),
-                    contentDescription = stringResource(R.string.movie_poster_fallback)
-                )
-            }
-        )
     }
 }

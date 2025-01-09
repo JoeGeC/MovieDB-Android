@@ -27,6 +27,7 @@ import coil3.compose.SubcomposeAsyncImage
 import com.joe.base.presentation.MediaDetailsModel
 import com.joe.presentation.ui.AnimatedScoreCircle
 import com.joe.presentation.ui.ErrorScreen
+import com.joe.presentation.ui.PosterImage
 import com.joe.presentation.ui.ShimmerBox
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
@@ -46,7 +47,10 @@ fun DetailsScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 
 @Composable
 fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable () -> Unit) {
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)) {
         BackgroundImage(mediaDetails.backdropPath)
         Column(
             modifier = Modifier
@@ -62,7 +66,12 @@ fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable (
                         .padding(horizontal = 42.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    PosterImage(mediaDetails.posterPath)
+                    PosterImage(
+                        mediaDetails.posterPath,
+                        modifier = Modifier
+                            .height(Dimensions.POSTER_IMAGE_HEIGHT.dp)
+                            .width(Dimensions.POSTER_IMAGE_WIDTH.dp)
+                    )
                     Spacer(Modifier.weight(1f))
                     UserScore(mediaDetails.score)
                 }
@@ -86,25 +95,6 @@ private fun BackgroundImage(backgroundImageUrl: String?) {
             contentScale = ContentScale.Crop,
             loading = { ShimmerBox() },
             error = { painterResource(presentationR.drawable.backdrop_fallback) }
-        )
-    }
-}
-
-@Composable
-private fun PosterImage(posterImageUrl: String?) {
-    Box(
-        modifier = Modifier
-            .height(Dimensions.POSTER_IMAGE_HEIGHT.dp)
-            .width(Dimensions.POSTER_IMAGE_WIDTH.dp)
-            .clip(RoundedCornerShape(8))
-    ) {
-        SubcomposeAsyncImage(
-            model = posterImageUrl,
-            contentDescription = "Movie Poster",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit,
-            loading = { ShimmerBox() },
-            error = { painterResource(presentationR.drawable.poster_fallback) }
         )
     }
 }
