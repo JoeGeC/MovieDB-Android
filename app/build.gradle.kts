@@ -54,7 +54,6 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(project(":core:domain"))
     implementation(project(":core:presentation"))
-//    implementation(project(":feature:details:base"))
     implementation(project(":feature:details:movies"))
     implementation(project(":feature:details:tv"))
     implementation(project(":feature:popular:movies"))
