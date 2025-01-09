@@ -2,13 +2,13 @@ package com.joe.popularmovies.resources
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
-import com.joe.popularmovies.domain.entity.MovieListItemEntity
-import com.joe.popularmovies.domain.entity.PopularMoviesEntity
-import com.joe.popularmovies.presentation.model.MovieListItemModel
-import com.joe.popularmovies.presentation.model.PopularMoviesModel
+import com.joe.popular.domain.entity.MediaListEntity
+import com.joe.popular.domain.entity.MediaListItemEntity
+import com.joe.popular.presentation.model.MediaListItemModel
+import com.joe.popular.presentation.model.MediaListModel
 import java.time.LocalDate
 
-object MockObjects {
+object MockEntity {
     const val PAGE_1 = 1
     const val PAGE_2 = 2
     const val MOVIE_ID_1 = 1
@@ -16,7 +16,7 @@ object MockObjects {
     const val SCORE_1 = 6.589f
     const val POSTER_PATH_1 = "https://image.tmdb.org/t/p/original/liW0mjvTyLs7UCumaHhx3PpU4VT.jpg"
 
-    val model1 = MovieListItemModel(
+    val model1 = MediaListItemModel(
         id = MOVIE_ID_1,
         title = TITLE_1,
         releaseDate = "15/11/1978",
@@ -29,7 +29,7 @@ object MockObjects {
     const val POSTER_PATH_2 = "https://image.tmdb.org/t/p/original/poster_path_2.jpg"
     const val SCORE_2 = 8.45f
 
-    val model2 = MovieListItemModel(
+    val model2 = MediaListItemModel(
         id = MOVIE_ID_2,
         title = TITLE_2,
         releaseDate = "16/12/1980",
@@ -37,7 +37,7 @@ object MockObjects {
         score = SCORE_2,
     )
 
-    val entity1 = MovieListItemEntity(
+    val entity1 = MediaListItemEntity(
         id = MOVIE_ID_1,
         title = TITLE_1,
         releaseDate = LocalDate.of(1978, 11, 15),
@@ -45,7 +45,7 @@ object MockObjects {
         score = SCORE_1,
     )
 
-    val entity2 = MovieListItemEntity(
+    val entity2 = MediaListItemEntity(
         id = MOVIE_ID_2,
         title = TITLE_2,
         releaseDate = LocalDate.of(1980, 12, 16),
@@ -56,14 +56,14 @@ object MockObjects {
     val entityList1 = listOf(entity1)
     val entityList2 = listOf(entity2)
 
-    val popularMoviesEntity1 = PopularMoviesEntity(1, entityList1, false)
-    val popularMoviesEntity2 = PopularMoviesEntity(2, entityList2, true)
+    val popularMoviesEntity1 = MediaListEntity(1, entityList1, false)
+    val popularMoviesEntity2 = MediaListEntity(2, entityList2, true)
 
     val modelList1 = listOf(model1)
     val modelList2 = listOf(model2)
 
-    val popularMoviesModel1 = PopularMoviesModel(PAGE_1, modelList1, false)
-    val popularMoviesModel2 = PopularMoviesModel(PAGE_2, modelList2, true)
+    val popularMoviesModel1 = MediaListModel(PAGE_1, modelList1, false)
+    val popularMoviesModel2 = MediaListModel(PAGE_2, modelList2, true)
 
     val success1 = Either.Success(popularMoviesEntity1)
     val success2 = Either.Success(popularMoviesEntity2)

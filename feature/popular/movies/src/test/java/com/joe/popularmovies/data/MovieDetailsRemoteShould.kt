@@ -36,7 +36,7 @@ class MovieDetailsRemoteShould {
     fun `return Success`() = runTest {
         mockWebServer.enqueue(MockResponse().setBody(MockJson.SUCCESS).setResponseCode(200))
 
-        val result = movieDetailsRemote.getPopularMovies(MockJson.PAGE_1)
+        val result = movieDetailsRemote.getItems(MockJson.PAGE_1)
 
         println(result)
         assert(result.isSuccess)

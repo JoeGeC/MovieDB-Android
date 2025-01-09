@@ -10,21 +10,19 @@ object MockResponse {
     const val TOTAL_PAGES = 2
 
     val movieDetails = MovieListItemResponse(
-        MockObjects.MOVIE_ID_1,
-        MockObjects.TITLE_1,
+        MockEntity.MOVIE_ID_1,
+        MockEntity.TITLE_1,
         "1978-11-15",
         POSTER_PATH_1,
-        MockObjects.SCORE_1,
+        MockEntity.SCORE_1,
     )
 
     val popularMovies = PopularMoviesResponse(
-        MockObjects.PAGE_1,
+        MockEntity.PAGE_1,
         listOf(movieDetails),
         TOTAL_PAGES
     )
 
-    const val ERROR_MESSAGE = "Error Message"
-
     val success = Either.Success(popularMovies)
-    val failure = Either.Failure(ErrorResponse(ERROR_MESSAGE))
+    val failure = Either.Failure(ErrorResponse(MockEntity.ERROR_MESSAGE))
 }

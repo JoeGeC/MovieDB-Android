@@ -1,8 +1,13 @@
 package com.joe.popularmovies.local
 
 import com.joe.core.entity.Either
+import com.joe.popular.local.PopularLocalImpl
+import com.joe.popularmovies.local.dao.PopularMoviesDao
+import com.joe.popularmovies.local.dao.PopularMoviesDaoHelper
+import com.joe.popularmovies.local.database.PopularMoviesDatabase
+import com.joe.popularmovies.local.model.PopularMoviesLocalModel
 import com.joe.popularmovies.resources.MockLocal
-import com.joe.popularmovies.resources.MockObjects
+import com.joe.popularmovies.resources.MockEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -13,26 +18,27 @@ import org.mockito.kotlin.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PopularMoviesLocalShould {
-    private lateinit var local: PopularMoviesLocalImpl
+    private lateinit var local: PopularLocalImpl<PopularMoviesLocalModel>
     private val mockDatabase: PopularMoviesDatabase = mock()
     private val mockDao: PopularMoviesDao = mock()
+    private val daoHelper = PopularMoviesDaoHelper(mockDao)
 
     @Before
     fun setup() {
         whenever(mockDatabase.popularMoviesDao()).thenReturn(mockDao)
-        local = PopularMoviesLocalImpl(mockDatabase)
+        local = PopularLocalImpl(daoHelper)
     }
 
     @Test
     fun `return success on get when dao returns data`() = runTest {
         whenever(
             mockDao.getByPage(
-                eq(MockObjects.PAGE_1),
+                eq(MockEntity.PAGE_1),
                 any()
             )
         ).thenReturn(MockLocal.model)
 
-        val result = local.get(MockObjects.PAGE_1)
+        val result = local.get(MockEntity.PAGE_1)
 
         println(result)
         assertTrue(result is Either.Success)
@@ -41,9 +47,9 @@ class PopularMoviesLocalShould {
 
     @Test
     fun `return failure on get when no data exists`() = runTest {
-        whenever(mockDao.getByPage(MockObjects.PAGE_1, MockLocal.validTime)).thenReturn(null)
+        whenever(mockDao.getByPage(MockEntity.PAGE_1, MockLocal.validTime)).thenReturn(null)
 
-        val result = local.get(MockObjects.PAGE_1)
+        val result = local.get(MockEntity.PAGE_1)
 
         assertTrue(result is Either.Failure)
         assertEquals("Cache expired or no data available", (result as Either.Failure).error.statusMessage)
@@ -55,7 +61,7 @@ class PopularMoviesLocalShould {
 
         verify(mockDao, times(1)).insertAll(
             check {
-                assertEquals(MockObjects.PAGE_1, it.page)
+                assertEquals(MockEntity.PAGE_1, it.page)
                 assertTrue(it.cachedAt > 0)
             }
         )
