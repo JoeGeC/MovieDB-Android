@@ -1,4 +1,4 @@
-package com.joe.popularmovies.repository.response
+package com.joe.popularmovies.data.response
 
 data class MovieListItemResponse(
     val id: Int?,

@@ -1,15 +1,15 @@
-package com.joe.popularmovies.repository
+package com.joe.populartvshows.repository
 
 import com.joe.popular.data.PopularRemote
 import com.joe.popular.local.PopularLocal
 import com.joe.popular.repository.PopularRepositoryImpl
-import com.joe.popularmovies.local.model.PopularMoviesLocalModel
-import com.joe.popularmovies.repository.converter.PopularMoviesRepositoryConverter
-import com.joe.popularmovies.data.response.MovieListItemResponse
-import com.joe.popularmovies.data.response.PopularMoviesResponse
-import com.joe.popularmovies.resources.MockLocal
-import com.joe.popularmovies.resources.MockEntity
-import com.joe.popularmovies.resources.MockResponse
+import com.joe.populartvshows.data.response.PopularTvShowsResponse
+import com.joe.populartvshows.data.response.TvShowListItemResponse
+import com.joe.populartvshows.local.model.PopularTvShowsLocalModel
+import com.joe.populartvshows.repository.converter.PopularTvShowsRepositoryConverter
+import com.joe.populartvshows.resources.MockEntity
+import com.joe.populartvshows.resources.MockLocal
+import com.joe.populartvshows.resources.MockResponse
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -17,11 +17,11 @@ import org.junit.Test
 import org.mockito.Mockito.*
 import org.mockito.kotlin.whenever
 
-class PopularMoviesRepositoryImplTest {
-    private var mockRemote: PopularRemote<MovieListItemResponse, PopularMoviesResponse> = mock()
-    private var mockLocal: PopularLocal<PopularMoviesLocalModel> = mock()
-    private lateinit var repository: PopularRepositoryImpl<PopularMoviesLocalModel, MovieListItemResponse, PopularMoviesResponse>
-    private var converter = PopularMoviesRepositoryConverter()
+class PopularTvShowsRepositoryImplTest {
+    private var mockRemote: PopularRemote<TvShowListItemResponse, PopularTvShowsResponse> = mock()
+    private var mockLocal: PopularLocal<PopularTvShowsLocalModel> = mock()
+    private lateinit var repository: PopularRepositoryImpl<PopularTvShowsLocalModel, TvShowListItemResponse, PopularTvShowsResponse>
+    private var converter = PopularTvShowsRepositoryConverter()
 
     @Before
     fun setup() {
@@ -53,7 +53,7 @@ class PopularMoviesRepositoryImplTest {
     }
 
     @Test
-    fun `getPopularMovies returns failure when both fetchLocal and fetchRemote fail`() = runBlocking {
+    fun `getPopularTvShows returns failure when both fetchLocal and fetchRemote fail`() = runBlocking {
         whenever(mockLocal.get(MockEntity.PAGE_1)).thenReturn(MockResponse.failure)
         whenever(mockRemote.getItems(MockEntity.PAGE_1)).thenReturn(MockResponse.failure)
 

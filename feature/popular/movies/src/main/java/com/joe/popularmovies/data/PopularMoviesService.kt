@@ -1,6 +1,6 @@
 package com.joe.popularmovies.data
 
-import com.joe.popularmovies.repository.response.PopularMoviesResponse
+import com.joe.popularmovies.data.response.PopularMoviesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

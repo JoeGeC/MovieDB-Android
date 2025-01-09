@@ -7,9 +7,8 @@ import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.domain.entity.MediaListItemEntity
 import com.joe.popular.repository.converter.PopularRepositoryConverter
 import com.joe.popularmovies.local.model.PopularMoviesLocalModel
-import com.joe.popularmovies.repository.response.MovieListItemResponse
-import com.joe.popularmovies.repository.response.PopularMoviesResponse
-import java.time.LocalDate
+import com.joe.popularmovies.data.response.MovieListItemResponse
+import com.joe.popularmovies.data.response.PopularMoviesResponse
 
 class PopularMoviesRepositoryConverter: PopularRepositoryConverter<PopularMoviesLocalModel, PopularMoviesResponse> {
 

@@ -1,6 +1,6 @@
 package com.joe.populartvshows.data
 
-import com.joe.populartvshows.repository.response.PopularTvShowsResponse
+import com.joe.populartvshows.data.response.PopularTvShowsResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

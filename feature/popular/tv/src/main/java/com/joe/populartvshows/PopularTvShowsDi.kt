@@ -14,8 +14,8 @@ import com.joe.populartvshows.local.dao.PopularTvShowsDaoHelper
 import com.joe.populartvshows.local.database.PopularTvShowsDatabase
 import com.joe.populartvshows.local.model.PopularTvShowsLocalModel
 import com.joe.populartvshows.repository.converter.PopularTvShowsRepositoryConverter
-import com.joe.populartvshows.repository.response.PopularTvShowsResponse
-import com.joe.populartvshows.repository.response.TvShowListItemResponse
+import com.joe.populartvshows.data.response.PopularTvShowsResponse
+import com.joe.populartvshows.data.response.TvShowListItemResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

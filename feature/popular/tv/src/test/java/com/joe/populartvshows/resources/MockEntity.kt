@@ -1,9 +1,10 @@
-package com.joe.popularmovies.resources
+package com.joe.populartvshows.resources
 
 import com.joe.core.entity.Either
 import com.joe.core.entity.ErrorEntity
 import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.domain.entity.MediaListItemEntity
+import com.joe.popular.presentation.model.MediaListItemModel
 import java.time.LocalDate
 
 object MockEntity {

@@ -7,8 +7,8 @@ import com.joe.popular.domain.entity.MediaListEntity
 import com.joe.popular.domain.entity.MediaListItemEntity
 import com.joe.popular.repository.converter.PopularRepositoryConverter
 import com.joe.populartvshows.local.model.PopularTvShowsLocalModel
-import com.joe.populartvshows.repository.response.PopularTvShowsResponse
-import com.joe.populartvshows.repository.response.TvShowListItemResponse
+import com.joe.populartvshows.data.response.PopularTvShowsResponse
+import com.joe.populartvshows.data.response.TvShowListItemResponse
 import java.time.LocalDate
 
 class PopularTvShowsRepositoryConverter: PopularRepositoryConverter<PopularTvShowsLocalModel, PopularTvShowsResponse> {

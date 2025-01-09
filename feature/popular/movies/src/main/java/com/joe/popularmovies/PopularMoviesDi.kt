@@ -14,8 +14,8 @@ import com.joe.popularmovies.local.dao.PopularMoviesDaoHelper
 import com.joe.popularmovies.local.database.PopularMoviesDatabase
 import com.joe.popularmovies.local.model.PopularMoviesLocalModel
 import com.joe.popularmovies.repository.converter.PopularMoviesRepositoryConverter
-import com.joe.popularmovies.repository.response.MovieListItemResponse
-import com.joe.popularmovies.repository.response.PopularMoviesResponse
+import com.joe.popularmovies.data.response.MovieListItemResponse
+import com.joe.popularmovies.data.response.PopularMoviesResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

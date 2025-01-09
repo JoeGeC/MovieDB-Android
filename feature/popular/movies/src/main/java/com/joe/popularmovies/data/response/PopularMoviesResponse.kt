@@ -1,4 +1,4 @@
-package com.joe.popularmovies.repository.response
+package com.joe.popularmovies.data.response
 
 import com.joe.popular.repository.response.PopularResponse
 

@@ -1,4 +1,4 @@
-package com.joe.populartvshows.repository.response
+package com.joe.populartvshows.data.response
 
 data class TvShowListItemResponse(
     val id: Int?,
