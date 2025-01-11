@@ -4,14 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,18 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
-import com.joe.cast.presentation.model.CastListModel
-import com.joe.cast.presentation.model.PersonModel
-import com.joe.cast.presentation.state.CastSuccessState
 import com.joe.cast.R
+import com.joe.cast.presentation.model.CastListModel
+import com.joe.cast.presentation.model.ActorModel
+import com.joe.cast.presentation.model.Person
+import com.joe.cast.presentation.state.CastSuccessState
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ShimmerBox
 import com.joe.presentation.viewModels.ErrorState
@@ -59,7 +54,7 @@ private fun CastSuccessScreen(castList: CastListModel) {
 }
 
 @Composable
-private fun PersonListWithTitle(personList: List<PersonModel>, title: String) {
+private fun PersonListWithTitle(personList: List<Person>, title: String) {
     if (personList.isEmpty()) return
     Text(
         title,
@@ -70,7 +65,7 @@ private fun PersonListWithTitle(personList: List<PersonModel>, title: String) {
 }
 
 @Composable
-private fun PersonList(personList: List<PersonModel>) {
+private fun PersonList(personList: List<Person>) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 26.dp),
@@ -82,7 +77,7 @@ private fun PersonList(personList: List<PersonModel>) {
 }
 
 @Composable
-private fun CastMemberItem(person: PersonModel) {
+private fun CastMemberItem(person: Person) {
     Surface(
         shape = RoundedCornerShape(14.dp),
         color = MaterialTheme.colorScheme.surface,
@@ -94,16 +89,16 @@ private fun CastMemberItem(person: PersonModel) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            PersonImage(person)
-            PersonName(person)
-            CharacterName(person)
+            PersonImage(person.profilePath, person.name)
+            PersonName(person.name)
+            PersonSubtitle(person.getListSubtitle())
         }
 
     }
 }
 
 @Composable
-private fun PersonImage(person: PersonModel) {
+private fun PersonImage(profilePath: String?, personName: String) {
     Box(
         Modifier
             .clip(RoundedCornerShape(8))
@@ -112,8 +107,8 @@ private fun PersonImage(person: PersonModel) {
     ) {
         SubcomposeAsyncImage(
             modifier = Modifier.fillMaxSize(),
-            model = person.profilePath,
-            contentDescription = "${person.name} ${stringResource(R.string.profile)}",
+            model = profilePath,
+            contentDescription = "$personName ${stringResource(R.string.profile)}",
             contentScale = ContentScale.Crop,
             loading = { ShimmerBox() },
             error = {
@@ -129,9 +124,9 @@ private fun PersonImage(person: PersonModel) {
 }
 
 @Composable
-private fun PersonName(person: PersonModel) {
+private fun PersonName(name: String) {
     Text(
-        text = person.name,
+        text = name,
         style = MaterialTheme.typography.titleSmall,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
@@ -142,9 +137,10 @@ private fun PersonName(person: PersonModel) {
 }
 
 @Composable
-private fun CharacterName(person: PersonModel) {
+private fun PersonSubtitle(subtitle: String?) {
+    if(subtitle.isNullOrEmpty()) return
     Text(
-        text = person.character,
+        text = subtitle,
         style = MaterialTheme.typography.labelMedium,
         maxLines = 2,
         overflow = TextOverflow.Ellipsis,

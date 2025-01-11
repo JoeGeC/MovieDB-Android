@@ -1,8 +1,8 @@
 package com.joe.cast.data.response
 
-data class PersonResponse(
+data class ActorResponse(
     val id: Int,
-    val name: String,
-    val character: String,
+    val name: String?,
+    val character: String?,
     val profilePath: String?
 )

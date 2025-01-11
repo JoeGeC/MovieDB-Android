@@ -12,7 +12,7 @@ class CastRepositoryImpl @Inject constructor(
     private val remote: CastRemote,
     private val local: CastLocal,
     private val converter: CastRepositoryConverter
-): CastRepository {
+) : CastRepository {
 
     override suspend fun getCastOf(mediaId: Int): Either<CastListEntity?, ErrorEntity?> =
         fetchLocal(mediaId).fold(
@@ -31,8 +31,12 @@ class CastRepositoryImpl @Inject constructor(
         val remoteResult = remote.getCastOf(page)
         remoteResult.fold(
             onSuccess = { remoteData ->
-                local.insert(converter.remoteToLocal(remoteData))
-                return Either.Success(converter.remoteToEntity(remoteData))
+                try {
+                    local.insert(converter.remoteToLocal(remoteData))
+                    return Either.Success(converter.remoteToEntity(remoteData))
+                } catch (e: Exception) {
+                    return Either.Failure(ErrorEntity(e.localizedMessage ?: ""))
+                }
             },
             onFailure = { error ->
                 return Either.Failure(ErrorEntity(error?.statusMessage ?: ""))

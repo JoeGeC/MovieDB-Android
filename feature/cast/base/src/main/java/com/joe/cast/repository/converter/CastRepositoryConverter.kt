@@ -2,9 +2,11 @@ package com.joe.cast.repository.converter
 
 import com.google.gson.reflect.TypeToken
 import com.joe.cast.data.response.CastListResponse
-import com.joe.cast.data.response.PersonResponse
+import com.joe.cast.data.response.ActorResponse
+import com.joe.cast.data.response.CrewResponse
 import com.joe.cast.domain.entity.CastListEntity
-import com.joe.cast.domain.entity.PersonEntity
+import com.joe.cast.domain.entity.ActorEntity
+import com.joe.cast.domain.entity.CrewEntity
 import com.joe.cast.local.model.CastListLocalModel
 import com.joe.data.JsonAdapter.localDateGson
 
@@ -14,19 +16,25 @@ class CastRepositoryConverter {
         return localListModel?.let {
             CastListEntity(
                 id = it.id,
-                cast = convertFromJson(it.cast),
-                crew = convertFromJson(it.crew)
+                cast = convertActorFromJson(it.cast),
+                crew = convertCrewFromJson(it.crew)
             )
         }
     }
 
-    fun convertFromJson(listJson: String): List<PersonEntity> =
-        localDateGson.fromJson<List<PersonEntity>>(
+    fun convertActorFromJson(listJson: String): List<ActorEntity> =
+        localDateGson.fromJson<List<ActorEntity>>(
             listJson,
-            object : TypeToken<List<PersonEntity>>() {}.type
+            object : TypeToken<List<ActorEntity>>() {}.type
         ).filterNotNull()
 
-    fun remoteToLocal(response: CastListResponse?): CastListLocalModel =
+    fun convertCrewFromJson(listJson: String): List<CrewEntity> =
+        localDateGson.fromJson<List<CrewEntity>>(
+            listJson,
+            object : TypeToken<List<CrewEntity>>() {}.type
+        ).filterNotNull()
+
+    fun remoteToLocal(response: CastListResponse?): CastListLocalModel? =
         CastListLocalModel(
             id = response?.id ?: throw NullPointerException(),
             cast = localDateGson.toJson(response.cast),
@@ -37,18 +45,29 @@ class CastRepositoryConverter {
         response?.let {
             CastListEntity(
                 id = it.id,
-                cast = it.cast.mapNotNull { person -> person.toEntity() },
-                crew = it.crew.mapNotNull { person -> person.toEntity() }
+                cast = it.cast.mapNotNull { actor -> actor.toEntity() },
+                crew = it.crew.mapNotNull { crew -> crew.toEntity() }
             )
         }
 
 }
 
-private fun PersonResponse.toEntity(): PersonEntity? = try {
-    PersonEntity(
+private fun ActorResponse.toEntity(): ActorEntity? = try {
+    ActorEntity(
         id = this.id,
-        name = this.name,
+        name = this.name ?: throw NullPointerException(),
         character = this.character,
+        profilePath = this.profilePath
+    )
+} catch (_: Exception) {
+    null
+}
+
+private fun CrewResponse.toEntity(): CrewEntity? = try {
+    CrewEntity(
+        id = this.id,
+        name = this.name ?: throw NullPointerException(),
+        job = this.job,
         profilePath = this.profilePath
     )
 } catch (_: Exception) {

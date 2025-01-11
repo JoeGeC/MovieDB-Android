@@ -1,8 +1,8 @@
 package com.joe.cast.domain.entity
 
-data class PersonEntity(
+data class CrewEntity(
     val id: Int,
     val name: String,
-    val character: String,
+    val job: String?,
     val profilePath: String?
 )
