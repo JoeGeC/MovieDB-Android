@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.joe.cast.R
 import com.joe.cast.presentation.model.CastListModel
-import com.joe.cast.presentation.model.ActorModel
 import com.joe.cast.presentation.model.Person
 import com.joe.cast.presentation.state.CastSuccessState
 import com.joe.presentation.ui.ErrorScreen

@@ -1,6 +1,5 @@
 package com.joe.tvCast.data
 
-import com.joe.cast.data.response.ActorResponse
 import com.joe.core.entity.Either
 import com.joe.data.json.NetworkProvider
 import com.joe.tvCast.resources.MockEntity

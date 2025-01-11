@@ -35,7 +35,7 @@ class CastRepositoryShould {
 
     @Test
     fun `retrieve from local when data is available`() = runTest {
-        whenever(local.getCastOf(MockEntity.CAST_LIST_ID)).thenReturn(Either.Success(MockLocal.castList))
+        whenever(local.getCastOf(MockEntity.CAST_LIST_ID)).thenReturn(Either.Success(MockLocal.model))
 
         val result = repository.getCastOf(MockEntity.CAST_LIST_ID)
 
@@ -94,7 +94,7 @@ class CastRepositoryShould {
 
         verify(local, times(1)).getCastOf(any())
         verify(remote, times(1)).getCastOf(any())
-        verify(local, times(1)).insert(MockLocal.castList)
+        verify(local, times(1)).insert(MockLocal.model)
     }
 
 }
