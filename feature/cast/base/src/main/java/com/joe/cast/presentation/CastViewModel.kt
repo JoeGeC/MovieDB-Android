@@ -25,7 +25,7 @@ abstract class CastViewModel(
     private val _state = MutableStateFlow<ViewModelState>(LoadingState())
     val state: StateFlow<ViewModelState> = _state.asStateFlow()
 
-    private fun getCast(mediaId: Int?){
+    fun getCastOf(mediaId: Int?){
         if(mediaId == null){
             _state.value = ErrorState()
             return

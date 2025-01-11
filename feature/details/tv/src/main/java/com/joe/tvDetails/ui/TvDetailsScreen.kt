@@ -34,6 +34,7 @@ import com.joe.base.ui.ReleaseDate
 import com.joe.base.ui.Tagline
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.viewModels.ViewModelState
+import com.joe.tvCast.ui.TvCastListScreen
 import com.joe.tvDetails.presentation.TvDetailsViewModel
 import com.joe.tvDetails.presentation.model.TvDetailsModel
 
@@ -109,6 +110,8 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
             }
             Tagline(tvDetails.tagline)
             Overview(tvDetails.overview)
+
+            TvCastListScreen(tvDetails.id)
         }
     }
 }

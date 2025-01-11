@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.joe.cast.data.CastRemote
 import com.joe.cast.domain.CastUseCase
+import com.joe.cast.local.CastDaoHelper
 import com.joe.cast.local.CastLocal
 import com.joe.cast.local.CastLocalImpl
 import com.joe.cast.presentation.converter.CastPresentationConverter
@@ -47,13 +48,16 @@ object TvCastDi {
     ).build()
 
     @Provides
-    fun provideDao(database: TvCastDatabase): TvCastDao =
-        database.tvCastDao()
+    fun provideDao(database: TvCastDatabase): TvCastDao = database.tvCastDao()
+
+    @TvCast
+    @Provides
+    fun provideDaoHelper(dao: TvCastDao): CastDaoHelper = TvCastDaoHelper(dao)
 
     @TvCast
     @Provides
     fun provideLocal(
-        daoHelper: TvCastDaoHelper
+        @TvCast daoHelper: CastDaoHelper
     ): CastLocal = CastLocalImpl(daoHelper)
 
     @Provides

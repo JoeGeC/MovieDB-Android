@@ -8,7 +8,7 @@ import com.joe.cast.local.model.CastListLocalModel
 
 @Dao
 interface TvCastDao {
-    @Query("SELECT * FROM tv_cast WHERE id = :id LIMIT 1")
+    @Query("SELECT * FROM media_cast WHERE id = :id LIMIT 1")
     fun getById(id: Int): CastListLocalModel?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

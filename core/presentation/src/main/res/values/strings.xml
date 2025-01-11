@@ -7,4 +7,5 @@
     <string name="refresh">Refresh</string>
     <string name="scroll_to_top">Scroll to top</string>
     <string name="popularTvShows">Popular TV Shows</string>
+    <string name="person_fallback">Person fallback image</string>
 </resources>
