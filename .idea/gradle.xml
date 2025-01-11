@@ -16,6 +16,10 @@
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/presentation" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/cast" />
+            <option value="$PROJECT_DIR$/feature/cast/base" />
+            <option value="$PROJECT_DIR$/feature/cast/movies" />
+            <option value="$PROJECT_DIR$/feature/cast/tv" />
             <option value="$PROJECT_DIR$/feature/details" />
             <option value="$PROJECT_DIR$/feature/details/base" />
             <option value="$PROJECT_DIR$/feature/details/movies" />
