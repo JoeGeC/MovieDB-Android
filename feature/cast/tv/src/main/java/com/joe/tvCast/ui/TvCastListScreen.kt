@@ -1,5 +1,6 @@
 package com.joe.tvCast.ui
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,12 +14,13 @@ import com.joe.tvCast.presentation.TvCastViewModel
 @Composable
 fun TvCastListScreen(
     tvShowId: Int?,
-    viewModel: TvCastViewModel = hiltViewModel()
+    detailsListState: ScrollState,
+    viewModel: TvCastViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(tvShowId) {
         viewModel.getCastOf(tvShowId)
     }
     val state by viewModel.state.collectAsState()
 
-    CastListState(state)
+    CastListState(state, detailsListState)
 }

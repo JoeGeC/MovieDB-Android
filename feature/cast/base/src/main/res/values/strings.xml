@@ -4,4 +4,5 @@
     <string name="profile_fallback">Profile fallback image</string>
     <string name="cast">Cast</string>
     <string name="crew">Crew</string>
+    <string name="show_cast_members">Show cast members</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.joe.base.ui
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +45,8 @@ fun DetailsScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 }
 
 @Composable
-fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable () -> Unit) {
+fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable (ScrollState) -> Unit) {
+    val scrollState = rememberScrollState()
     Box(
         Modifier
             .fillMaxSize()
@@ -53,11 +55,11 @@ fun DetailsSuccessScreen(mediaDetails: MediaDetailsModel, surface: @Composable (
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             Spacer(Modifier.height(100.dp))
             Box {
-                surface()
+                surface(scrollState)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -1,6 +1,7 @@
 package com.joe.tvDetails.ui
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,8 +64,8 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
         is DetailsSuccessState<*> -> {
             if (state.mediaDetails !is TvDetailsModel)
                 ErrorScreen()
-            else DetailsSuccessScreen(state.mediaDetails) {
-                TvDetailsSurface(state.mediaDetails)
+            else DetailsSuccessScreen(state.mediaDetails) { scrollState ->
+                TvDetailsSurface(state.mediaDetails, scrollState)
             }
         }
 
@@ -73,7 +74,7 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
+private fun TvDetailsSurface(tvDetails: MediaDetailsModel, scrollState: ScrollState) {
     tvDetails as TvDetailsModel
     Surface(
         modifier = Modifier
@@ -114,7 +115,7 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
                 Overview(tvDetails.overview)
             }
 
-            TvCastListScreen(tvDetails.id)
+            TvCastListScreen(tvDetails.id, scrollState)
         }
     }
 }

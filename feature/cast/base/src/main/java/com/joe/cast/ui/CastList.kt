@@ -1,28 +1,54 @@
 package com.joe.cast.ui
 
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.joe.cast.R
@@ -34,40 +60,102 @@ import com.joe.presentation.ui.ShimmerBox
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.ViewModelState
+import kotlinx.coroutines.delay
 
 @Composable
-fun CastListState(state: ViewModelState, refresh: (() -> Unit)? = null) {
+fun CastListState(state: ViewModelState, detailsListState: ScrollState) {
     when (state) {
-        is CastSuccessState -> CastSuccessScreen(state.castListModel)
-        is ErrorState -> ErrorScreen(refresh)
+        is CastSuccessState -> CastSuccessScreen(state.castListModel, detailsListState)
+        is ErrorState -> ErrorScreen()
         is LoadingState -> CastListLoadingScreen()
     }
 }
 
 @Composable
-private fun CastSuccessScreen(castList: CastListModel) {
+private fun CastSuccessScreen(castList: CastListModel, detailsListState: ScrollState) {
     Column {
-        PersonListWithTitle(castList.cast, stringResource(R.string.cast))
-        PersonListWithTitle(castList.crew, stringResource(R.string.crew))
+        ExpandablePersonListWithTitle(
+            castList.cast,
+            stringResource(R.string.cast),
+            detailsListState,
+            true
+        )
+        Spacer(Modifier.height(8.dp))
+        ExpandablePersonListWithTitle(
+            castList.crew,
+            stringResource(R.string.crew),
+            detailsListState,
+            false
+        )
     }
 }
 
 @Composable
-private fun PersonListWithTitle(personList: List<Person>, title: String) {
+private fun ExpandablePersonListWithTitle(
+    personList: List<Person>,
+    title: String,
+    detailsListState: ScrollState,
+    openOnStart: Boolean
+) {
     if (personList.isEmpty()) return
-    Text(
-        title,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(top = 16.dp, start = 26.dp, bottom = 8.dp)
+    val personListState = rememberLazyListState()
+    var isExpanded by remember { mutableStateOf(openOnStart) }
+    var userHasExpanded by remember { mutableStateOf(false) }
+
+    val listVisibility by animateDpAsState(
+        targetValue = if (isExpanded) 380.dp else 0.dp,
+        animationSpec = tween(durationMillis = 300),
+        label = "Expanding cast list"
     )
-    PersonList(personList)
+
+    val rotationAngle by animateFloatAsState(
+        targetValue = if (isExpanded) 180f else 0f,
+        animationSpec = tween(durationMillis = 300),
+        label = "Rotating arrow"
+    )
+
+    Column(Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp)
+            .clickable {
+                isExpanded = !isExpanded
+                userHasExpanded = true
+            }
+            .padding(top = 8.dp, start = 26.dp, bottom = 8.dp)
+        ) {
+            Text(
+                title,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Icon(
+                imageVector = Icons.Rounded.ArrowDropDown,
+                contentDescription = stringResource(R.string.show_cast_members),
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.rotate(rotationAngle)
+            )
+        }
+
+        Box(modifier = Modifier.height(listVisibility)) {
+            if (isExpanded) {
+                PersonList(personList, personListState)
+            }
+        }
+    }
+
+    LaunchedEffect(isExpanded) {
+        if (isExpanded && userHasExpanded) {
+            detailsListState.animateScrollBy(800f)
+        }
+    }
 }
 
 @Composable
-private fun PersonList(personList: List<Person>) {
+private fun PersonList(personList: List<Person>, state: LazyListState) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 26.dp),
+        state = state
     ) {
         items(personList.size) { index ->
             CastMemberItem(personList[index])
@@ -137,7 +225,7 @@ private fun PersonName(name: String) {
 
 @Composable
 private fun PersonSubtitle(subtitle: String?) {
-    if(subtitle.isNullOrEmpty()) return
+    if (subtitle.isNullOrEmpty()) return
     Text(
         text = subtitle,
         style = MaterialTheme.typography.labelMedium,
