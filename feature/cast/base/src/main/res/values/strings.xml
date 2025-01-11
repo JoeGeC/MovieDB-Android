@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile">Profile</string>
+    <string name="profile_fallback">Profile fallback image</string>
+    <string name="cast">Cast</string>
+    <string name="crew">Crew</string>
+</resources>

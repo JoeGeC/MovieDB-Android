@@ -82,34 +82,37 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel) {
             .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
         color = MaterialTheme.colorScheme.surface
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 120.dp, bottom = 16.dp)
-                .padding(horizontal = 28.dp),
-        ) {
-            MediaTitle(tvDetails.name)
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+        Column(Modifier.padding(bottom = 26.dp)) {
+
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .fillMaxSize()
+                    .padding(top = 120.dp)
+                    .padding(horizontal = 26.dp),
             ) {
-                ReleaseDate("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
-                Spacer(Modifier.weight(1f))
-                InProduction(tvDetails.inProduction)
-                Spacer(Modifier.weight(1f))
+                MediaTitle(tvDetails.name)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    ReleaseDate("${tvDetails.firstAirDate} -> ${tvDetails.lastAirDate}")
+                    Spacer(Modifier.weight(1f))
+                    InProduction(tvDetails.inProduction)
+                    Spacer(Modifier.weight(1f))
+                }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 18.dp)
+                ) {
+                    NumberOf("Seasons", tvDetails.numberOfSeasons, Modifier.weight(1f))
+                    NumberOf("Episodes", tvDetails.numberOfEpisodes, Modifier.weight(1f))
+                }
+                Tagline(tvDetails.tagline)
+                Overview(tvDetails.overview)
             }
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 18.dp)
-            ) {
-                NumberOf("Seasons", tvDetails.numberOfSeasons, Modifier.weight(1f))
-                NumberOf("Episodes", tvDetails.numberOfEpisodes, Modifier.weight(1f))
-            }
-            Tagline(tvDetails.tagline)
-            Overview(tvDetails.overview)
 
             TvCastListScreen(tvDetails.id)
         }
