@@ -16,12 +16,11 @@ import com.valentinilk.shimmer.shimmer
 @Composable
 fun MediaListLoadingItem() {
     Surface(
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier
             .fillMaxWidth()
             .height(300.dp)
             .clip(RoundedCornerShape(12.dp))
-            .shimmer()
     ) {
         Box(Modifier.fillMaxSize())
     }
