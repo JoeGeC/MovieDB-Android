@@ -98,7 +98,7 @@ private fun NavHost(
     NavHost(
         navController = navController,
         startDestination = Screens.Movies.route,
-        modifier = Modifier.padding(paddingValues = paddingValues)
+        modifier = Modifier.padding(paddingValues = paddingValues),
     ) {
         composable(Screens.Movies.route) {
             PopularMoviesScreen(navController)
