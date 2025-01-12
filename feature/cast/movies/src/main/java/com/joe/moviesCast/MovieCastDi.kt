@@ -1,4 +1,4 @@
-package com.joe.tvCast
+package com.joe.moviesCast
 
 import android.content.Context
 import androidx.room.Room
@@ -12,10 +12,10 @@ import com.joe.cast.presentation.converter.CastPresentationConverterImpl
 import com.joe.cast.repository.CastRepository
 import com.joe.cast.repository.converter.CastRepositoryConverter
 import com.joe.cast.repository.CastRepositoryImpl
-import com.joe.tvCast.data.TvCastRemoteImpl
-import com.joe.tvCast.local.TvCastDatabase
-import com.joe.tvCast.local.dao.TvCastDao
-import com.joe.tvCast.local.dao.TvCastDaoHelper
+import com.joe.moviesCast.data.MovieCastRemoteImpl
+import com.joe.moviesCast.local.MovieCastDatabase
+import com.joe.moviesCast.local.dao.MovieCastDao
+import com.joe.moviesCast.local.dao.MovieCastDaoHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,51 +27,51 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class TvCast
+annotation class MovieCast
 
 @Module
 @InstallIn(SingletonComponent::class)
 object TvCastDi {
 
-    @TvCast
+    @MovieCast
     @Provides
     fun provideRemote(
         retrofit: Retrofit
-    ): CastRemote = TvCastRemoteImpl(retrofit)
+    ): CastRemote = MovieCastRemoteImpl(retrofit)
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): TvCastDatabase = Room.databaseBuilder(
+    fun provideDatabase(@ApplicationContext context: Context): MovieCastDatabase = Room.databaseBuilder(
         context,
-        TvCastDatabase::class.java,
-        "tv_cast_database"
+        MovieCastDatabase::class.java,
+        "movie_cast_database"
     ).build()
 
     @Provides
-    fun provideDao(database: TvCastDatabase): TvCastDao = database.tvCastDao()
+    fun provideDao(database: MovieCastDatabase): MovieCastDao = database.movieCastDao()
 
-    @TvCast
+    @MovieCast
     @Provides
-    fun provideDaoHelper(dao: TvCastDao): CastDaoHelper = TvCastDaoHelper(dao)
+    fun provideDaoHelper(dao: MovieCastDao): CastDaoHelper = MovieCastDaoHelper(dao)
 
-    @TvCast
+    @MovieCast
     @Provides
     fun provideLocal(
-        @TvCast daoHelper: CastDaoHelper
+        @MovieCast daoHelper: CastDaoHelper
     ): CastLocal = CastLocalImpl(daoHelper)
 
-    @TvCast
+    @MovieCast
     @Provides
     fun provideRepository(
-        @TvCast remote: CastRemote,
-        @TvCast local: CastLocal,
+        @MovieCast remote: CastRemote,
+        @MovieCast local: CastLocal,
         converter: CastRepositoryConverter,
     ): CastRepository = CastRepositoryImpl(remote, local, converter)
 
-    @TvCast
+    @MovieCast
     @Provides
     fun provideUseCase(
-        @TvCast repository: CastRepository,
+        @MovieCast repository: CastRepository,
     ): CastUseCase = CastUseCase(repository)
 
 }

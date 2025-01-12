@@ -1,5 +1,6 @@
 package com.joe.movieDetails.ui
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import com.joe.base.ui.ReleaseDate
 import com.joe.base.ui.Tagline
 import com.joe.movieDetails.presentation.MovieDetailsViewModel
 import com.joe.movieDetails.presentation.model.MovieDetailsModel
+import com.joe.moviesCast.ui.MovieCastListScreen
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.viewModels.ViewModelState
 
@@ -53,8 +55,8 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
         is DetailsSuccessState<*> -> {
             if (state.mediaDetails !is MovieDetailsModel)
                 ErrorScreen()
-            else DetailsSuccessScreen(state.mediaDetails) {
-                MovieDetailsSurface(state.mediaDetails)
+            else DetailsSuccessScreen(state.mediaDetails) { scrollState ->
+                MovieDetailsSurface(state.mediaDetails, scrollState)
             }
         }
         else -> DetailsScreenState(state, refresh)
@@ -62,7 +64,7 @@ fun ScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
 }
 
 @Composable
-private fun MovieDetailsSurface(mediaDetails: MediaDetailsModel) {
+private fun MovieDetailsSurface(mediaDetails: MediaDetailsModel, scrollState: ScrollState) {
     mediaDetails as MovieDetailsModel
     Surface(
         modifier = Modifier
@@ -71,16 +73,19 @@ private fun MovieDetailsSurface(mediaDetails: MediaDetailsModel) {
             .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
         color = MaterialTheme.colorScheme.surface
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 120.dp, bottom = 16.dp)
-                .padding(horizontal = 28.dp),
-        ) {
-            MediaTitle(mediaDetails.name)
-            ReleaseDate(mediaDetails.releaseDate)
-            Tagline(mediaDetails.tagline)
-            Overview(mediaDetails.overview)
+        Column(Modifier.padding(bottom = 26.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 120.dp, bottom = 16.dp)
+                    .padding(horizontal = 28.dp),
+            ) {
+                MediaTitle(mediaDetails.name)
+                ReleaseDate(mediaDetails.releaseDate)
+                Tagline(mediaDetails.tagline)
+                Overview(mediaDetails.overview)
+            }
+            MovieCastListScreen(mediaDetails.id, scrollState)
         }
     }
 }

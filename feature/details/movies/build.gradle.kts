@@ -56,6 +56,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:presentation"))
     implementation(project(":feature:details:base"))
+    implementation(project(":feature:cast:movies"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito)
