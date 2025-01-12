@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +33,7 @@ import com.joe.tvDetails.ui.TvDetailsScreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationBar() {
-    var navigationSelectedItem by remember { mutableIntStateOf(0) }
+    var navigationSelectedItem by rememberSaveable { mutableIntStateOf(0) }
     val navController = rememberNavController()
 
     Scaffold(
