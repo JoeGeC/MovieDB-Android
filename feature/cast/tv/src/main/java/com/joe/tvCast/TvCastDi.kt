@@ -7,11 +7,9 @@ import com.joe.cast.domain.CastUseCase
 import com.joe.cast.local.CastDaoHelper
 import com.joe.cast.local.CastLocal
 import com.joe.cast.local.CastLocalImpl
-import com.joe.cast.presentation.converter.CastPresentationConverter
-import com.joe.cast.presentation.converter.CastPresentationConverterImpl
 import com.joe.cast.repository.CastRepository
-import com.joe.cast.repository.converter.CastRepositoryConverter
 import com.joe.cast.repository.CastRepositoryImpl
+import com.joe.cast.repository.converter.CastRepositoryConverter
 import com.joe.tvCast.data.TvCastRemoteImpl
 import com.joe.tvCast.local.TvCastDatabase
 import com.joe.tvCast.local.dao.TvCastDao
