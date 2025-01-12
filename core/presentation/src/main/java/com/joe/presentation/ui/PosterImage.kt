@@ -12,16 +12,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import coil3.compose.SubcomposeAsyncImage
 import com.joe.presentation.R
+import com.valentinilk.shimmer.Shimmer
 
 @Composable
-fun PosterImage(posterImageUrl: String?, modifier: Modifier = Modifier) {
+fun PosterImage(posterImageUrl: String?, shimmerInstance: Shimmer? = null, modifier: Modifier = Modifier) {
     Box(modifier = modifier.clip(RoundedCornerShape(8))) {
         SubcomposeAsyncImage(
             model = posterImageUrl,
             contentDescription = stringResource(R.string.movie_poster),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
-            loading = { ShimmerBox() },
+            loading = { ShimmerBox(shimmerInstance) },
             error = {
                 Image(
                     painter = painterResource(R.drawable.poster_fallback),

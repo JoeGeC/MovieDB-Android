@@ -21,9 +21,14 @@ import androidx.compose.ui.unit.dp
 import com.joe.popular.presentation.model.MediaListItemModel
 import com.joe.presentation.ui.AnimatedScoreCircle
 import com.joe.presentation.ui.PosterImage
+import com.valentinilk.shimmer.Shimmer
 
 @Composable
-fun MediaListItem(movie: MediaListItemModel, onClick: (() -> Unit)? = null) {
+fun MediaListItem(
+    movie: MediaListItemModel,
+    onClick: (() -> Unit)? = null,
+    shimmerInstance: Shimmer
+) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
         modifier = Modifier
@@ -35,6 +40,7 @@ fun MediaListItem(movie: MediaListItemModel, onClick: (() -> Unit)? = null) {
             Box(contentAlignment = Alignment.BottomStart) {
                 PosterImage(
                     movie.posterPath,
+                    shimmerInstance,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(0.667f)

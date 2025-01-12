@@ -38,6 +38,9 @@ import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
 import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
+import com.valentinilk.shimmer.Shimmer
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
 
 @Composable
 fun CastListState(state: ViewModelState, detailsListState: ScrollState, onRefresh: () -> Unit) {
@@ -95,7 +98,7 @@ fun ExpandableContentWithTitle(
     isExpanded: Boolean,
     title: @Composable () -> Unit,
     content: @Composable () -> Unit,
-){
+) {
     Column(Modifier.fillMaxWidth()) {
         title()
         Box(modifier = Modifier.height(contentAnimatedHeight)) {
@@ -107,20 +110,24 @@ fun ExpandableContentWithTitle(
 }
 
 @Composable
-private fun PersonList(personList: List<Person>, state: LazyListState) {
+private fun PersonList(
+    personList: List<Person>,
+    state: LazyListState,
+    shimmerInstance: Shimmer = rememberShimmer(ShimmerBounds.Window)
+) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 26.dp),
         state = state
     ) {
         items(personList.size) { index ->
-            CastMemberItem(personList[index])
+            CastMemberItem(personList[index], shimmerInstance)
         }
     }
 }
 
 @Composable
-private fun CastMemberItem(person: Person) {
+private fun CastMemberItem(person: Person, shimmerInstance: Shimmer) {
     Surface(
         shape = RoundedCornerShape(14.dp),
         color = MaterialTheme.colorScheme.surface,
@@ -132,7 +139,7 @@ private fun CastMemberItem(person: Person) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            PersonImage(person.profilePath, person.name)
+            PersonImage(person.profilePath, person.name, shimmerInstance)
             PersonName(person.name)
             PersonSubtitle(person.getListSubtitle())
         }
@@ -141,7 +148,7 @@ private fun CastMemberItem(person: Person) {
 }
 
 @Composable
-private fun PersonImage(profilePath: String?, personName: String) {
+private fun PersonImage(profilePath: String?, personName: String, shimmerInstance: Shimmer) {
     Box(
         Modifier
             .clip(RoundedCornerShape(8))
@@ -153,7 +160,7 @@ private fun PersonImage(profilePath: String?, personName: String) {
             model = profilePath,
             contentDescription = "$personName ${stringResource(R.string.profile)}",
             contentScale = ContentScale.Crop,
-            loading = { ShimmerBox() },
+            loading = { ShimmerBox(shimmerInstance) },
             error = {
                 Image(
                     painter = painterResource(R.drawable.profile_fallback),

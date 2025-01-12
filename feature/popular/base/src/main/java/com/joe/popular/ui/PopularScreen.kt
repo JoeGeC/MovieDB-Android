@@ -42,6 +42,9 @@ import com.joe.popular.ui.sound.scrollToTopSounds
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ScrollPageWithHeader
 import com.joe.presentation.ui.sound.sfxSoundPool
+import com.valentinilk.shimmer.ShimmerBounds
+import com.valentinilk.shimmer.rememberShimmer
+import com.valentinilk.shimmer.shimmer
 import com.joe.presentation.R as presentationR
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,7 +80,7 @@ fun PopularMoviesList(
     onItemClick: (Int) -> Unit
 ) {
     val gridState = rememberLazyStaggeredGridState()
-
+    val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.Window)
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
             state = gridState,
@@ -93,7 +96,8 @@ fun PopularMoviesList(
                 movies[index]?.let { movie ->
                     MediaListItem(
                         movie,
-                        onClick = { onItemClick(movie.id) }
+                        onClick = { onItemClick(movie.id) },
+                        shimmerInstance
                     )
                 }
             }
