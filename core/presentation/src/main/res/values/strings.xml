@@ -9,4 +9,5 @@
     <string name="popularTvShows">Popular TV Shows</string>
     <string name="person_fallback">Person fallback image</string>
     <string name="profile">Profile</string>
+    <string name="movie_backdrop_fallback">Movie backdrop fallback</string>
 </resources>

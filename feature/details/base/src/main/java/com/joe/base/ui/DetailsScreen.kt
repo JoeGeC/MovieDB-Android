@@ -1,5 +1,6 @@
 package com.joe.base.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -94,7 +95,14 @@ private fun BackgroundImage(backgroundImageUrl: String?) {
             contentDescription = "Background Image",
             contentScale = ContentScale.Crop,
             loading = { ShimmerBox() },
-            error = { painterResource(presentationR.drawable.backdrop_fallback) }
+            error = {
+                Image(
+                    painter = painterResource(presentationR.drawable.backdrop_fallback),
+                    contentDescription = stringResource(presentationR.string.movie_backdrop_fallback),
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
         )
     }
 }
