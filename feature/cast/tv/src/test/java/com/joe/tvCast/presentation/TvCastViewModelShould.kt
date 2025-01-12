@@ -20,6 +20,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -91,6 +93,34 @@ class TvCastViewModelShould {
 
         val state = viewModel.state.value
         assertEquals(CastSuccessState(MockModel.model), state)
+    }
+
+    @Test
+    fun `do nothing on refresh when LoadingState`() = runTest {
+        whenever(useCase.getCastOf(MockEntity.CAST_LIST_ID)).thenReturn(MockEntity.success)
+
+        viewModel.getCastOf(MockEntity.CAST_LIST_ID)
+        viewModel.refresh(MockEntity.CAST_LIST_ID)
+        advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals(CastSuccessState(MockModel.model), state)
+        verify(useCase, times(1)).getCastOf(MockEntity.CAST_LIST_ID)
+    }
+
+    @Test
+    fun `do nothing on refresh when RefreshingState && refresh correctly`() = runTest {
+        whenever(useCase.getCastOf(MockEntity.CAST_LIST_ID)).thenReturn(MockEntity.success)
+
+        viewModel.getCastOf(MockEntity.CAST_LIST_ID)
+        advanceUntilIdle()
+        viewModel.refresh(MockEntity.CAST_LIST_ID)
+        viewModel.refresh(MockEntity.CAST_LIST_ID)
+        advanceUntilIdle()
+
+        val state = viewModel.state.value
+        assertEquals(CastSuccessState(MockModel.model), state)
+        verify(useCase, times(2)).getCastOf(MockEntity.CAST_LIST_ID)
     }
 
 }
