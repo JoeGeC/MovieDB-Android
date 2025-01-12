@@ -14,7 +14,6 @@ import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
 import com.joe.presentation.viewModels.job
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
