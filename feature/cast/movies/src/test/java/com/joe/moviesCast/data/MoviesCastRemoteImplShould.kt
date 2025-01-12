@@ -1,9 +1,7 @@
-package com.joe.tvCast.data
+package com.joe.moviesCast.data
 
 import com.joe.core.entity.Either
 import com.joe.data.json.NetworkProvider
-import com.joe.tvCast.resources.MockEntity
-import com.joe.tvCast.resources.MockJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -13,19 +11,21 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
+import com.joe.moviesCast.resources.MockEntity
+import com.joe.moviesCast.resources.MockJson
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MovieDetailsRemoteImplTest {
+class MovieCastRemoteImplShould {
     private lateinit var mockWebServer: MockWebServer
     private lateinit var retrofit: Retrofit
-    private lateinit var tvCastRemote: TvCastRemoteImpl
+    private lateinit var tvCastRemote: MovieCastRemoteImpl
 
     @Before
     fun setUp() {
         mockWebServer = MockWebServer()
         mockWebServer.start()
         retrofit = NetworkProvider.createRetrofit(mockWebServer.url("/").toString())
-        tvCastRemote = TvCastRemoteImpl(retrofit)
+        tvCastRemote = MovieCastRemoteImpl(retrofit)
     }
 
     @After
