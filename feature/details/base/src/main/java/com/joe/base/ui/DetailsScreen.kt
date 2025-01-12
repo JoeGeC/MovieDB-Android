@@ -92,7 +92,7 @@ private fun BackgroundImage(backgroundImageUrl: String?) {
         SubcomposeAsyncImage(
             modifier = Modifier.fillMaxSize(),
             model = backgroundImageUrl,
-            contentDescription = "Background Image",
+            contentDescription = stringResource(detailsR.string.background_image),
             contentScale = ContentScale.Crop,
             loading = { ShimmerBox() },
             error = {

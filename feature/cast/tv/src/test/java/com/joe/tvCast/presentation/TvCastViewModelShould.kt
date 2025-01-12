@@ -49,8 +49,7 @@ class TvCastViewModelShould {
 
     @Test
     fun `set ErrorState when exception is thrown`() = runTest {
-        whenever(useCase.getCastOf(MockEntity.CAST_LIST_ID))
-            .thenThrow(NullPointerException())
+        whenever(useCase.getCastOf(MockEntity.CAST_LIST_ID)).thenThrow(NullPointerException())
 
         viewModel.getCastOf(MockEntity.CAST_LIST_ID)
         advanceUntilIdle()
@@ -61,8 +60,7 @@ class TvCastViewModelShould {
 
     @Test
     fun `set ErrorState when failure`() = runTest {
-        whenever(useCase.getCastOf(MockEntity.CAST_LIST_ID))
-            .thenReturn(MockEntity.failure)
+        whenever(useCase.getCastOf(MockEntity.CAST_LIST_ID)).thenReturn(MockEntity.failure)
 
         viewModel.getCastOf(MockEntity.CAST_LIST_ID)
         advanceUntilIdle()
