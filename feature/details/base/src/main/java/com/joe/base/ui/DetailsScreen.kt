@@ -38,7 +38,7 @@ import com.joe.presentation.R as presentationR
 @Composable
 fun DetailsScreenState(state: ViewModelState, refresh: (() -> Unit)? = null) {
     when (state) {
-        is ErrorState -> ErrorScreen(refresh)
+        is ErrorState -> ErrorScreen(onRefresh = refresh)
         is LoadingState -> MovieDetailsLoadingScreen()
         is RefreshingState -> DetailsScreenState(state.previousState)
     }

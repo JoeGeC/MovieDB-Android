@@ -1,10 +1,9 @@
 package com.joe.cast.ui
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,33 +14,31 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.joe.cast.R
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun CastListLoadingScreen() {
-    Column(Modifier.shimmer()) {
-        TitleShimmer()
-        ListShimmer()
+fun CastListLoadingScreen(baseListState: ScrollState) {
+    AnimatedExpandableHeaderList(
+        baseListState = baseListState,
+        openOnStart = true,
+        expandedHeight = 380.dp
+    ) { isExpanded, onToggleExpand, contentAnimatedHeight, iconAnimatedRotation, contentListState ->
+        ExpandableContentWithTitle(
+            contentAnimatedHeight,
+            isExpanded,
+            { ClickableTitleWithIcon(stringResource(R.string.cast), iconAnimatedRotation, onToggleExpand) },
+            { ListShimmer() }
+        )
     }
-}
-
-@Composable
-private fun TitleShimmer() {
-    Box(
-        Modifier
-            .padding(top = 16.dp, bottom = 8.dp, start = 26.dp)
-            .height(40.dp)
-            .width(150.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .background(MaterialTheme.colorScheme.onSurface)
-    )
 }
 
 @Composable
 private fun ListShimmer() {
     LazyRow(
-        Modifier.fillMaxWidth(),
+        Modifier.fillMaxWidth().shimmer(),
         contentPadding = PaddingValues(horizontal = 26.dp),
     ) {
         items(6) {

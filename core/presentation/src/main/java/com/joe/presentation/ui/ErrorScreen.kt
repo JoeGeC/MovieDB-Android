@@ -21,9 +21,14 @@ import androidx.compose.ui.unit.dp
 import com.joe.presentation.R
 
 @Composable
-fun ErrorScreen(onRefresh: (() -> Unit)? = null) {
+fun ErrorScreen(modifier: Modifier = Modifier, onRefresh: (() -> Unit)? = null) {
+    ErrorView(modifier.fillMaxSize(), onRefresh)
+}
+
+@Composable
+fun ErrorView(modifier: Modifier = Modifier, onRefresh: (() -> Unit)? = null) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

@@ -17,16 +17,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AnimatedExpandableHeader(
-    title: String,
-    baseListState: ScrollState?,
+fun AnimatedExpandableHeaderList(
+    baseListState: ScrollState? = null,
     openOnStart: Boolean,
+    expandedHeight: Dp = 380.dp,
     content: @Composable (
         isExpanded: Boolean,
         onClick: () -> Unit,
         listVisibility: Dp,
         rotationAngle: Float,
-        title: String,
         personListState: LazyListState
     ) -> Unit
 ) {
@@ -35,7 +34,7 @@ fun AnimatedExpandableHeader(
     var userHasExpanded by remember { mutableStateOf(false) }
 
     val listVisibility by animateDpAsState(
-        targetValue = if (isExpanded) 380.dp else 0.dp,
+        targetValue = if (isExpanded) expandedHeight else 0.dp,
         animationSpec = tween(durationMillis = 300),
         label = "Expanding list"
     )
@@ -54,7 +53,6 @@ fun AnimatedExpandableHeader(
         },
         listVisibility,
         iconAnimationAngle,
-        title,
         expandableListState
     )
 

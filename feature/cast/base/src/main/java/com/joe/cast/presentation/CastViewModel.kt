@@ -10,9 +10,11 @@ import com.joe.core.entity.ErrorEntity
 import com.joe.presentation.IoDispatcher
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
+import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
 import com.joe.presentation.viewModels.job
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,5 +53,11 @@ abstract class CastViewModel(
         _state.value = if (body != null) {
             CastSuccessState(converter.entityToModel(body))
         } else ErrorState()
+    }
+
+    fun refresh(mediaId: Int?) {
+        if (_state.value is LoadingState || _state.value is RefreshingState) return
+        _state.value = RefreshingState(_state.value)
+        getCastOf(mediaId)
     }
 }

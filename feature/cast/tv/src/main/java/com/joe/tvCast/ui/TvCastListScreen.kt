@@ -22,5 +22,5 @@ fun TvCastListScreen(
     }
     val state by viewModel.state.collectAsState()
 
-    CastListState(state, detailsListState)
+    CastListState(state, detailsListState) { viewModel.refresh(tvShowId) }
 }

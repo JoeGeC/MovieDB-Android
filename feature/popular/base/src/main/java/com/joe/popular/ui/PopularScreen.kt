@@ -58,7 +58,7 @@ fun PopularScreen(
         scrollBehavior = topAppBarScrollBehavior
     ) {
         when (items.loadState.refresh) {
-            is LoadState.Error -> ErrorScreen(items::refresh)
+            is LoadState.Error -> ErrorScreen(onRefresh = items::refresh)
             is LoadState.Loading -> PopularGridLoadingScreen()
             is LoadState.NotLoading -> PopularMoviesList(
                 items,

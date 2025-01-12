@@ -2,11 +2,9 @@ package com.joe.cast.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,18 +33,19 @@ import com.joe.cast.R
 import com.joe.cast.presentation.model.CastListModel
 import com.joe.cast.presentation.model.Person
 import com.joe.cast.presentation.state.CastSuccessState
-import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.ui.ShimmerBox
 import com.joe.presentation.viewModels.ErrorState
 import com.joe.presentation.viewModels.LoadingState
+import com.joe.presentation.viewModels.RefreshingState
 import com.joe.presentation.viewModels.ViewModelState
 
 @Composable
-fun CastListState(state: ViewModelState, detailsListState: ScrollState) {
+fun CastListState(state: ViewModelState, detailsListState: ScrollState, onRefresh: () -> Unit) {
     when (state) {
         is CastSuccessState -> CastSuccessScreen(state.castListModel, detailsListState)
-        is ErrorState -> ErrorScreen()
-        is LoadingState -> CastListLoadingScreen()
+        is ErrorState -> CastListErrorScreen(detailsListState, onRefresh)
+        is LoadingState -> CastListLoadingScreen(detailsListState)
+        is RefreshingState -> CastListLoadingScreen(detailsListState)
     }
 }
 
@@ -81,68 +76,34 @@ private fun AnimatedExpandablePersonListWithTitle(
     openOnStart: Boolean
 ) {
     if (personList.isEmpty()) return
-    AnimatedExpandableHeader(
-        title = title,
+    AnimatedExpandableHeaderList(
         baseListState = detailsListState,
         openOnStart = openOnStart,
-    ) { isExpanded, onToggleExpand, listVisibility, rotationAngle, title, personListState ->
-        ExpandablePersonListWithTitle(
-            isExpanded = isExpanded,
-            onToggleExpand = onToggleExpand,
-            listVisibility = listVisibility,
-            rotationAngle = rotationAngle,
-            title = title,
-            personList = personList,
-            personListState = personListState
+    ) { isExpanded, onToggleExpand, contentAnimatedHeight, iconAnimatedRotation, contentListState ->
+        ExpandableContentWithTitle(
+            contentAnimatedHeight,
+            isExpanded,
+            { ClickableTitleWithIcon(title, iconAnimatedRotation, onToggleExpand) },
+            { PersonList(personList, contentListState) }
         )
     }
 }
 
 @Composable
-private fun ExpandablePersonListWithTitle(
+fun ExpandableContentWithTitle(
+    contentAnimatedHeight: Dp,
     isExpanded: Boolean,
-    onToggleExpand: () -> Unit,
-    listVisibility: Dp,
-    rotationAngle: Float,
-    title: String,
-    personList: List<Person>,
-    personListState: LazyListState
-) {
+    title: @Composable () -> Unit,
+    content: @Composable () -> Unit,
+){
     Column(Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)
-            .clickable { onToggleExpand() }
-            .padding(top = 8.dp, start = 26.dp, bottom = 8.dp)
-        ) {
-            CastTitle(title)
-            DropDownIcon(rotationAngle)
-        }
-
-        Box(modifier = Modifier.height(listVisibility)) {
+        title()
+        Box(modifier = Modifier.height(contentAnimatedHeight)) {
             if (isExpanded) {
-                PersonList(personList, personListState)
+                content()
             }
         }
     }
-}
-
-@Composable
-private fun CastTitle(title: String) {
-    Text(
-        title,
-        style = MaterialTheme.typography.titleMedium,
-    )
-}
-
-@Composable
-private fun DropDownIcon(rotationAngle: Float) {
-    Icon(
-        imageVector = Icons.Rounded.ArrowDropDown,
-        contentDescription = stringResource(R.string.show_cast_members),
-        tint = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.rotate(rotationAngle)
-    )
 }
 
 @Composable
