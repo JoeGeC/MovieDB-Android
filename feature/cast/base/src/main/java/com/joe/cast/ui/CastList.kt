@@ -1,12 +1,8 @@
 package com.joe.cast.ui
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
@@ -28,11 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.SubcomposeAsyncImage
 import com.joe.cast.R
@@ -66,66 +57,66 @@ fun CastListState(state: ViewModelState, detailsListState: ScrollState) {
 @Composable
 private fun CastSuccessScreen(castList: CastListModel, detailsListState: ScrollState) {
     Column {
-        ExpandablePersonListWithTitle(
-            castList.cast,
+        AnimatedExpandablePersonListWithTitle(
             stringResource(R.string.cast),
             detailsListState,
+            castList.cast,
             true
         )
         Spacer(Modifier.height(8.dp))
-        ExpandablePersonListWithTitle(
-            castList.crew,
+        AnimatedExpandablePersonListWithTitle(
             stringResource(R.string.crew),
             detailsListState,
+            castList.crew,
             false
         )
     }
 }
 
 @Composable
-private fun ExpandablePersonListWithTitle(
-    personList: List<Person>,
+private fun AnimatedExpandablePersonListWithTitle(
     title: String,
     detailsListState: ScrollState,
+    personList: List<Person>,
     openOnStart: Boolean
 ) {
     if (personList.isEmpty()) return
-    val personListState = rememberLazyListState()
-    var isExpanded by remember { mutableStateOf(openOnStart) }
-    var userHasExpanded by remember { mutableStateOf(false) }
+    AnimatedExpandableHeader(
+        title = title,
+        baseListState = detailsListState,
+        openOnStart = openOnStart,
+    ) { isExpanded, onToggleExpand, listVisibility, rotationAngle, title, personListState ->
+        ExpandablePersonListWithTitle(
+            isExpanded = isExpanded,
+            onToggleExpand = onToggleExpand,
+            listVisibility = listVisibility,
+            rotationAngle = rotationAngle,
+            title = title,
+            personList = personList,
+            personListState = personListState
+        )
+    }
+}
 
-    val listVisibility by animateDpAsState(
-        targetValue = if (isExpanded) 380.dp else 0.dp,
-        animationSpec = tween(durationMillis = 300),
-        label = "Expanding cast list"
-    )
-
-    val rotationAngle by animateFloatAsState(
-        targetValue = if (isExpanded) 180f else 0f,
-        animationSpec = tween(durationMillis = 300),
-        label = "Rotating arrow"
-    )
-
+@Composable
+private fun ExpandablePersonListWithTitle(
+    isExpanded: Boolean,
+    onToggleExpand: () -> Unit,
+    listVisibility: Dp,
+    rotationAngle: Float,
+    title: String,
+    personList: List<Person>,
+    personListState: LazyListState
+) {
     Column(Modifier.fillMaxWidth()) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp)
-            .clickable {
-                isExpanded = !isExpanded
-                userHasExpanded = true
-            }
+            .clickable { onToggleExpand() }
             .padding(top = 8.dp, start = 26.dp, bottom = 8.dp)
         ) {
-            Text(
-                title,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Icon(
-                imageVector = Icons.Rounded.ArrowDropDown,
-                contentDescription = stringResource(R.string.show_cast_members),
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.rotate(rotationAngle)
-            )
+            CastTitle(title)
+            DropDownIcon(rotationAngle)
         }
 
         Box(modifier = Modifier.height(listVisibility)) {
@@ -134,12 +125,24 @@ private fun ExpandablePersonListWithTitle(
             }
         }
     }
+}
 
-    LaunchedEffect(isExpanded) {
-        if (isExpanded && userHasExpanded) {
-            detailsListState.animateScrollBy(800f)
-        }
-    }
+@Composable
+private fun CastTitle(title: String) {
+    Text(
+        title,
+        style = MaterialTheme.typography.titleMedium,
+    )
+}
+
+@Composable
+private fun DropDownIcon(rotationAngle: Float) {
+    Icon(
+        imageVector = Icons.Rounded.ArrowDropDown,
+        contentDescription = stringResource(R.string.show_cast_members),
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier.rotate(rotationAngle)
+    )
 }
 
 @Composable
