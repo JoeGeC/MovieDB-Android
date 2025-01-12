@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joe.base.presentation.DetailsSuccessState
@@ -36,6 +37,7 @@ import com.joe.base.ui.Tagline
 import com.joe.presentation.ui.ErrorScreen
 import com.joe.presentation.viewModels.ViewModelState
 import com.joe.tvCast.ui.TvCastListScreen
+import com.joe.tvDetails.R
 import com.joe.tvDetails.presentation.TvDetailsViewModel
 import com.joe.tvDetails.presentation.model.TvDetailsModel
 
@@ -108,8 +110,8 @@ private fun TvDetailsSurface(tvDetails: MediaDetailsModel, scrollState: ScrollSt
                         .fillMaxWidth()
                         .padding(top = 18.dp)
                 ) {
-                    NumberOf("Seasons", tvDetails.numberOfSeasons, Modifier.weight(1f))
-                    NumberOf("Episodes", tvDetails.numberOfEpisodes, Modifier.weight(1f))
+                    NumberOf(stringResource(R.string.seasons), tvDetails.numberOfSeasons, Modifier.weight(1f))
+                    NumberOf(stringResource(R.string.episodes), tvDetails.numberOfEpisodes, Modifier.weight(1f))
                 }
                 Tagline(tvDetails.tagline)
                 Overview(tvDetails.overview)
@@ -127,7 +129,7 @@ fun NumberOf(label: String, numberOf: Int?, modifier: Modifier = Modifier) {
         Text(
             "$label: ",
             style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             numberOf.toString(),

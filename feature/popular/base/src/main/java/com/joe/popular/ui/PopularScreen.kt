@@ -44,7 +44,6 @@ import com.joe.presentation.ui.ScrollPageWithHeader
 import com.joe.presentation.ui.sound.sfxSoundPool
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
-import com.valentinilk.shimmer.shimmer
 import com.joe.presentation.R as presentationR
 
 @OptIn(ExperimentalMaterial3Api::class)
